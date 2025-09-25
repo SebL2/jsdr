@@ -11,6 +11,7 @@ FORCE:
 prod: all_tests github
 
 github: FORCE
+	git add .
 	- git commit -a
 	git push origin master
 
