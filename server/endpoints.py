@@ -21,7 +21,7 @@ HELLO_RESP = 'hello'
 MESSAGE = 'Message'
 
 
-@api.route(HELLO_EP)
+@api.route(HELLO_EP)    
 class HelloWorld(Resource):
     """
     The purpose of the HelloWorld class is to have a simple test to see if the
