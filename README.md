@@ -8,3 +8,5 @@ To create the env for a new developer, run `make dev_env`.
 # Group Members
 
 Sebastian Liu
+
+Derek Kim
