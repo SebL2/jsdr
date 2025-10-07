@@ -10,3 +10,4 @@ To create the env for a new developer, run `make dev_env`.
 Sebastian Liu
 Derek Kim
 Soohyeuk Choi
+Jefferson Le
