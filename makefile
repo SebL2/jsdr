@@ -2,6 +2,7 @@ include common.mk
 
 # Our directories
 API_DIR = server
+CITIES_DIR = cities
 DB_DIR = data
 SEC_DIR = security
 REQ_DIR = .
@@ -17,6 +18,7 @@ github: FORCE
 
 all_tests: 
 	cd $(API_DIR) && make tests
+	cd $(CITIES_DIR) && make tests
 # 	cd $(DB_DIR) && make tests
 
 dev_env: FORCE
