@@ -11,4 +11,4 @@ Sebastian Liu
 Derek Kim
 Soohyeuk Choi
 Jefferson Le
-Rafiul Kashfi
+Rafiul H. Kashfi
