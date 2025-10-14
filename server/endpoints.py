@@ -9,6 +9,7 @@ from flask_restx import Resource, Api  # , fields  # Namespace
 from flask_cors import CORS
 
 # import werkzeug.exceptions as wz
+# import cities.queries as cqry 
 
 app = Flask(__name__)
 CORS(app)
@@ -28,6 +29,8 @@ CITIES_RESP = 'Cities'
 @api.route(f'{CITIES_EPS}/{READ}')
 class Cities(Resource):
     def get(self):
+        # cities = cqry.read()
+        # return {CITIES_RESP:cities}
         return {CITIES_RESP:"world"}
 
 
