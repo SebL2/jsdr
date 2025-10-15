@@ -14,10 +14,10 @@ def test_success_create():
     old_length = ct.num_cities()
 
     # Create a new city using a valid sample city object
-    new_id = ct.create(ct.SAMPLE.CITY)
+    new_id = ct.create(ct.SAMPLE_CITY)
 
     # Verify that the returned city ID is valid
     assert ct.valid_id(new_id)
 
     # Verify that the total number of cities increased after creation
-    assert ct.num_cities > old_length
+    assert ct.num_cities() > old_length

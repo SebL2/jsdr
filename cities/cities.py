@@ -16,7 +16,7 @@ SAMPLE_CITY = {
 }
 
 
-def create(flds: dict):
+def create(flds: dict) -> int:
     if not isinstance(flds, dict):
         raise ValueError(f'Bad type for {type(flds)=}')
     if not flds.get(NAME):
@@ -30,8 +30,8 @@ def num_cities() -> int:
     return len(cities)
 
 
-def valid_id(_id: int):
-    if not isinstance(id, int):
+def valid_id(_id: int) -> bool:
+    if not isinstance(_id, int):
         raise ValueError(f'Bad type for {type(id)=}')
     if len(str(_id)) < MIN_ID_LEN:
         return False
