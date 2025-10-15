@@ -24,8 +24,10 @@ def create(flds: dict):
     cities[new_id] = flds
     return new_id
 
+
 def num_cities() -> int:
     return len(cities)
+
 
 def valid_id(_id: int):
     if not isinstance(id, int):
