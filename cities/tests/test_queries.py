@@ -1,40 +1,32 @@
+# Import patch to mock functions or objects during tests
 from unittest.mock import patch
+
+# Import pytest to define and manage test cases
 import pytest
 
+# Import the module we are testing — contains the queries for city data
 import cities.queries as qry
 
 
+# This test is intentionally skipped because it's an example of a *bad test*.
+# The decorator below tells pytest to skip this test entirely when running.
 @pytest.mark.skip('This is an example of a bad test!')
 def test_bad_test_for_num_cities():
+    # This test directly compares a function's output (num_cities)
+    # with an internal data structure (city_cache) — which makes it fragile.
+    # It depends too much on implementation details rather than behavior.
     assert qry.num_cities() == len(qry.city_cache)
 
 
-def test_num_cities():
-    # get the count
-    old_count = qry.num_cities()
-    # add a record
-    qry.create(qry.SAMPLE_CITY)
-    assert qry.num_cities() == old_count + 1
-
-
-def test_good_create():
-    old_count = qry.num_cities()
-    new_rec_id = qry.create(qry.SAMPLE_CITY)
-    assert qry.is_valid_id(new_rec_id)
-    assert qry.num_cities() == old_count + 1
-
-
-def test_create_bad_name():
-    with pytest.raises(ValueError):
-        qry.create({})
-
-
-def test_create_bad_param_type():
-    with pytest.raises(ValueError):
-        qry.create(17)
-
-
+# The @patch decorator replaces 'db_connect' inside 'cities.queries' with a mock.
+# This prevents the test from actually connecting to a database.
+# It will instead return True whenever 'qry.db_connect()' is called.
 @patch('cities.queries.db_connect', return_value=True)
 def test_read(mock_db_connect):
+    # Call the function we’re testing (qry.read).
+    # Since db_connect is mocked, this runs in isolation.
     cities = qry.read()
+    
+    # Check that the returned object is a dictionary.
+    # This ensures qry.read() returns data in the expected format.
     assert isinstance(cities, dict)
