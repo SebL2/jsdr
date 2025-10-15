@@ -1,3 +1,4 @@
+from random import randint
 """
 City-level data for SWE project
 """
@@ -15,6 +16,9 @@ SAMPLE_CITY = {
     STATE_CODE: 'NY',
 }
 
+def db_connect(success_ratio: int) -> bool:
+    return randint(1, success_ratio) % success_ratio
+
 def create(flds: dict):
     if not isinstance(flds, dict):
         raise ValueError(f'Bad type for {type(flds)=}')
@@ -27,9 +31,23 @@ def create(flds: dict):
 def num_cities() -> int:
     return len(cities)
 
-def valid_id(_id: int):
-    if not isinstance(id, int):
-        raise ValueError(f'Bad type for {type(id)=}')
-    if len(str(_id)) < MIN_ID_LEN:
+
+def is_valid_id(_id: str) -> bool:
+    if not isinstance(_id, str):
+        return False
+    if len(_id) < MIN_ID_LEN:
         return False
     return True
+
+def read() -> dict:
+    if not lb_connect(3):
+        raise ConnectionError('Could not connec to DB.')
+    return city_cache
+
+
+def main():
+    print(read())
+
+
+if __name__ == '__main__':
+    main()
