@@ -1,23 +1,24 @@
+# cities/tests/test_cities.py
 import pytest
 import cities.cities as ct
 
-# Test that creating a city with an invalid argument (non-dictionary input) 
-# correctly raises a ValueError exception.
-def test_create():
+def test_create_invalid_input_raises_error():
+    # Arrange
+    invalid_input = 17
+
+    # Act & Assert
     with pytest.raises(ValueError):
-        ct.create(17)
+        ct.create(invalid_input)
 
-# Test that successfully creating a valid city increases the number of stored cities
-# and that the returned city ID is valid.
-def test_success_create():
-    # Record the current number of cities before creation
+
+def test_success_create_increases_city_count():
+    # Arrange
     old_length = ct.num_cities()
+    sample_city = ct.SAMPLE.CITY
 
-    # Create a new city using a valid sample city object
-    new_id = ct.create(ct.SAMPLE.CITY)
+    # Act
+    new_id = ct.create(sample_city)
 
-    # Verify that the returned city ID is valid
+    # Assert
     assert ct.valid_id(new_id)
-
-    # Verify that the total number of cities increased after creation
-    assert ct.num_cities > old_length
+    assert ct.num_cities() > old_length
