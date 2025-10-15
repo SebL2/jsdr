@@ -15,6 +15,7 @@ SAMPLE_CITY = {
     STATE_CODE: 'NY',
 }
 
+
 def create(flds: dict):
     if not isinstance(flds, dict):
         raise ValueError(f'Bad type for {type(flds)=}')
