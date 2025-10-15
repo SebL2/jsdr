@@ -17,9 +17,11 @@ SAMPLE_CITY = {
 }
 
 def db_connect(success_ratio: int) -> bool:
+     # Simulates a database connection attempt — succeeds randomly based on success_ratio
     return randint(1, success_ratio) % success_ratio
 
 def create(flds: dict):
+    # Validates the input and creates a new city entry in the cities dictionary
     if not isinstance(flds, dict):
         raise ValueError(f'Bad type for {type(flds)=}')
     if not flds.get(NAME):
@@ -29,6 +31,7 @@ def create(flds: dict):
     return new_id
 
 def num_cities() -> int:
+    # Returns the total number of cities currently stored
     return len(cities)
 
 
