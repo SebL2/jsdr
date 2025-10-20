@@ -9,7 +9,7 @@ from flask_restx import Resource, Api  # , fields  # Namespace
 from flask_cors import CORS
 
 # import werkzeug.exceptions as wz
-# import cities.queries as cqry 
+import cities.cities as ct
 
 app = Flask(__name__)
 CORS(app)
@@ -25,6 +25,9 @@ MESSAGE = 'Message'
 
 CITIES_EPS = '/cities'
 CITIES_RESP = 'Cities'
+CITIES_CREATE = '/create'
+
+SUCCESS = "Success"
 
 @api.route(f'{CITIES_EPS}/{READ}')
 class Cities(Resource):
@@ -33,6 +36,14 @@ class Cities(Resource):
         # return {CITIES_RESP:cities}
         return {CITIES_RESP:"world"}
 
+@api.route(f'{CITIES_EPS}/{CITIES_CREATE}')
+class Create(Resource):
+    def post(self,fields):
+        try:
+            ct.create(fields)
+        except ValueError:
+            return {SUCCESS: False}
+        return {SUCCESS: True}
 
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
