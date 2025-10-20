@@ -15,7 +15,14 @@ SAMPLE_CITY = {
     STATE_CODE: 'NY',
 }
 
-def create(flds: dict):
+def db_connect(success_ratio: int) -> bool:
+    """
+    Return True if connection successful to database 
+    """
+    return success_ratio == 1 
+
+
+def create(flds: dict) -> int:
     if not isinstance(flds, dict):
         raise ValueError(f'Bad type for {type(flds)=}')
     if not flds.get(NAME):
@@ -24,12 +31,26 @@ def create(flds: dict):
     cities[new_id] = flds
     return new_id
 
-def num_cities() -> int:
+
+def num_cities() -> int:    
     return len(cities)
 
-def valid_id(_id: int):
-    if not isinstance(id, int):
+
+def valid_id(_id: int) -> bool:
+    if not isinstance(_id, int):
         raise ValueError(f'Bad type for {type(id)=}')
     if len(str(_id)) < MIN_ID_LEN:
         return False
     return True
+
+def delete(city_id: str) -> bool:
+    if city_id not in cities:
+        raise ValueError(f'City does not exist: {city_id}')
+    del cities[city_id]
+    return True
+
+
+def read() -> dict:
+    if not db_connect(1):
+        raise ConnectionError('Could not connect to DB.')
+    return cities
