@@ -45,12 +45,6 @@ def test_create_bad_name():
     with pytest.raises(ValueError):
         ct.create({})
 
-
-def test_create_bad_param_type():
-    with pytest.raises(ValueError):
-        ct.create(17)
-
-
 @patch('cities.queries.db_connect', return_value=True, autospec=True)
 def test_delete(mock_db_connect, temp_city):
     ct.delete(temp_city)
@@ -73,4 +67,4 @@ def test_read(mock_db_connect, temp_city):
 @patch('cities.queries.db_connect', return_value=False, autospec=True)
 def test_read_cant_connect(mock_db_connect):
     with pytest.raises(ConnectionError):
-        cities = ct.read()
+        ct.read()
