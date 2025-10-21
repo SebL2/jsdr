@@ -38,6 +38,7 @@ def create(flds: dict) -> str:
 def num_cities() -> int:
     return len(cities)
 
+
 def valid_id(_id: str) -> bool:
     if not isinstance(_id, str):
         raise ValueError(f'Bad type for {type(_id)=}')
