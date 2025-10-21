@@ -28,8 +28,8 @@ def num_cities() -> int:
     return len(cities)
 
 def valid_id(_id: int):
-    if not isinstance(id, int):
-        raise ValueError(f'Bad type for {type(id)=}')
+    if not isinstance(_id, int):
+        raise ValueError(f'Bad type for {type(_id)=}')
     if len(str(_id)) < MIN_ID_LEN:
         return False
     return True
