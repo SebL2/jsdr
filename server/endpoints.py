@@ -40,7 +40,7 @@ class Cities(Resource):
         except ConnectionError:
             return {ERROR: "There is a connection error"}, 500
 
-    def create(self):
+    def post(self):
         fields = request.get_json()
         try:
             ct.create(fields)
