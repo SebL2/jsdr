@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 # from http import HTTPStatus
 
-from flask import Flask , request
+from flask import Flask, request
 from flask_restx import Resource, Api  # , fields  # Namespace
 from flask_cors import CORS
 
@@ -29,12 +29,14 @@ CITIES_CREATE = '/create'
 
 SUCCESS = "Success"
 
+
 @api.route(f'{CITIES_EPS}/{READ}')
 class Cities(Resource):
     def get(self):
         # cities = cqry.read()
         # return {CITIES_RESP:cities}
-        return {CITIES_RESP:"world"}
+        return {CITIES_RESP: "world"}
+
 
 @api.route(f'{CITIES_EPS}/{CITIES_CREATE}')
 class Create(Resource):
@@ -46,11 +48,11 @@ class Create(Resource):
             return {SUCCESS: False}
         return {SUCCESS: True}
 
+
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
     """
-    The purpose of the HelloWorld class is to have a simple test to see if the
-    app is working at all.
+    Provide a simple test endpoint to verify the application is working.
     """
     def get(self):
         """
@@ -69,5 +71,7 @@ class Endpoints(Resource):
         """
         The `get()` method will return a sorted list of available endpoints.
         """
-        endpoints = sorted(rule.rule for rule in api.app.url_map.iter_rules())
+        endpoints = sorted(
+            rule.rule for rule in api.app.url_map.iter_rules()
+        )
         return {"Available endpoints": endpoints}

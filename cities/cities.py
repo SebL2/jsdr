@@ -17,11 +17,12 @@ SAMPLE_CITY = {
     POPULATION: -1
 }
 
+
 def db_connect(success_ratio: int) -> bool:
     """
-    Return True if connection successful to database 
+    Return True if connection successful to database
     """
-    return success_ratio == 1 
+    return success_ratio == 1
 
 
 def create(flds: dict) -> str:
@@ -34,7 +35,7 @@ def create(flds: dict) -> str:
     return new_id
 
 
-def num_cities() -> int:    
+def num_cities() -> int:
     return len(cities)
 
 
@@ -44,6 +45,7 @@ def valid_id(_id: str) -> bool:
     if len(_id) < MIN_ID_LEN:
         return False
     return True
+
 
 def delete(city_id: str) -> bool:
     if city_id not in cities:
@@ -57,17 +59,18 @@ def read() -> dict:
         raise ConnectionError('Could not connect to DB.')
     return cities
 
+
 def get_population(city_id: str) -> int:
     if city_id not in cities:
         raise ValueError(f'City does not exist: {city_id}')
     return cities[city_id]['population']
 
 
-def set_population(city_id: str,population: int) -> bool:
+def set_population(city_id: str, population: int) -> bool:
     if city_id not in cities:
         raise ValueError(f'City does not exist: {city_id}')
-    if not isinstance(population,int):
-         raise ValueError(f'Bad type for {type(population)=}')
+    if not isinstance(population, int):
+        raise ValueError(f'Bad type for {type(population)=}')
     if population < 0:
         raise ValueError('Population cannot be negative')
     cities[city_id]['population'] = population
