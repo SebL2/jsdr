@@ -59,17 +59,18 @@ def read() -> dict:
         raise ConnectionError('Could not connect to DB.')
     return cities
 
+
 def get_population(city_id: str) -> int:
     if city_id not in cities:
         raise ValueError(f'City does not exist: {city_id}')
     return cities[city_id]['population']
 
 
-def set_population(city_id: str,population: int) -> bool:
+def set_population(city_id: str, population: int) -> bool:
     if city_id not in cities:
         raise ValueError(f'City does not exist: {city_id}')
-    if not isinstance(population,int):
-         raise ValueError(f'Bad type for {type(population)=}')
+    if not isinstance(population, int):
+        raise ValueError(f'Bad type for {type(population)=}')
     if population < 0:
         raise ValueError('Population cannot be negative')
     cities[city_id]['population'] = population
