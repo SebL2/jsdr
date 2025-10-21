@@ -28,24 +28,24 @@ CITIES_RESP = 'Cities'
 CITIES_CREATE = '/create'
 
 SUCCESS = "Success"
+ERROR = "Error"
 
 
 @api.route(f'{CITIES_EPS}/{READ}')
 class Cities(Resource):
     def get(self):
-        # cities = cqry.read()
-        # return {CITIES_RESP:cities}
-        return {CITIES_RESP: "world"}
+        try:
+            cities = ct.read()
+            return {CITIES_RESP: cities, "Number of cities": len(cities)}
+        except ConnectionError:
+            return {ERROR: "There is a connection error"}, 500
 
-
-@api.route(f'{CITIES_EPS}/{CITIES_CREATE}')
-class Create(Resource):
-    def post(self):
+    def create(self):
         fields = request.get_json()
         try:
             ct.create(fields)
         except ValueError:
-            return {SUCCESS: False}
+            return {ERROR: "There is a value error"}, 400
         return {SUCCESS: True}
 
 
