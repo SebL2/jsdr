@@ -15,11 +15,12 @@ SAMPLE_CITY = {
     STATE_CODE: 'NY',
 }
 
+
 def db_connect(success_ratio: int) -> bool:
     """
-    Return True if connection successful to database 
+    Return True if connection successful to database
     """
-    return success_ratio == 1 
+    return success_ratio == 1
 
 
 def create(flds: dict) -> int:
@@ -32,7 +33,7 @@ def create(flds: dict) -> int:
     return new_id
 
 
-def num_cities() -> int:    
+def num_cities() -> int:
     return len(cities)
 
 
@@ -42,6 +43,7 @@ def valid_id(_id: int) -> bool:
     if len(str(_id)) < MIN_ID_LEN:
         return False
     return True
+
 
 def delete(city_id: str) -> bool:
     if city_id not in cities:
