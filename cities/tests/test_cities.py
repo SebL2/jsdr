@@ -39,32 +39,41 @@ def test_num_cities():
     old_length = ct.num_cities()
     sample_city = ct.SAMPLE_CITY
     ct.create(sample_city)
-    assert ct.num_cities == old_length + 1
+    assert ct.num_cities() == old_length + 1
     
 def test_create_bad_name():
     with pytest.raises(ValueError):
         ct.create({})
 
-@patch('cities.queries.db_connect', return_value=True, autospec=True)
+
+def test_change_population(temp_city):
+    old_population = ct.get_population(temp_city)
+    new_population = old_population+1
+    ct.set_population(temp_city,new_population)
+    assert new_population == ct.get_population(temp_city)
+        
+
+@patch('cities.cities.db_connect', return_value=True, autospec=True)
 def test_delete(mock_db_connect, temp_city):
     ct.delete(temp_city)
     assert temp_city not in ct.read()
 
 
-@patch('cities.queries.db_connect', return_value=True, autospec=True)
+@patch('cities.cities.db_connect', return_value=True, autospec=True)
 def test_delete_not_there(mock_db_connect):
     with pytest.raises(ValueError):
         ct.delete('some value that is not there')
 
 
-@patch('cities.queries.db_connect', return_value=True, autospec=True)
+@patch('cities.cities.db_connect', return_value=True, autospec=True)
 def test_read(mock_db_connect, temp_city):
     cities = ct.read()
     assert isinstance(cities, dict)
     assert temp_city in cities
 
 
-@patch('cities.queries.db_connect', return_value=False, autospec=True)
+@patch('cities.cities.db_connect', return_value=False, autospec=True)
 def test_read_cant_connect(mock_db_connect):
     with pytest.raises(ConnectionError):
         ct.read()
+    

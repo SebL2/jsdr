@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 # from http import HTTPStatus
 
-from flask import Flask  # , request
+from flask import Flask , request
 from flask_restx import Resource, Api  # , fields  # Namespace
 from flask_cors import CORS
 
@@ -38,7 +38,8 @@ class Cities(Resource):
 
 @api.route(f'{CITIES_EPS}/{CITIES_CREATE}')
 class Create(Resource):
-    def post(self,fields):
+    def post(self):
+        fields = request.get_json()
         try:
             ct.create(fields)
         except ValueError:
