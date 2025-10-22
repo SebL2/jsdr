@@ -135,6 +135,16 @@ def handle_action(curr_state, action, **kwargs) -> str:
         raise ValueError(f'{action} not available in {curr_state}')
     return STATE_TABLE[curr_state][action][FUNC](**kwargs)
 
+def delete(manu_dict: dict, manu_id: str) -> bool:
+    """
+    Delete a manuscript entry from the given manuscript dictionary.
+    Raises ValueError if the ID does not exist.
+    """
+    if manu_id not in manu_dict:
+        raise ValueError(f"No such manuscript: {manu_id}")
+    del manu_dict[manu_id]
+    return True
+
 
 def main():
     print(handle_action(SUBMITTED, ASSIGN_REF,
