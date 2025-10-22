@@ -27,17 +27,12 @@ def clean_database():
     pass
 
 
-# This test is intentionally skipped because it's an example of a *bad test*.
-# The decorator below tells pytest to skip this test entirely when running.
 @pytest.mark.skip('This is an example of a bad test!')
 def test_bad_test_for_num_cities():
-    # This test directly compares a function's output (num_cities)
-    # with an internal data structure (cities dict) — which makes it fragile.
-    # It depends too much on implementation details rather than behavior.
+    """Skipped test that depends too much on internal structure"""
     assert qry.num_cities() == len(qry.cities)
 
 
-# Example of using a fixture in a test
 def test_create_with_fixture(sample_city, clean_database):
     """Test creating a city using a fixture for test data"""
     old_count = qry.num_cities()
@@ -46,7 +41,6 @@ def test_create_with_fixture(sample_city, clean_database):
     assert qry.num_cities() == old_count + 1
 
 
-# Example of pytest.raises for testing exceptions
 def test_create_raises_error_for_invalid_input():
     """Test that create() raises ValueError for invalid input"""
     with pytest.raises(ValueError):
@@ -55,8 +49,18 @@ def test_create_raises_error_for_invalid_input():
 
 def test_mock_example():
     """Example test showing pytest concepts without external dependencies"""
-    # This test demonstrates pytest features without needing to mock non-existent functions
-    # In real scenarios, you'd mock actual external dependencies like database calls
     sample_data = {'1': {'name': 'NYC', 'state_code': 'NY'}}
     assert isinstance(sample_data, dict)
     assert '1' in sample_data
+
+
+@patch("cities.cities.num_cities", return_value=42)
+def test_num_cities_with_patch(mock_num_cities):
+    """
+    Example of using patch to mock a function call.
+    Pretends that num_cities() always returns 42,
+    simulating a mock database response.
+    """
+    result = qry.num_cities()
+    mock_num_cities.assert_called_once()
+    assert result == 42
