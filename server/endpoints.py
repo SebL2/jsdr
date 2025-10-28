@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 # from http import HTTPStatus
 
-from flask import Flask, request
+from flask import Flask
 from flask_restx import Resource, Api  ,reqparse# , fields  # Namespace
 from flask_cors import CORS
 
@@ -76,7 +76,6 @@ class Cities(Resource):
             return {ERROR: "There is a value error"}, 400
         return {SUCCESS: True}
     
-
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
     """
