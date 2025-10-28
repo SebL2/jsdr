@@ -24,3 +24,7 @@ def test_hello():
 @pytest.mark.skip(reason="Demonstration of pytest skip feature")
 def test_skip_demo():
     assert True
+
+
+def test_skip_demo_inline():
+    pytest.skip("Demonstration of inline skip call")
