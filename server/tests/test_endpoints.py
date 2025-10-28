@@ -19,3 +19,12 @@ def test_hello():
     resp = TEST_CLIENT.get(ep.HELLO_EP)
     resp_json = resp.get_json()
     assert ep.HELLO_RESP in resp_json
+
+    
+@pytest.mark.skip(reason="Demonstration of pytest skip feature")
+def test_skip_demo():
+    assert True
+
+
+def test_skip_demo_inline():
+    pytest.skip("Demonstration of inline skip call")
