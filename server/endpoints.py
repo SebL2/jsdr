@@ -25,7 +25,6 @@ MESSAGE = 'Message'
 
 CITIES_EPS = '/cities'
 CITIES_RESP = 'Cities'
-CITIES_CREATE = '/create'
 
 SUCCESS = "Success"
 ERROR = "Error"
@@ -43,7 +42,7 @@ population_put = reqparse.RequestParser()
 population_put.add_argument('city_id',type=str,required=True)
 population_put.add_argument('population', type=int, required=True)
 
-@api.route(f'{CITIES_EPS}/')
+@api.route(f'{CITIES_EPS}')
 class Cities(Resource):
     def get(self):
         try:
