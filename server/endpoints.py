@@ -5,7 +5,7 @@ The endpoint called `endpoints` will return all available endpoints.
 # from http import HTTPStatus
 
 from flask import Flask
-from flask_restx import Resource, Api  ,reqparse# , fields  # Namespace
+from flask_restx import Resource, Api, reqparse  # , fields  # Namespace
 from flask_cors import CORS
 
 # import werkzeug.exceptions as wz
@@ -39,8 +39,9 @@ city_post.add_argument('state_code', type=str, required=True)
 city_post.add_argument('population', type=int, required=True)
 
 population_put = reqparse.RequestParser()
-population_put.add_argument('city_id',type=str,required=True)
+population_put.add_argument('city_id', type=str, required=True)
 population_put.add_argument('population', type=int, required=True)
+
 
 @api.route(f'{CITIES_EPS}')
 class Cities(Resource):
@@ -50,7 +51,7 @@ class Cities(Resource):
             return {CITIES_RESP: cities, "Number of cities": len(cities)}
         except ConnectionError:
             return {ERROR: "There is a connection error"}, 500
-        
+
     @api.expect(city_post)
     def post(self):
         args = city_post.parse_args()
@@ -64,18 +65,19 @@ class Cities(Resource):
         except ValueError:
             return {ERROR: "There is a value error"}, 400
         return {SUCCESS: True}
-    
+
     @api.expect(population_put)
     def put(self):
         args = population_put.parse_args()
         city_id = args['city_id']
         population = args['population']
         try:
-            ct.set_population(city_id,population)
+            ct.set_population(city_id, population)
         except ValueError:
             return {ERROR: "There is a value error"}, 400
         return {SUCCESS: True}
-    
+
+
 @api.route(HELLO_EP)
 class HelloWorld(Resource):
     """
