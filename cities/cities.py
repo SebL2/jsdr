@@ -31,6 +31,8 @@ def create(flds: dict) -> str:
     if not flds.get(NAME):
         raise ValueError(f'Bad value for {flds.get(NAME)=}')
     new_id = str(len(cities) + 1)
+    flds[NAME] = flds[NAME].strip()
+    flds[STATE_CODE] = flds[STATE_CODE].strip().upper()
     cities[new_id] = flds
     return new_id
 
