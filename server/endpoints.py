@@ -66,7 +66,7 @@ class Cities(Resource):
             ct.create(city)
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
-        return {SUCCESS: True}
+        return {SUCCESS: True}, HTTPStatus.CREATED
 
     @api.expect(population_put)
     def put(self):
