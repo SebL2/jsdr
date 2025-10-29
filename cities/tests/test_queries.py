@@ -64,3 +64,8 @@ def test_num_cities_with_patch(mock_num_cities):
     result = qry.num_cities()
     mock_num_cities.assert_called_once()
     assert result == 42
+
+@pytest.mark.skip(reason="Demonstration of skip feature — test temporarily disabled")
+def test_skip_example():
+    """Example of a skipped test to demonstrate pytest skip functionality"""
+    assert False, "This test should be skipped"
