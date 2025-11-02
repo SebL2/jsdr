@@ -78,6 +78,7 @@ def set_population(city_id: str, population: int) -> bool:
     cities[city_id]['population'] = population
     return True
 
+
 def city_exists(city_id: str) -> bool:
     """Return True if a city with the given ID exists in the database."""
     return city_id in cities
