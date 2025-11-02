@@ -2,6 +2,9 @@
 City-level data for SWE project
 """
 
+import data.db_connect as dbc
+
+CITY_COLLECTION = "Cities"
 ID = 'id'
 NAME = 'name'
 STATE_CODE = 'state_code'
@@ -30,10 +33,7 @@ def create(flds: dict) -> str:
         raise ValueError(f'Bad type for {type(flds)=}')
     if not flds.get(NAME):
         raise ValueError(f'Bad value for {flds.get(NAME)=}')
-    new_id = str(len(cities) + 1)
-    flds[NAME] = flds[NAME].strip()
-    flds[STATE_CODE] = flds[STATE_CODE].strip().upper()
-    cities[new_id] = flds
+    new_id = dbc.create(CITY_COLLECTION, flds)
     return new_id
 
 
@@ -49,17 +49,15 @@ def valid_id(_id: str) -> bool:
     return True
 
 
-def delete(city_id: str) -> bool:
-    if city_id not in cities:
-        raise ValueError(f'City does not exist: {city_id}')
-    del cities[city_id]
-    return True
+def delete(name: str, state_code: str) -> bool:
+    ret = dbc.delete(CITY_COLLECTION, {NAME: name, STATE_CODE: state_code})
+    if ret < 1:
+        raise ValueError(f'City not found: {name}, {state_code}')
+    return ret
 
 
 def read() -> dict:
-    if not db_connect(1):
-        raise ConnectionError('Could not connect to DB.')
-    return cities
+    return dbc.read(CITY_COLLECTION)
 
 
 def get_population(city_id: str) -> int:

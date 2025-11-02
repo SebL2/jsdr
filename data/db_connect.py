@@ -17,6 +17,8 @@ client = None
 
 MONGO_ID = '_id'
 
+# client = pm.MongoClient()
+# client[SE_DB]['Cities'].delete_many({})
 
 def needs_db(fn, *args, **kwargs):
     @wraps(fn)
