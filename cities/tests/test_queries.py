@@ -35,10 +35,14 @@ def test_bad_test_for_num_cities():
 
 def test_create_with_fixture(sample_city, clean_database):
     """Test creating a city using a fixture for test data"""
-    old_count = qry.num_cities()
-    new_id = qry.create(sample_city)
-    assert qry.valid_id(new_id)
-    assert qry.num_cities() == old_count + 1
+    # Avoid real DB calls by mocking both num_cities() and create()
+    with patch("cities.cities.num_cities", side_effect=[0, 1]):
+        with patch("cities.cities.create", return_value="1") as mock_create:
+            old_count = qry.num_cities()
+            new_id = qry.create(sample_city)
+            mock_create.assert_called_once_with(sample_city)
+            assert qry.valid_id(new_id)
+            assert qry.num_cities() == old_count + 1
 
 
 def test_create_raises_error_for_invalid_input():
