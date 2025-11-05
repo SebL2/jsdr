@@ -2,7 +2,7 @@
 City-level data for SWE project
 """
 
-import data.db_connect as dbc
+from data import db_connect as dbc
 
 CITY_COLLECTION = "Cities"
 ID = 'id'
@@ -10,22 +10,11 @@ NAME = 'name'
 STATE_CODE = 'state_code'
 POPULATION = 'population'
 
-cities = {}
-
-MIN_ID_LEN = 1
-
 SAMPLE_CITY = {
     NAME: 'New York',
     STATE_CODE: 'NY',
     POPULATION: -1
 }
-
-
-def db_connect(success_ratio: int) -> bool:
-    """
-    Return True if connection successful to database
-    """
-    return success_ratio == 1
 
 
 def create(flds: dict) -> str:
@@ -38,15 +27,14 @@ def create(flds: dict) -> str:
 
 
 def num_cities() -> int:
-    return len(cities)
+    city_list = dbc.read(CITY_COLLECTION)
+    return len(city_list)
 
 
 def valid_id(_id: str) -> bool:
     if not isinstance(_id, str):
         raise ValueError(f'Bad type for {type(_id)=}')
-    if len(_id) < MIN_ID_LEN:
-        return False
-    return True
+    return len(_id) >= 1
 
 
 def delete(name: str, state_code: str) -> bool:
@@ -56,27 +44,11 @@ def delete(name: str, state_code: str) -> bool:
     return ret
 
 
-def read() -> dict:
+def read() -> list:
     return dbc.read(CITY_COLLECTION)
-
-
-def get_population(city_id: str) -> int:
-    if city_id not in cities:
-        raise ValueError(f'City does not exist: {city_id}')
-    return cities[city_id]['population']
-
-
-def set_population(city_id: str, population: int) -> bool:
-    if city_id not in cities:
-        raise ValueError(f'City does not exist: {city_id}')
-    if not isinstance(population, int):
-        raise ValueError(f'Bad type for {type(population)=}')
-    if population < 0:
-        raise ValueError('Population cannot be negative')
-    cities[city_id]['population'] = population
-    return True
 
 
 def city_exists(city_id: str) -> bool:
     """Return True if a city with the given ID exists in the database."""
-    return city_id in cities
+    cities = dbc.read(CITY_COLLECTION)
+    return any(city.get(ID) == city_id for city in cities)
