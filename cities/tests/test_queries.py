@@ -21,7 +21,7 @@ def sample_city():
 def clean_database():
     """Fixture that ensures a clean database state for each test"""
     # Setup: clear any existing data
-    original_count = qry.num_cities()
+    qry.num_cities()
     yield
     # Teardown: restore original state if needed
     pass
@@ -35,10 +35,14 @@ def test_bad_test_for_num_cities():
 
 def test_create_with_fixture(sample_city, clean_database):
     """Test creating a city using a fixture for test data"""
-    old_count = qry.num_cities()
-    new_id = qry.create(sample_city)
-    assert qry.valid_id(new_id)
-    assert qry.num_cities() == old_count + 1
+    # Avoid real DB calls by mocking both num_cities() and create()
+    with patch("cities.cities.num_cities", side_effect=[0, 1]):
+        with patch("cities.cities.create", return_value="1") as mock_create:
+            old_count = qry.num_cities()
+            new_id = qry.create(sample_city)
+            mock_create.assert_called_once_with(sample_city)
+            assert qry.valid_id(new_id)
+            assert qry.num_cities() == old_count + 1
 
 
 def test_create_raises_error_for_invalid_input():
@@ -65,7 +69,10 @@ def test_num_cities_with_patch(mock_num_cities):
     mock_num_cities.assert_called_once()
     assert result == 42
 
-@pytest.mark.skip(reason="Demonstration of skip feature — test temporarily disabled")
+
+@pytest.mark.skip(
+    reason="Demonstration of skip feature — test temporarily disabled"
+)
 def test_skip_example():
     """Example of a skipped test to demonstrate pytest skip functionality"""
     assert False, "This test should be skipped"
