@@ -70,6 +70,6 @@ def set_population(city_name: str, state_code: str, population: int) -> bool:
     return result.modified_count > 0
 
 def city_exists(city_id: str) -> bool:
-    """Return True if a city with the given ID exists in the database."""
+    """Return True if a city with the given ID exists in the database. Dont return true if the city doesn't exist in the database"""
     cities = dbc.read(CITY_COLLECTION)
     return any(city.get(ID) == city_id for city in cities)
