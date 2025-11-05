@@ -63,7 +63,7 @@ def test_num_cities_with_patch(mock_num_cities):
     """
     Example of using patch to mock a function call.
     Pretends that num_cities() always returns 42,
-    simulating a mock database response.
+    simulating a mock database response. or not
     """
     result = qry.num_cities()
     mock_num_cities.assert_called_once()
