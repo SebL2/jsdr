@@ -47,29 +47,42 @@ def delete(name: str, state_code: str) -> bool:
 def read() -> list:
     return dbc.read(CITY_COLLECTION)
 
+
 def get_population(city_name: str, state_code: str) -> int:
-  
-    city = dbc.read_one(CITY_COLLECTION, {NAME: city_name, STATE_CODE: state_code})
+    city = dbc.read_one(
+        CITY_COLLECTION,
+        {NAME: city_name, STATE_CODE: state_code},
+    )
     if not city:
         raise ValueError(f'City not found: {city_name}, {state_code}')
     return city.get(POPULATION, -1)
 
 
 def set_population(city_name: str, state_code: str, population: int) -> bool:
-
     if not isinstance(population, int):
         raise ValueError(f'Bad type for {type(population)=}')
     if population < 0:
         raise ValueError('Population cannot be negative')
 
-    city = dbc.read_one(CITY_COLLECTION, {NAME: city_name, STATE_CODE: state_code})
+    city = dbc.read_one(
+        CITY_COLLECTION,
+        {NAME: city_name, STATE_CODE: state_code},
+    )
     if not city:
         raise ValueError(f'City does not exist: {city_name}, {state_code}')
 
-    result = dbc.update(CITY_COLLECTION, {NAME: city_name, STATE_CODE: state_code}, {POPULATION: population})
+    result = dbc.update(
+        CITY_COLLECTION,
+        {NAME: city_name, STATE_CODE: state_code},
+        {POPULATION: population},
+    )
     return result.modified_count > 0
 
+
 def city_exists(city_id: str) -> bool:
-    """Return True if a city with the given ID exists in the database. Dont return true if the city doesn't exist in the database"""
+    """
+    Return True if a city with the given ID exists in the database.
+    Do not return True if the city does not exist in the database.
+    """
     cities = dbc.read(CITY_COLLECTION)
     return any(city.get(ID) == city_id for city in cities)

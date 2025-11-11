@@ -81,27 +81,34 @@ city_delete.add_argument('city_id', type=str, required=True,
 class Cities(Resource):
     """
     RESTful endpoint for cities collection operations.
-    
+
     This class handles HTTP requests to /cities and provides:
     - GET: Retrieve all cities
     - POST: Create a new city
     - PUT: Update city population
     - DELETE: Remove a city
-    
-    All methods include proper error handling and return appropriate HTTP status codes.
+
+    All methods include proper error handling and return appropriate
+    HTTP status codes.
     """
-    
+
     def get(self):
         """
         GET /cities - Retrieve all cities in the system.
-        
+
         Returns:
             200: JSON object with cities data and count
             500: Internal server error if database connection fails
-            
+
         Example response:
             {
-                "Cities": {"1": {"name": "NYC", "state_code": "NY", "population": 8000000}},
+                "Cities": {
+                    "1": {
+                        "name": "NYC",
+                        "state_code": "NY",
+                        "population": 8000000
+                    }
+                },
                 "Number of cities": 1
             }
         """
@@ -116,18 +123,18 @@ class Cities(Resource):
     def post(self):
         """
         POST /cities - Create a new city.
-        
+
         Expected JSON body:
             {
                 "name": "City Name",
-                "state_code": "ST", 
+                "state_code": "ST",
                 "population": 123456
             }
-            
+
         Returns:
             201: City created successfully
             400: Bad request (invalid data, missing fields, etc.)
-            
+
         The request parser automatically validates required fields and types.
         """
         args = city_post.parse_args()
@@ -146,16 +153,17 @@ class Cities(Resource):
     def put(self):
         """
         PUT /cities - Update a city's population.
-        
+
         Expected parameters:
             city_id (str): ID of the city to update
             population (int): New population value (must be >= 0)
-            
+
         Returns:
             200: Population updated successfully
             400: Bad request (city not found, negative population, etc.)
-            
-        This endpoint includes validation to prevent negative population values.
+
+        This endpoint includes validation to prevent negative
+        population values.
         """
         args = population_put.parse_args()
         city_id = args['city_id']
@@ -176,15 +184,16 @@ class Cities(Resource):
     def delete(self):
         """
         DELETE /cities - Remove a city from the system.
-        
+
         Expected parameters:
             city_id (str): ID of the city to delete
-            
+
         Returns:
             200: City deleted successfully
             400: Bad request (city not found, invalid ID, etc.)
-            
-        This is a destructive operation that permanently removes the city.
+
+        This is a destructive operation that permanently removes the
+        city.
         """
         args = city_delete.parse_args()
         city_id = args['city_id']
@@ -199,26 +208,27 @@ class Cities(Resource):
 class HelloWorld(Resource):
     """
     Health check endpoint for monitoring and testing.
-    
+
     This simple endpoint serves multiple purposes:
     - Verify the Flask application is running
     - Test basic HTTP connectivity
     - Provide a lightweight endpoint for load balancers
     - Serve as a starting point for API exploration
     """
-    
+
     def get(self):
         """
         GET /hello - Simple health check endpoint.
-        
+
         Returns:
             200: JSON response indicating the server is operational
-            
+
         Example response:
             {"hello": "world"}
-            
+
         This endpoint requires no authentication and has no side effects,
-        making it perfect for automated health checks and monitoring systems.
+        making it perfect for automated health checks and monitoring
+        systems.
         """
         return {HELLO_RESP: 'world'}
 
@@ -227,7 +237,7 @@ class HelloWorld(Resource):
 class Endpoints(Resource):
     """
     Self-documenting API endpoint discovery.
-    
+
     This endpoint provides runtime discovery of all available API endpoints.
     It's particularly useful for:
     - API documentation and exploration
@@ -235,26 +245,27 @@ class Endpoints(Resource):
     - Development and debugging
     - Integration testing
     """
-    
+
     def get(self):
         """
         GET /endpoints - Discover all available API endpoints.
-        
+
         Returns:
-            200: JSON object containing a sorted list of all endpoint URLs
-            
+            200: JSON object with a sorted list of all endpoint URLs
+
         Example response:
             {
                 "Available endpoints": [
                     "/cities",
-                    "/cities/<string:city_id>", 
+                    "/cities/<string:city_id>",
                     "/endpoints",
                     "/hello"
                 ]
             }
-            
-        This endpoint dynamically generates the list by inspecting Flask's
-        URL routing table, so it's always up-to-date with the current API.
+
+        This endpoint dynamically generates the list by inspecting
+        Flask's URL routing table, so it's always up-to-date with the
+        current API.
         """
         endpoints = sorted(
             rule.rule for rule in api.app.url_map.iter_rules()
@@ -266,38 +277,40 @@ class Endpoints(Resource):
 class City(Resource):
     """
     RESTful endpoint for individual city operations.
-    
+
     This endpoint handles operations on specific cities identified by their ID.
     The URL pattern /cities/<city_id> follows REST conventions where:
     - The resource collection is /cities
     - Individual resources are /cities/{id}
-    
-    This provides a clean, predictable API structure that clients can easily understand.
+
+    This provides a clean, predictable API structure that clients can
+    easily understand.
     """
-    
+
     def get(self, city_id):
         """
         GET /cities/<city_id> - Retrieve a specific city by its ID.
-        
+
         Args:
             city_id (str): The unique identifier of the city to retrieve
-            
+
         Returns:
             200: JSON object containing the city data
             404: City not found
             500: Internal server error (database connection issues)
-            
+
         Example response for GET /cities/1:
             {
                 "Cities": {
                     "name": "New York",
-                    "state_code": "NY", 
+                    "state_code": "NY",
                     "population": 8000000
                 }
             }
-            
-        This endpoint is useful when clients need details about a specific city
-        rather than retrieving the entire cities collection.
+
+        This endpoint is useful when clients need details about a
+        specific city rather than retrieving the entire cities
+        collection.
         """
         try:
             cities = ct.read()
