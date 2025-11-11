@@ -4,14 +4,14 @@ City-level data for SWE project
 
 from data import db_connect as dbc
 
-CITY_COLLECTION = "Cities"
+STATE_COLLECTION = "States"
 ID = 'id'
-NAME = 'name'
+COUNTRY_NAME = 'country_name'
 STATE_CODE = 'state_code'
 POPULATION = 'population'
 
-SAMPLE_CITY = {
-    NAME: 'New York',
+SAMPLE_STATE = {
+    COUNTRY_NAME: 'USA',
     STATE_CODE: 'NY',
     POPULATION: -1
 }
@@ -22,7 +22,7 @@ def create(flds: dict) -> str:
         raise ValueError(f'Bad type for {type(flds)=}')
     if not flds.get(NAME):
         raise ValueError(f'Bad value for {flds.get(NAME)=}')
-    new_id = dbc.create(CITY_COLLECTION, flds)
+    new_id = dbc.create(STATE_COLLECTION, flds)
     return new_id
 
 

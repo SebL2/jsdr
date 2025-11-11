@@ -1,7 +1,7 @@
 # Project Kanban Board
 
 **Link to Kanban Board:**  
-👉 [GitHub Projects Board](https://github.com/your-org-or-user/your-repo/projects/1)
+👉 [GitHub Projects Board](https://github.com/users/SebL2/projects/1)
 
 ##  Columns
 - **To Do:** Tasks we plan to start soon  
