@@ -350,7 +350,7 @@ def city_exists(city_id: str) -> bool:
     - Currently reads all cities to check existence
     - For large datasets, consider implementing a database-level exists query
     - The any() function provides short-circuit evaluation for better performance
-    
+
     Example:
         if city_exists('12345'):
             print("City found!")
@@ -359,7 +359,7 @@ def city_exists(city_id: str) -> bool:
     """
     # Retrieve all cities from the database
     cities = dbc.read(CITY_COLLECTION)
-    
+
     # Use generator expression with any() for efficient searching
     # Stops at first match, doesn't need to check all cities
     return any(city.get(ID) == city_id for city in cities)
