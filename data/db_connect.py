@@ -23,7 +23,7 @@ MONGO_ID = '_id'
 def needs_db(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        global client
+        global client   
         if not client:
             connect_db()
         return fn(*args,**kwargs)
