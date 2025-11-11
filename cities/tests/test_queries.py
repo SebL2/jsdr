@@ -21,7 +21,7 @@ def sample_city():
 def clean_database():
     """Fixture that ensures a clean database state for each test"""
     # Setup: clear any existing data
-    qry.num_cities()
+    # qry.num_cities()
     yield
     # Teardown: restore original state if needed
     pass
