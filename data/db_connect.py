@@ -2,6 +2,9 @@
 All interaction with MongoDB should be through this file!
 We may be required to use a new database at any point.
 """
+# This module centralizes all MongoDB operations to ensure consistent access patterns.
+# Changing databases in the future will only require edits within this file.
+
 import os
 
 from functools import wraps
