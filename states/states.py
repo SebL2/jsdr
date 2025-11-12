@@ -18,6 +18,8 @@ SAMPLE_STATE = {
     POPULATION: -1
 }
 
+# Each function in this module interacts with MongoDB via db_connect (dbc).
+# This keeps database access logic separate from data-handling logic.
 
 def create(flds: dict) -> str:
     """Create a new state record in the database."""
