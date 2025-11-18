@@ -80,3 +80,13 @@ def test_bad_population(temp_city):
         query_string={"city_id": temp_city, "population": -1},
     )
     assert resp.status_code == 400
+
+
+def test_endpoints_lists_hello():
+    """
+    Ensure the endpoint discovery includes the /hello route.
+    """
+    resp = TEST_CLIENT.get(ep.ENDPOINT_EP)
+    data = resp.get_json()
+    assert ep.ENDPOINT_RESP in data
+    assert ep.HELLO_EP in data[ep.ENDPOINT_RESP]
