@@ -143,6 +143,10 @@ class Cities(Resource):
             STATE_CODE: args['state_code'],
             POPULATION: args['population']
         }
+        # Additional validation: population must be non-negative
+        if city[POPULATION] < 0:
+            return {ERROR: "Population cannot be negative"}, \
+                HTTPStatus.BAD_REQUEST
         try:
             ct.create(city)
         except ValueError as e:
