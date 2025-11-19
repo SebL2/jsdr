@@ -118,9 +118,12 @@ class Cities(Resource):
             }
         """
         try:
+            # Fetch all cities from database
             cities = ct.read()
+            # Return cities with count for client convenience
             return {CITIES_RESP: cities, "Number of cities": len(cities)}
         except ConnectionError:
+            # Handle database connection failures gracefully
             return {ERROR: "There is a connection error"}, \
                 HTTPStatus.INTERNAL_SERVER_ERROR
 
@@ -142,7 +145,9 @@ class Cities(Resource):
 
         The request parser automatically validates required fields and types.
         """
+        # Parse and validate request arguments
         args = city_post.parse_args()
+        # Build city object from request data
         city = {
             NAME: args['name'],
             STATE_CODE: args['state_code'],
@@ -153,9 +158,12 @@ class Cities(Resource):
             return {ERROR: "Population cannot be negative"}, \
                 HTTPStatus.BAD_REQUEST
         try:
+            # Delegate to business logic layer for creation
             ct.create(city)
         except ValueError as e:
+            # Return validation errors to client
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
+        # Return success with 201 Created status
         return {SUCCESS: True}, HTTPStatus.CREATED
 
     @api.expect(population_put)
@@ -175,19 +183,22 @@ class Cities(Resource):
         This endpoint includes validation to prevent negative
         population values.
         """
+        # Parse request parameters
         args = population_put.parse_args()
         city = args['city']
         state = args['state']
         population = args['population']
 
-        # Validate population is not negative - business rule enforcement
+        # Validate population is not negative - business rule
         if population < 0:
             return {ERROR: "Population cannot be negative"}, \
                 HTTPStatus.BAD_REQUEST
 
         try:
+            # Update population through business logic layer
             ct.set_population(city, state, population)
         except ValueError as e:
+            # Handle city not found or other validation errors
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
 
@@ -207,12 +218,15 @@ class Cities(Resource):
         This is a destructive operation that permanently removes the
         city.
         """
+        # Parse delete request parameters
         args = city_delete.parse_args()
         city = args['city']
         state = args['state']
         try:
+            # Perform deletion through business logic layer
             ct.delete(city, state)
         except ValueError as e:
+            # Handle city not found errors
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
 
@@ -280,9 +294,11 @@ class Endpoints(Resource):
         Flask's URL routing table, so it's always up-to-date with the
         current API.
         """
+        # Extract all URL rules from Flask's routing table
         endpoints = sorted(
             rule.rule for rule in api.app.url_map.iter_rules()
         )
+        # Return sorted list for easy reading
         return {"Available endpoints": endpoints}
 
 
@@ -326,11 +342,15 @@ class City(Resource):
         collection.
         """
         try:
+            # Fetch all cities from database
             cities = ct.read()
+            # Check if requested city exists
             if city_id not in cities:
                 return {ERROR: f"City {city_id} not found"}, \
                     HTTPStatus.NOT_FOUND
+            # Return the specific city data
             return {CITIES_RESP: cities[city_id]}
         except ConnectionError:
+            # Handle database connection failures
             return {ERROR: "There is a connection error"}, \
                 HTTPStatus.INTERNAL_SERVER_ERROR
