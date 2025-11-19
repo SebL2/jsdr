@@ -66,15 +66,18 @@ city_post.add_argument('population', type=int, required=True,
 
 # Parser for PUT /cities - updating city population
 population_put = reqparse.RequestParser()
-population_put.add_argument('city_id', type=str, required=True,
-                            help='City ID is required')
+population_put.add_argument('city', type=str, required=True,
+                            help='City is required')
+population_put.add_argument('state', type=str, required=True,
+                            help='State is required')
 population_put.add_argument('population', type=int, required=True,
                             help='New population value')
+
 
 # Parser for DELETE /cities - deleting cities
 city_delete = reqparse.RequestParser()
 city_delete.add_argument('city', type=str, required=True,
-                         help='City ID to delete is required')
+                         help='City to delete is required')
 city_delete.add_argument('state', type=str, required=True,
                          help='State name to delete is required')
 
@@ -162,7 +165,8 @@ class Cities(Resource):
         PUT /cities - Update a city's population.
 
         Expected parameters:
-            city_id (str): ID of the city to update
+            city (str): ID of the city to update
+            state (str): State of the city to delete
             population (int): New population value (must be >= 0)
 
         Returns:
@@ -173,7 +177,8 @@ class Cities(Resource):
         population values.
         """
         args = population_put.parse_args()
-        city_id = args['city_id']
+        city= args['city']
+        state = args['state']
         population = args['population']
 
         # Validate population is not negative - business rule enforcement
@@ -182,7 +187,7 @@ class Cities(Resource):
                 HTTPStatus.BAD_REQUEST
 
         try:
-            ct.set_population(city_id, population)
+            ct.set_population(city,state,population)
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
@@ -193,7 +198,8 @@ class Cities(Resource):
         DELETE /cities - Remove a city from the system.
 
         Expected parameters:
-            city_id (str): ID of the city to delete
+            city (str): ID of the city to delete
+            state (str): State of the city to delete
 
         Returns:
             200: City deleted successfully
