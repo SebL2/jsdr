@@ -3,6 +3,7 @@ from functools import wraps
 # import data.db_connect as dbc
 
 """
+gotta be changing n stuff
 Our record format to meet our requirements (see security.md) will be:
 
 {
