@@ -82,7 +82,6 @@ city_delete.add_argument('state', type=str, required=True,
                          help='State name to delete is required')
 
 
-
 @api.route(f'{CITIES_EPS}')
 class Cities(Resource):
     """
@@ -177,7 +176,7 @@ class Cities(Resource):
         population values.
         """
         args = population_put.parse_args()
-        city= args['city']
+        city = args['city']
         state = args['state']
         population = args['population']
 
@@ -187,7 +186,7 @@ class Cities(Resource):
                 HTTPStatus.BAD_REQUEST
 
         try:
-            ct.set_population(city,state,population)
+            ct.set_population(city, state, population)
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
@@ -209,10 +208,10 @@ class Cities(Resource):
         city.
         """
         args = city_delete.parse_args()
-        city =  args['city']
+        city = args['city']
         state = args['state']
         try:
-            ct.delete(city,state)
+            ct.delete(city, state)
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
