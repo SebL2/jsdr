@@ -157,35 +157,6 @@ def read(collection, db=SE_DB, no_id=True) -> list:
         logging.error(f"MongoDB read error: {e}")
         raise
 
-# -----------------------------
-# SIMPLE IN-MEMORY CACHE
-# -----------------------------
-_cache = {}
-
-def cached_read(collection, db=SE_DB, no_id=True):
-    """
-    Returns cached results for a collection if available.
-    Falls back to DB read() on cache miss.
-    """
-    key = (collection, db, no_id)
-
-    if key in _cache:
-        logging.info(f"Cache hit for {collection}")
-        return _cache[key]
-
-    logging.info(f"Cache miss for {collection} — querying DB")
-    data = read(collection, db=db, no_id=no_id)
-
-    _cache[key] = data
-    return data
-
-
-def clear_cache():
-    """Clears the in-memory read cache."""
-    _cache.clear()
-    logging.info("Cache cleared.")
-
-
 
 def read_dict(collection, key, db=SE_DB, no_id=True) -> dict:
     try:
