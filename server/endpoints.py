@@ -73,8 +73,11 @@ population_put.add_argument('population', type=int, required=True,
 
 # Parser for DELETE /cities - deleting cities
 city_delete = reqparse.RequestParser()
-city_delete.add_argument('city_id', type=str, required=True,
+city_delete.add_argument('city', type=str, required=True,
                          help='City ID to delete is required')
+city_delete.add_argument('state', type=str, required=True,
+                         help='State name to delete is required')
+
 
 
 @api.route(f'{CITIES_EPS}')
@@ -200,9 +203,10 @@ class Cities(Resource):
         city.
         """
         args = city_delete.parse_args()
-        city_id = args['city_id']
+        city =  args['city']
+        state = args['state']
         try:
-            ct.delete(city_id)
+            ct.delete(city,state)
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
         return {SUCCESS: True}
