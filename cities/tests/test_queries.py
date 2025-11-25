@@ -14,6 +14,10 @@ import pytest
 # Import the cities module we're testing
 import cities.cities as qry
 
+# TODO: Add an integration test that uses the real MongoDB via
+# data.db_connect (with CLOUD_MONGO / MONGO_URI) instead of mocks,
+# to verify cloud DB connectivity end-to-end.
+
 
 @pytest.fixture
 def sample_city():
