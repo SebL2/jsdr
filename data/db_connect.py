@@ -50,21 +50,34 @@ def connect_db():
         try:
             logging.info("Client is None — initializing MongoDB client...")
 
-            # Cloud DB
-            if os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD:
-                password = os.environ.get('MONGO_PASSWD')
-                if not password:
-                    raise ValueError(
-                        "You must set MONGO_PASSWD to use cloud MongoDB."
-                    )
-                logging.info("Connecting to MongoDB Atlas (cloud)...")
+            use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
 
-                client = pm.MongoClient(
-                    f'mongodb+srv://gcallah:{password}'
-                    '@koukoumongo1.yud9b.mongodb.net/'
-                    '?retryWrites=true&w=majority',
-                    serverSelectionTimeoutMS=5000
-                )
+            # Cloud DB
+            if use_cloud:
+                # Prefer a full URI if provided (e.g. your own Atlas cluster)
+                mongo_uri = os.environ.get('MONGO_URI')
+                if mongo_uri:
+                    logging.info("Connecting to MongoDB via MONGO_URI (cloud)...")
+                    client = pm.MongoClient(
+                        mongo_uri,
+                        serverSelectionTimeoutMS=5000
+                    )
+                else:
+                    # Backwards-compatible: use class / default Atlas cluster
+                    password = os.environ.get('MONGO_PASSWD')
+                    if not password:
+                        raise ValueError(
+                            "You must set either MONGO_URI or MONGO_PASSWD "
+                            "to use cloud MongoDB."
+                        )
+                    logging.info("Connecting to default MongoDB Atlas cluster (cloud)...")
+
+                    client = pm.MongoClient(
+                        f'mongodb+srv://gcallah:{password}'
+                        '@koukoumongo1.yud9b.mongodb.net/'
+                        '?retryWrites=true&w=majority',
+                        serverSelectionTimeoutMS=5000
+                    )
 
             # Local DB
             else:
