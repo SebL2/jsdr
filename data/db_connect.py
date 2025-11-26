@@ -229,3 +229,25 @@ def read_dict(collection, key, db=SE_DB, no_id=True) -> dict:
     except Exception as e:
         logging.error(f"Unexpected error in read_dict: {e}")
         raise
+
+def health_check():
+    """
+    Returns True if MongoDB is reachable.
+    Returns False if not.
+    Does NOT throw errors — safe for status endpoints.
+    """
+    global client
+
+    try:
+        # Ensure client exists
+        if client is None:
+            connect_db()
+
+        # Ping DB
+        client.admin.command("ping")
+        logging.info("Health check: MongoDB is UP.")
+        return True
+
+    except Exception as e:
+        logging.warning(f"Health check failed: {e}")
+        return False
