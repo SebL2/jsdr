@@ -42,63 +42,81 @@ def needs_db(fn):
 # DB Connection Logic
 # -----------------------------
 
-#TODO: Initialize personal MongoDB instance on cloud and update config
 def connect_db():
     """
     Provides a uniform DB connection mechanism.
+    Includes retry logic for more reliable MongoDB connections.
     """
+    import time
     global client
-    if client is None:
-        try:
-            logging.info("Client is None — initializing MongoDB client...")
 
-            use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
+    if client is not None:
+        return client
 
-            # Cloud DB
-            if use_cloud:
-                # Prefer a full URI if provided (e.g. your own Atlas cluster)
-                mongo_uri = os.environ.get('MONGO_URI')
-                if mongo_uri:
-                    logging.info("Connecting to MongoDB via MONGO_URI (cloud)...")
-                    client = pm.MongoClient(
-                        mongo_uri,
-                        serverSelectionTimeoutMS=5000
-                    )
-                else:
-                    # Backwards-compatible: use class / default Atlas cluster
-                    password = os.environ.get('MONGO_PASSWD')
-                    if not password:
-                        raise ValueError(
-                            "You must set either MONGO_URI or MONGO_PASSWD "
-                            "to use cloud MongoDB."
-                        )
-                    logging.info("Connecting to default MongoDB Atlas cluster (cloud)...")
+    logging.info("Client is None — initializing MongoDB client...")
 
-                    client = pm.MongoClient(
-                        f'mongodb+srv://gcallah:{password}'
-                        '@koukoumongo1.yud9b.mongodb.net/'
-                        '?retryWrites=true&w=majority',
-                        serverSelectionTimeoutMS=5000   
-                    )
+    use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
 
-            # Local DB
+    # -----------------------------
+    # Choose connection method
+    # -----------------------------
+    try:
+        if use_cloud:
+            # Prefer a complete user-provided URI
+            mongo_uri = os.environ.get('MONGO_URI')
+
+            if mongo_uri:
+                logging.info("Connecting to MongoDB using MONGO_URI (cloud)...")
+                client = pm.MongoClient(
+                    mongo_uri,
+                    serverSelectionTimeoutMS=5000
+                )
+
             else:
-                logging.info("Connecting to local MongoDB...")
-                client = pm.MongoClient(serverSelectionTimeoutMS=5000)
+                # Fallback to default Atlas cluster using password
+                password = os.environ.get('MONGO_PASSWD')
+                if not password:
+                    raise ValueError(
+                        "Cloud MongoDB enabled, but no MONGO_URI or MONGO_PASSWD provided."
+                    )
 
-            # Force connection test
-            client.admin.command('ping')
+                logging.info("Connecting to default MongoDB Atlas (cloud)...")
+                client = pm.MongoClient(
+                    f'mongodb+srv://gcallah:{password}'
+                    '@koukoumongo1.yud9b.mongodb.net/'
+                    '?retryWrites=true&w=majority',
+                    serverSelectionTimeoutMS=5000
+                )
+
+        else:
+            # Local MongoDB
+            logging.info("Connecting to local MongoDB on default port...")
+            client = pm.MongoClient(serverSelectionTimeoutMS=5000)
+
+    except Exception as e:
+        logging.error(f"Error preparing MongoDB client: {e}")
+        raise
+
+    # -----------------------------
+    # Retry Connection Attempts
+    # -----------------------------
+    RETRIES = 3
+    for attempt in range(1, RETRIES + 1):
+        try:
+            logging.info(f"Pinging MongoDB (attempt {attempt}/{RETRIES})...")
+            client.admin.command("ping")
             logging.info("MongoDB connection successful.")
-
-        except ServerSelectionTimeoutError as e:
-            logging.error(f"MongoDB server connection failed: {e}")
-            raise
+            return client
 
         except Exception as e:
-            logging.error(f"Error connecting to MongoDB: {e}")
-            raise
+            logging.warning(f"MongoDB ping failed: {e}")
+            time.sleep(0.5)
 
-    return client
+    # After retries, fail out
+    error_msg = f"MongoDB connection failed after {RETRIES} attempts."
+    logging.error(error_msg)
+    raise ConnectionError(error_msg)
+
 
 
 # -----------------------------
