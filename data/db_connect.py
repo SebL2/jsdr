@@ -41,6 +41,8 @@ def needs_db(fn):
 # -----------------------------
 # DB Connection Logic
 # -----------------------------
+
+#TODO: Initialize personal MongoDB instance on cloud and update variables
 def connect_db():
     """
     Provides a uniform DB connection mechanism.
@@ -76,7 +78,7 @@ def connect_db():
                         f'mongodb+srv://gcallah:{password}'
                         '@koukoumongo1.yud9b.mongodb.net/'
                         '?retryWrites=true&w=majority',
-                        serverSelectionTimeoutMS=5000
+                        serverSelectionTimeoutMS=5000   
                     )
 
             # Local DB
