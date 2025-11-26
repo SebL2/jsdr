@@ -1,7 +1,16 @@
 """
-All interaction with MongoDB should be through this file!
-We may be required to use a new database at any point.
+Database connection + data access layer for the project.
+
+All interactions with MongoDB must go through this module so we can:
+• swap databases without breaking the rest of the code,
+• centralize reliability logic (retries, health checks),
+• centralize caching,
+• enforce consistent CRUD behavior,
+• simplify future refactoring.
+
+This file is intentionally abstracted away from the application logic.
 """
+
 import os
 import logging
 from functools import wraps
@@ -100,6 +109,8 @@ def connect_db():
     # -----------------------------
     # Retry Connection Attempts
     # -----------------------------
+    # Retry ping attempts to handle slow startup, network hiccups, or cold cloud clusters.
+
     RETRIES = 3
     for attempt in range(1, RETRIES + 1):
         try:
@@ -127,9 +138,11 @@ def convert_mongo_id(doc: dict):
         doc[MONGO_ID] = str(doc[MONGO_ID])
 
 
-# -----------------------------
-# CRUD OPERATIONS
-# -----------------------------
+# ----------------------------------------------------
+# CRUD OPERATIONS 
+# Wrapped with @needs_db to ensure safe DB access.
+# ----------------------------------------------------
+
 @needs_db
 def create(collection, doc, db=SE_DB):
     try:
@@ -190,9 +203,15 @@ def read(collection, db=SE_DB, no_id=True) -> list:
         logging.error(f"MongoDB read error: {e}")
         raise
 
-# -----------------------------
-# SIMPLE IN-MEMORY CACHE
-# -----------------------------
+# ----------------------------------------------------
+# IN-MEMORY READ CACHE
+# ----------------------------------------------------
+# Basic L1 cache used to avoid unnecessary reads on:
+#   • frequently accessed collections
+#   • slow local/remote MongoDB instances
+#
+# This dramatically reduces redundant database calls and improves performance.
+
 _cache = {}
 
 def cached_read(collection, db=SE_DB, no_id=True):
