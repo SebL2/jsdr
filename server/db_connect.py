@@ -1,4 +1,6 @@
 # server/db_connect.py
+from data import db_connect
+
 
 class DBConnect:
     def connect(self):
@@ -8,4 +10,5 @@ class DBConnect:
         or SQL connection.
         """
         print("Connecting to database...")
-        return True
+        client = db_connect.connect_db()
+        return client

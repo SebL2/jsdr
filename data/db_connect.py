@@ -42,7 +42,7 @@ def needs_db(fn):
 # DB Connection Logic
 # -----------------------------
 
-#TODO: Initialize personal MongoDB instance on cloud and update variables
+#TODO: Initialize personal MongoDB instance on cloud and update config
 def connect_db():
     """
     Provides a uniform DB connection mechanism.
