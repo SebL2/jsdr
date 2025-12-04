@@ -64,6 +64,8 @@ def connect_db():
 
     logging.info("Client is None — initializing MongoDB client...")
 
+    # TODO: Switch DB connection config to use environment variables suitable for PythonAnywhere.
+    # TODO: Document PythonAnywhere-specific DB URI and credentials handling here.
     use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
 
     # -----------------------------
