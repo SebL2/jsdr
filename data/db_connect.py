@@ -270,3 +270,13 @@ def health_check():
     except Exception as e:
         logging.warning(f"Health check failed: {e}")
         return False
+
+
+# TODO: Use this helper to add any PythonAnywhere-specific MongoDB configuration if needed.
+def running_on_pythonanywhere() -> bool:
+    """
+    Returns True when the app is likely running on PythonAnywhere.
+    This currently uses a simple environment-variable heuristic and
+    does not change any connection behavior by itself.
+    """
+    return "PYTHONANYWHERE_DOMAIN" in os.environ
