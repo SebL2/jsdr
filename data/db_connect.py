@@ -1,30 +1,14 @@
-"""
-Database connection + data access layer for the project.
-
-All interactions with MongoDB must go through this module so we can:
-• swap databases without breaking the rest of the code,
-• centralize reliability logic (retries, health checks),
-• centralize caching,
-• enforce consistent CRUD behavior,
-• simplify future refactoring.
-
-This file is intentionally abstracted away from the application logic.
-"""
-
 import os
 import logging
 from functools import wraps
-
+import certifi
 import pymongo as pm
 from pymongo.errors import PyMongoError, ServerSelectionTimeoutError
 
-# -----------------------------
-# Logging Setup
-# -----------------------------
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s"
-)
+"""
+Database connection + data access layer for the project.
+All interactions with MongoDB must go through this module.
+"""
 
 LOCAL = "0"
 CLOUD = "1"
@@ -32,11 +16,12 @@ SE_DB = 'seDB'
 
 client = None
 MONGO_ID = '_id'
+PA_SETTINGS = {}
 
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-# -----------------------------
-# Decorator: Ensure DB Connected
-# -----------------------------
+# Decorator to ensure DB is connected
+
 def needs_db(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -47,103 +32,53 @@ def needs_db(fn):
     return wrapper
 
 
-# -----------------------------
-# DB Connection Logic
-# -----------------------------
-
 def connect_db():
     """
-    Provides a uniform DB connection mechanism.
-    Includes retry logic for more reliable MongoDB connections.
+    Unified DB connection logic.
+    Incorporates screenshot additions: certifi TLS and PA_SETTINGS.
     """
-    import time
     global client
 
     if client is not None:
         return client
 
-    logging.info("Client is None — initializing MongoDB client...")
+    print('Client is None — initializing MongoDB client...')
 
-    # TODO: Switch DB connection config to use environment variables suitable for PythonAnywhere.
-    # TODO: Document PythonAnywhere-specific DB URI and credentials handling here.
     use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
 
-    # -----------------------------
-    # Choose connection method
-    # -----------------------------
-    try:
-        if use_cloud:
-            # Prefer a complete user-provided URI
-            mongo_uri = os.environ.get('MONGO_URI')
+    if use_cloud:
+        password = os.environ.get('MONGO_PASSWD')
+        user_nm = os.environ.get('MONGO_USER', 'gcallah')
+        cloud_mdb = os.environ.get('MONGO_MDB', 'mongodb+srv')
+        cloud_svc = os.environ.get('MONGO_SVC', 'koukoumongo1.yud9b.mongodb.net')
+        GEO_DB = os.environ.get('GEO_DB', SE_DB)
+        db_params = os.environ.get('DB_PARAMS', 'retryWrites=true&w=majority')
 
-            if mongo_uri:
-                logging.info("Connecting to MongoDB using MONGO_URI (cloud)...")
-                client = pm.MongoClient(
-                    mongo_uri,
-                    serverSelectionTimeoutMS=5000
-                )
+        if not password:
+            raise ValueError('You must set MONGO_PASSWD to use cloud MongoDB.')
 
-            else:
-                # Fallback to default Atlas cluster using password
-                password = os.environ.get('MONGO_PASSWD')
-                if not password:
-                    raise ValueError(
-                        "Cloud MongoDB enabled, but no MONGO_URI or MONGO_PASSWD provided."
-                    )
+        print('Connecting to Mongo in the cloud.')
+        client = pm.MongoClient(
+            f"{cloud_mdb}://{user_nm}:{password}@{cloud_svc}/{GEO_DB}?{db_params}",
+            tlsCAFile=certifi.where(),
+            **PA_SETTINGS
+        )
 
-                logging.info("Connecting to default MongoDB Atlas (cloud)...")
-                client = pm.MongoClient(
-                    f'mongodb+srv://gcallah:{password}'
-                    '@koukoumongo1.yud9b.mongodb.net/'
-                    '?retryWrites=true&w=majority',
-                    serverSelectionTimeoutMS=5000
-                )
+    else:
+        print("Connecting to Mongo locally.")
+        client = pm.MongoClient()
 
-        else:
-            # Local MongoDB
-            logging.info("Connecting to local MongoDB on default port...")
-            client = pm.MongoClient(serverSelectionTimeoutMS=5000)
-
-    except Exception as e:
-        logging.error(f"Error preparing MongoDB client: {e}")
-        raise
-
-    # -----------------------------
-    # Retry Connection Attempts
-    # -----------------------------
-    # Retry ping attempts to handle slow startup, network hiccups, or cold cloud clusters.
-
-    RETRIES = 3
-    for attempt in range(1, RETRIES + 1):
-        try:
-            logging.info(f"Pinging MongoDB (attempt {attempt}/{RETRIES})...")
-            client.admin.command("ping")
-            logging.info("MongoDB connection successful.")
-            return client
-
-        except Exception as e:
-            logging.warning(f"MongoDB ping failed: {e}")
-            time.sleep(0.5)
-
-    # After retries, fail out
-    error_msg = f"MongoDB connection failed after {RETRIES} attempts."
-    logging.error(error_msg)
-    raise ConnectionError(error_msg)
+    return client
 
 
-
-# -----------------------------
 # Helpers
-# -----------------------------
+
 def convert_mongo_id(doc: dict):
     if MONGO_ID in doc:
         doc[MONGO_ID] = str(doc[MONGO_ID])
 
 
-# ----------------------------------------------------
-# CRUD OPERATIONS 
-# Wrapped with @needs_db to ensure safe DB access.
-# ----------------------------------------------------
+# CRUD Operations
 
 @needs_db
 def create(collection, doc, db=SE_DB):
@@ -205,80 +140,43 @@ def read(collection, db=SE_DB, no_id=True) -> list:
         logging.error(f"MongoDB read error: {e}")
         raise
 
-# ----------------------------------------------------
-# IN-MEMORY READ CACHE
-# ----------------------------------------------------
-# Basic L1 cache used to avoid unnecessary reads on:
-#   • frequently accessed collections
-#   • slow local/remote MongoDB instances
-#
-# This dramatically reduces redundant database calls and improves performance.
+
+# Cache
 
 _cache = {}
 
 def cached_read(collection, db=SE_DB, no_id=True):
-    """
-    Returns cached results for a collection if available.
-    Falls back to DB read() on cache miss.
-    """
     key = (collection, db, no_id)
-
     if key in _cache:
         logging.info(f"Cache hit for {collection}")
         return _cache[key]
-
-    logging.info(f"Cache miss for {collection} — querying DB")
+    logging.info(f"Cache miss for {collection}")
     data = read(collection, db=db, no_id=no_id)
-
     _cache[key] = data
     return data
 
-
 def clear_cache():
-    """Clears the in-memory read cache."""
     _cache.clear()
     logging.info("Cache cleared.")
 
 
 def read_dict(collection, key, db=SE_DB, no_id=True) -> dict:
-    try:
-        recs = read(collection, db=db, no_id=no_id)
-        return {rec[key]: rec for rec in recs}
-    except KeyError as e:
-        logging.error(f"KeyError: key '{key}' not found in records: {e}")
-        raise
-    except Exception as e:
-        logging.error(f"Unexpected error in read_dict: {e}")
-        raise
+    recs = read(collection, db=db, no_id=no_id)
+    return {rec[key]: rec for rec in recs}
+
+
+# Health check
 
 def health_check():
-    """
-    Returns True if MongoDB is reachable.
-    Returns False if not.
-    Does NOT throw errors — safe for status endpoints.
-    """
     global client
-
     try:
-        # Ensure client exists
         if client is None:
             connect_db()
-
-        # Ping DB
         client.admin.command("ping")
-        logging.info("Health check: MongoDB is UP.")
         return True
-
-    except Exception as e:
-        logging.warning(f"Health check failed: {e}")
+    except Exception:
         return False
 
 
-# TODO: Use this helper to add any PythonAnywhere-specific MongoDB configuration if needed.
 def running_on_pythonanywhere() -> bool:
-    """
-    Returns True when the app is likely running on PythonAnywhere.
-    This currently uses a simple environment-variable heuristic and
-    does not change any connection behavior by itself.
-    """
     return "PYTHONANYWHERE_DOMAIN" in os.environ
