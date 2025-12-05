@@ -16,7 +16,7 @@ CHOICES = 'choices'
 SUBFIELDS = 'subfields'
 
 # Field behavior modifiers
-MULTI = 'multiple'  # Choice field allowing multiple selections
+MULTI = 'multiple'  # Choice field allowing multiple selections forreal
 RANGE = 'range'  # Field that selects a range of values
 DEFAULT = 'default'
 TYPECAST = 'typecast'
