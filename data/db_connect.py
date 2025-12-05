@@ -95,13 +95,12 @@ def create(collection, doc, db=SE_DB):
             Name of the MongoDB collection.
         doc : dict
             The document to insert into the collection.
-        db : str, optional
+        db : str
             Name of the database to use (default = SE_DB).
 
-    Returns
-    -------
-    InsertOneResult
-        The result object returned by PyMongo after insertion.
+    Returns:
+        InsertOneResult
+            The result object returned by PyMongo after insertion.
     """
     try:
         logging.info(f"Inserting into {collection} in DB={db}")
@@ -113,6 +112,19 @@ def create(collection, doc, db=SE_DB):
 
 @needs_db
 def read_one(collection, filt, db=SE_DB):
+    """
+    Retrieve a single document from a MongoDB collection that matches a filter.
+    Args:
+        collection : str
+            Name of the MongoDB collection.
+        filt : dict
+            The MongoDB filter used to select the document.
+        db : str
+            Name of the database to use (default = SE_DB).
+
+    Returns:
+        dict or None
+    """
     try:
         logging.info(f"Reading one from {collection} with filter={filt}")
         for doc in client[db][collection].find(filt):
