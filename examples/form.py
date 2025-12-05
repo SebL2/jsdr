@@ -36,7 +36,7 @@ def get_form() -> list:
 
 def get_form_descr() -> dict:
     """
-    For Swagger!
+    For Swagger! and style
     """
     return ff.get_form_descr(LOGIN_FORM_FLDS)
 
