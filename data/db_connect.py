@@ -16,12 +16,14 @@ SE_DB = 'seDB'
 
 client = None
 MONGO_ID = '_id'
+
+# PythonAnywhere settings (empty by default, but can be extended)
 PA_SETTINGS = {}
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
-# Decorator to ensure DB is connected
 
+# Decorator to ensure DB is connected
 def needs_db(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -33,10 +35,10 @@ def needs_db(fn):
 
 
 def connect_db():
-  """
+    """
     Unified DB connection logic.
 
-     Contains PythonAnywhere additions:
+    Contains PythonAnywhere additions:
         - certifi TLS CA bundle for Atlas SSL verification
         - PA_SETTINGS passed into MongoClient
         - environment-based autodetection
@@ -70,7 +72,6 @@ def connect_db():
             tlsCAFile=certifi.where(),
             **PA_SETTINGS
         )
-
     else:
         print("Connecting to Mongo locally.")
         client = pm.MongoClient()
@@ -79,14 +80,12 @@ def connect_db():
 
 
 # Helpers
-
 def convert_mongo_id(doc: dict):
     if MONGO_ID in doc:
         doc[MONGO_ID] = str(doc[MONGO_ID])
 
 
 # CRUD Operations
-
 @needs_db
 def create(collection, doc, db=SE_DB):
     try:
@@ -149,7 +148,6 @@ def read(collection, db=SE_DB, no_id=True) -> list:
 
 
 # Cache
-
 _cache = {}
 
 def cached_read(collection, db=SE_DB, no_id=True):
@@ -162,6 +160,7 @@ def cached_read(collection, db=SE_DB, no_id=True):
     _cache[key] = data
     return data
 
+
 def clear_cache():
     _cache.clear()
     logging.info("Cache cleared.")
@@ -173,7 +172,6 @@ def read_dict(collection, key, db=SE_DB, no_id=True) -> dict:
 
 
 # Health check
-
 def health_check():
     global client
     try:
@@ -186,7 +184,5 @@ def health_check():
 
 
 # PythonAnywhere detection helper
-# This is not required, but it allows you to branch logic later if you want
-# (for example: special file paths, logging, different behavior on PA).
 def running_on_pythonanywhere() -> bool:
     return "PYTHONANYWHERE_DOMAIN" in os.environ
