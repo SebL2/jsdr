@@ -88,6 +88,21 @@ def convert_mongo_id(doc: dict):
 # CRUD Operations
 @needs_db
 def create(collection, doc, db=SE_DB):
+    """
+    Insert a single document into a specified MongoDB collection.
+    Args:
+        collection : str
+            Name of the MongoDB collection.
+        doc : dict
+            The document to insert into the collection.
+        db : str, optional
+            Name of the database to use (default = SE_DB).
+
+    Returns
+    -------
+    InsertOneResult
+        The result object returned by PyMongo after insertion.
+    """
     try:
         logging.info(f"Inserting into {collection} in DB={db}")
         return client[db][collection].insert_one(doc)
