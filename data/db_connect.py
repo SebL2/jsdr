@@ -33,9 +33,16 @@ def needs_db(fn):
 
 
 def connect_db():
-    """
+  """
     Unified DB connection logic.
-    Incorporates screenshot additions: certifi TLS and PA_SETTINGS.
+
+     Contains PythonAnywhere additions:
+        - certifi TLS CA bundle for Atlas SSL verification
+        - PA_SETTINGS passed into MongoClient
+        - environment-based autodetection
+
+    These are required because PythonAnywhere does NOT ship standard Linux
+    certificate bundles, so Atlas connections need certifi to succeed.
     """
     global client
 
@@ -178,5 +185,8 @@ def health_check():
         return False
 
 
+# PythonAnywhere detection helper
+# This is not required, but it allows you to branch logic later if you want
+# (for example: special file paths, logging, different behavior on PA).
 def running_on_pythonanywhere() -> bool:
     return "PYTHONANYWHERE_DOMAIN" in os.environ
