@@ -16,14 +16,20 @@ import logging
 from functools import wraps
 import certifi
 import pymongo as pm
+from dotenv import load_dotenv
 from pymongo.errors import PyMongoError, ServerSelectionTimeoutError
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ENV_PATH = os.path.join(BASE_DIR, ".env")
+
+load_dotenv(ENV_PATH)
 
 # Environment constants for connection type
 LOCAL = "0"
 CLOUD = "1"
 
 # Default database name
-SE_DB = 'seDB'
+SE_DB = 'Geo'
 
 # Global MongoDB client instance
 client = None
@@ -114,6 +120,7 @@ def connect_db():
             tlsCAFile=certifi.where(),
             **PA_SETTINGS
         )
+        print("Connection successful")
     else:
         # Local connection uses default settings
         print("Connecting to Mongo locally.")
@@ -344,3 +351,6 @@ def running_on_pythonanywhere() -> bool:
         bool: True if on PythonAnywhere, False otherwise
     """
     return "PYTHONANYWHERE_DOMAIN" in os.environ
+
+if __name__ == "__main__":
+    create('Geo',{"test":1})
