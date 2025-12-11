@@ -25,6 +25,7 @@ def test_db_connect_real_success():
     assert client is not None
     assert core_db.health_check() is True
 
+
 def test_list_collections_and_sample_documents():
     """
     Integration test that inspects available collections and prints
@@ -53,6 +54,7 @@ def test_list_collections_and_sample_documents():
 
     # Basic assertion so the test has a check
     assert isinstance(collections, list)
+
 
 @patch("server.db_connect.DBConnect")
 def test_read(mock_db_connect):
