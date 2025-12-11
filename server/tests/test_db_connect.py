@@ -1,30 +1,30 @@
 """
 Tests for database connection module.
 
-Demonstrates mocking database connections to avoid real DB dependencies.
+Includes both a real integration test and mocked examples.
 """
 
 from unittest.mock import patch
+
 from server.db_connect import DBConnect
+from data import db_connect as core_db
 
 
-@patch("server.db_connect.DBConnect.connect", autospec=True)
-def test_db_connect_mocked_success(mock_connect):
+def test_db_connect_real_success():
     """
-    Test DBConnect.connect() with mocking.
+    Test DBConnect.connect() using the real underlying MongoDB connection.
 
-    Demonstrates: method mocking, autospec, mock verification.
+    This verifies that our configuration (local or cloud MongoDB)
+    is working end-to-end by performing a health check ping.
     """
-    # Arrange: Set up mock to return True
-    mock_connect.return_value = True
+    # Act: call the real connect method
     db_instance = DBConnect()
+    client = db_instance.connect()
 
-    # Act: Call the mocked connect method
-    result = db_instance.connect()
+    # Assert: client object exists and health check passes
+    assert client is not None
+    assert core_db.health_check() is True
 
-    # Assert: Verify behavior and mock was called correctly
-    assert result is True
-    mock_connect.assert_called_once_with(db_instance)
 
 
 @patch("server.db_connect.DBConnect")
