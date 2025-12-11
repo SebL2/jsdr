@@ -12,7 +12,7 @@ maintains data integrity.
 """
 
 import pytest
-import cities.states as st
+import states.states as st
 
 
 @pytest.fixture(scope='function')
@@ -87,7 +87,7 @@ def test_read(temp_state, monkeypatch):
 @pytest.mark.skip("temporarily disabled")
 def test_delete_not_there():
     """
-    Ensure delete() raises ValueError when trying to delete a non-existent state.
+    Ensure delete() raises ValueError for non-existent state.
     """
     with pytest.raises(ValueError):
         st.delete("some value", "XX")
@@ -98,7 +98,11 @@ def test_get_population(monkeypatch):
     """
     Test get_population() retrieves correct population value.
     """
-    mock_state = {st.STATE_CODE: "CA", st.COUNTRY_NAME: "USA", st.POPULATION: 39500000}
+    mock_state = {
+        st.STATE_CODE: "CA",
+        st.COUNTRY_NAME: "USA",
+        st.POPULATION: 39500000
+    }
     monkeypatch.setattr(st.dbc, "read_one", lambda *_: mock_state)
     result = st.get_population("USA", "CA")
     assert result == 39500000
@@ -109,9 +113,17 @@ def test_set_population(monkeypatch):
     """
     Test set_population() updates the population correctly.
     """
-    mock_state = {st.STATE_CODE: "CA", st.COUNTRY_NAME: "USA", st.POPULATION: 39500000}
+    mock_state = {
+        st.STATE_CODE: "CA",
+        st.COUNTRY_NAME: "USA",
+        st.POPULATION: 39500000
+    }
     monkeypatch.setattr(st.dbc, "read_one", lambda *_: mock_state)
-    mock_update = lambda *_, **__: type("MockResult", (), {"modified_count": 1})()
+
+    # Create mock update result
+    def mock_update(*_, **__):
+        return type("MockResult", (), {"modified_count": 1})()
+
     monkeypatch.setattr(st.dbc, "update", mock_update)
     result = st.set_population("USA", "CA", 40000000)
     assert result
