@@ -25,7 +25,34 @@ def test_db_connect_real_success():
     assert client is not None
     assert core_db.health_check() is True
 
+def test_list_collections_and_sample_documents():
+    """
+    Integration test that inspects available collections and prints
+    one sample document (if any) from each.
 
+    Run with `pytest -s` to see printed output.
+    """
+    client = core_db.connect_db()
+    db_name = core_db.SE_DB
+    db = client[db_name]
+
+    # List collections
+    collections = sorted(db.list_collection_names())
+    print(f"Collections in '{db_name}': {collections}")
+
+    # Grab at most one sample document per collection
+    sample_docs = {}
+    for coll in collections:
+        doc = db[coll].find_one()
+        if doc:
+            sample_docs[coll] = doc
+
+    print("Sample documents (one per non-empty collection):")
+    for coll, doc in sample_docs.items():
+        print(f"  {coll}: {doc}")
+
+    # Basic assertion so the test has a check
+    assert isinstance(collections, list)
 
 @patch("server.db_connect.DBConnect")
 def test_read(mock_db_connect):
