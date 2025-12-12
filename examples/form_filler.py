@@ -5,7 +5,7 @@ A utility for filling in forms in a notebook or from the command line.
 Supports various field types, validation, and default values.
 """
 
-# Field descriptor constants - define form field properties
+# Field descriptor constants - define form field properties for easier use
 # Basic field properties
 FLD_NM = 'fld_nm'
 QSTN = 'question'
