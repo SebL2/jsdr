@@ -1,141 +1,233 @@
 """
-Unit tests for the cities.states module.
+Unit tests for the states module.
 
-This test suite follows the same structure as test_cities.py and focuses on:
-- Validation and CRUD operations for states
-- Proper error handling and input validation
-- Usage of pytest fixtures and monkeypatching
-- Demonstrating testing best practices
-
-These tests verify that the state management logic works correctly and
-maintains data integrity.
+Tests cover:
+- validation
+- CRUD logic
+- population getters/setters
+- error handling
+- monkeypatching database layer safely
 """
 
 import pytest
-import states.states as st
+import states as st
 
 
-@pytest.fixture(scope='function')
-def temp_state():
-    """
-    Pytest fixture providing a clean copy of sample state data for each test.
+#
+# ──────────────────── FIXTURE ────────────────────
+#
 
-    Ensures test isolation — each test gets a fresh copy of SAMPLE_STATE,
-    avoiding side effects between tests.
-    """
+@pytest.fixture()
+def sample_state():
+    """Provide a fresh copy for each test."""
     return dict(st.SAMPLE_STATE)
 
 
-@pytest.mark.skip("temporarily disabled")
-def test_create_invalid_input_raises_error():
-    """
-    Ensure create() properly validates input types and raises ValueError
-    for invalid data such as non-dict input.
-    """
-    invalid_input = 42
+#
+# ──────────────────── CREATE TESTS ────────────────────
+#
+
+def test_create_invalid_type():
+    """create() must reject non-dict input."""
     with pytest.raises(ValueError):
-        st.create(invalid_input)
+        st.create(123)
 
 
-def test_create_bad_state_code():
-    """
-    Test that create() rejects invalid or missing required fields.
-    """
+def test_create_missing_fields():
+    """create() must reject dicts missing required fields."""
     with pytest.raises(ValueError):
         st.create({})
 
-
-@pytest.mark.skip("temporarily disabled")
-def test_success_create_increases_state_count(monkeypatch):
-    """
-    Test that create() increases the number of states when successful.
-    """
-    monkeypatch.setattr(st, "num_states", lambda: 0)
-    sample_state = st.SAMPLE_STATE
-    new_id = st.create(sample_state)
-    assert st.valid_id(new_id)
-
-
-@pytest.mark.skip("temporarily disabled")
-def test_num_states(monkeypatch):
-    """
-    Verify that num_states() accurately returns number of states.
-    """
-    mock_data = [{"country_name": "USA", "state_code": "CA"}]
-    monkeypatch.setattr(st.dbc, "read", lambda _: mock_data)
-    assert st.num_states() == len(mock_data)
-
-
-def test_valid_id_good_and_bad():
-    """
-    Test valid_id() behavior for valid and invalid inputs.
-    """
-    assert st.valid_id("123")
-    assert not st.valid_id("")
-
-
-def test_read(temp_state, monkeypatch):
-    """
-    Test read() using monkeypatching to isolate database layer.
-    """
-    monkeypatch.setattr(st.dbc, "read", lambda _: [dict(temp_state)])
-    states = st.read()
-    assert isinstance(states, list)
-    assert temp_state in states
-
-
-@pytest.mark.skip("temporarily disabled")
-def test_delete_not_there():
-    """
-    Ensure delete() raises ValueError for non-existent state.
-    """
     with pytest.raises(ValueError):
-        st.delete("some value", "XX")
+        st.create({st.STATE_CODE: "NY"})  # missing country_name
+
+    with pytest.raises(ValueError):
+        st.create({st.COUNTRY_NAME: "USA"})  # missing state_code
 
 
-@pytest.mark.skip("temporarily disabled")
-def test_get_population(monkeypatch):
-    """
-    Test get_population() retrieves correct population value.
-    """
-    mock_state = {
-        st.STATE_CODE: "CA",
-        st.COUNTRY_NAME: "USA",
-        st.POPULATION: 39500000
-    }
-    monkeypatch.setattr(st.dbc, "read_one", lambda *_: mock_state)
-    result = st.get_population("USA", "CA")
-    assert result == 39500000
+def test_create_success(monkeypatch, sample_state):
+    """create() should call dbc.create and return its result."""
+
+    class MockInsertResult:
+        inserted_id = "abc123"
+
+    def mock_create(collection, flds):
+        assert collection == st.STATE_COLLECTION
+        assert flds == sample_state
+        return "abc123"
+
+    monkeypatch.setattr(st.dbc, "create", mock_create)
+
+    result = st.create(sample_state)
+    assert result == "abc123"
 
 
-@pytest.mark.skip("temporarily disabled")
-def test_set_population(monkeypatch):
-    """
-    Test set_population() updates the population correctly.
-    """
-    mock_state = {
-        st.STATE_CODE: "CA",
-        st.COUNTRY_NAME: "USA",
-        st.POPULATION: 39500000
-    }
-    monkeypatch.setattr(st.dbc, "read_one", lambda *_: mock_state)
+#
+# ──────────────────── READ TESTS ────────────────────
+#
 
-    # Create mock update result
-    def mock_update(*_, **__):
-        return type("MockResult", (), {"modified_count": 1})()
+def test_read_all_states(monkeypatch, sample_state):
+    """read() should return list of state dicts."""
+    monkeypatch.setattr(st.dbc, "read", lambda collection, db=None, no_id=True: [sample_state])
 
-    monkeypatch.setattr(st.dbc, "update", mock_update)
-    result = st.set_population("USA", "CA", 40000000)
-    assert result
+    result = st.read()
+    assert isinstance(result, list)
+    assert result == [sample_state]
 
 
-@pytest.mark.skip("temporarily disabled")
-def test_read_cant_connect(monkeypatch):
-    """
-    Ensure read() raises ConnectionError when database is unreachable.
-    """
-    def mock_read_fail(_):
-        raise ConnectionError("Database not reachable")
+def test_read_db_connection_error(monkeypatch):
+    """Force read() to raise connection error via MongoClient failure."""
+
+    def mock_read_fail(*args, **kwargs):
+        raise ConnectionError("DB unreachable")
+
     monkeypatch.setattr(st.dbc, "read", mock_read_fail)
+
     with pytest.raises(ConnectionError):
         st.read()
+
+
+#
+# ──────────────────── num_states TEST ────────────────────
+#
+
+def test_num_states(monkeypatch):
+    mock_data = [
+        {st.STATE_CODE: "NY"},
+        {st.STATE_CODE: "CA"},
+    ]
+    monkeypatch.setattr(st.dbc, "read", lambda collection, db=None, no_id=True: mock_data)
+
+    assert st.num_states() == 2
+
+
+#
+# ──────────────────── ID VALIDATION TEST ────────────────────
+#
+
+def test_valid_id():
+    assert st.valid_id("abc")
+    assert not st.valid_id("")
+    assert not st.valid_id("   ")
+
+    with pytest.raises(ValueError):
+        st.valid_id(123)
+
+
+#
+# ──────────────────── DELETE TESTS ────────────────────
+#
+
+def test_delete_success(monkeypatch):
+    """delete() returns True when a state is deleted."""
+    monkeypatch.setattr(
+        st.dbc,
+        "delete",
+        lambda collection, filt, db=None: 1
+    )
+
+    assert st.delete("NY") == 1
+
+
+def test_delete_not_found(monkeypatch):
+    """delete() should raise ValueError when nothing is deleted."""
+    monkeypatch.setattr(
+        st.dbc,
+        "delete",
+        lambda collection, filt, db=None: 0
+    )
+
+    with pytest.raises(ValueError):
+        st.delete("INVALID")
+
+
+#
+# ──────────────────── GET POPULATION TESTS ────────────────────
+#
+
+def test_get_population(monkeypatch):
+    mock_state = {
+        st.STATE_CODE: "NY",
+        st.POPULATION: 8000000
+    }
+
+    monkeypatch.setattr(
+        st.dbc,
+        "read_one",
+        lambda collection, filt, db=None: mock_state
+    )
+
+    assert st.get_population("NY") == 8000000
+
+
+def test_get_population_missing(monkeypatch):
+    monkeypatch.setattr(
+        st.dbc,
+        "read_one",
+        lambda collection, filt, db=None: None
+    )
+
+    with pytest.raises(ValueError):
+        st.get_population("ZZ")
+
+
+#
+# ──────────────────── SET POPULATION TESTS ────────────────────
+#
+
+def test_set_population_success(monkeypatch):
+    existing = {
+        st.STATE_CODE: "NY",
+        st.POPULATION: 100
+    }
+
+    monkeypatch.setattr(
+        st.dbc,
+        "read_one",
+        lambda collection, filt, db=None: existing
+    )
+
+    class MockUpdateResult:
+        modified_count = 1
+
+    monkeypatch.setattr(
+        st.dbc,
+        "update",
+        lambda collection, filt, update_val, db=None: MockUpdateResult()
+    )
+
+    assert st.set_population("NY", 200)
+
+
+def test_set_population_invalid_value():
+    with pytest.raises(ValueError):
+        st.set_population("NY", -5)
+
+    with pytest.raises(ValueError):
+        st.set_population("NY", "not-int")
+
+
+def test_set_population_state_not_found(monkeypatch):
+    monkeypatch.setattr(
+        st.dbc,
+        "read_one",
+        lambda collection, filt, db=None: None
+    )
+
+    with pytest.raises(ValueError):
+        st.set_population("ZZ", 100)
+
+
+#
+# ──────────────────── state_exists TEST ────────────────────
+#
+
+def test_state_exists(monkeypatch):
+    mock_list = [
+        {st.ID: "A1"},
+        {st.ID: "B2"},
+    ]
+    monkeypatch.setattr(st.dbc, "read", lambda collection, db=None, no_id=True: mock_list)
+
+    assert st.state_exists("A1")
+    assert not st.state_exists("X9")
