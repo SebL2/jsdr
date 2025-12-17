@@ -17,7 +17,7 @@ from functools import wraps
 import certifi
 import pymongo as pm
 from dotenv import load_dotenv
-from pymongo.errors import PyMongoError, ServerSelectionTimeoutError
+from pymongo.errors import PyMongoError
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENV_PATH = os.path.join(BASE_DIR, ".env")
@@ -352,5 +352,6 @@ def running_on_pythonanywhere() -> bool:
     """
     return "PYTHONANYWHERE_DOMAIN" in os.environ
 
+
 if __name__ == "__main__":
-    create('Geo',{"test":1})
+    create('Geo', {"test": 1})
