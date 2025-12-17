@@ -62,7 +62,6 @@ def needs_db(fn):
     """
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        global client
         # Connect if not already connected
         if not client:
             connect_db()
@@ -331,7 +330,6 @@ def health_check():
     Returns:
         bool: True if connection is working, False otherwise
     """
-    global client
     try:
         # Connect if not already connected
         if client is None:
