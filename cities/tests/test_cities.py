@@ -43,7 +43,6 @@ def temp_city():
     return dict(ct.SAMPLE_CITY)
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_create_invalid_input_raises_error():
     """
     Test that create() properly validates input types and raises
@@ -67,7 +66,6 @@ def test_create_invalid_input_raises_error():
         ct.create(invalid_input)
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_success_create_increases_city_count():
     """
     Test the happy path for city creation - verify successful
@@ -89,15 +87,14 @@ def test_success_create_increases_city_count():
 
     # Act: Perform the operation we're testing
     new_id = ct.create(sample_city)
-
+    _id = str(new_id.inserted_id)
     # Assert: Verify the expected outcomes
     # Check that the returned ID is valid according to business rules
-    assert ct.valid_id(new_id)
+    assert ct.valid_id(_id)
     # Check that the city count increased (side effect verification)
     assert ct.num_cities() > old_length
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_num_cities():
     """
     Test that num_cities() accurately tracks the count of cities.
@@ -113,7 +110,8 @@ def test_num_cities():
     """
     # Capture current count
     old_length = ct.num_cities()
-    sample_city = ct.SAMPLE_CITY
+    sample_city = ct.SAMPLE_CITY.copy()
+    sample_city.pop("_id", None)
 
     # Add one city
     ct.create(sample_city)
@@ -139,7 +137,6 @@ def test_create_bad_name():
         ct.create({})
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_change_population(temp_city):
     """
     Test population update functionality using a fixture.
@@ -157,19 +154,18 @@ def test_change_population(temp_city):
         temp_city: Fixture providing sample city data for testing
     """
     # Get the current population value
-    old_population = ct.get_population(temp_city)
+    old_population = ct.get_population(temp_city["name"], temp_city["state_code"])  # noqa: E501
 
     # Calculate a new population value
     new_population = old_population + 1
 
     # Update the population
-    ct.set_population(temp_city, new_population)
+    ct.set_population(temp_city["name"], temp_city["state_code"], new_population)  # noqa: E501
 
     # Verify the change was persisted
-    assert new_population == ct.get_population(temp_city)
+    assert new_population == ct.get_population(temp_city["name"], temp_city["state_code"])  # noqa: E501
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_delete(temp_city):
     """
     Test successful city deletion.
@@ -184,13 +180,12 @@ def test_delete(temp_city):
         temp_city: Fixture providing a city to delete
     """
     # Delete the city
-    ct.delete(temp_city)
+    ct.delete(temp_city["name"], temp_city["state_code"])
 
     # Verify it's no longer in the system
     assert temp_city not in ct.read()
 
 
-@pytest.mark.skip("temporarily disabled")
 def test_delete_not_there():
     """
     Test that deleting a non-existent city raises appropriate error.
@@ -204,7 +199,7 @@ def test_delete_not_there():
     raise a ValueError rather than silently failing or crashing.
     """
     with pytest.raises(ValueError):
-        ct.delete('some value that is not there')
+        ct.delete('some value that is not there', "nothing here either")
 
 
 def test_read(temp_city, monkeypatch):
@@ -239,6 +234,8 @@ def test_read(temp_city, monkeypatch):
     # Clean up test data - remove internal fields that might interfere
     if "_id" in temp_city:
         del temp_city["_id"]
+    for city in cities:
+        del city["_id"]
 
     # Verify our test city is in the returned data
     assert temp_city in cities
