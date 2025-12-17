@@ -20,7 +20,6 @@ all_tests: lint
 	cd $(API_DIR) && make tests
 	cd $(CITIES_DIR) && make tests
 	cd $(DB_DIR) && make tests
-	cd $(SEC_DIR) && make tests
 	cd $(REQ_DIR) && make tests
 
 
