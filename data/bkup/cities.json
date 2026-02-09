@@ -1,0 +1,202 @@
+[
+  {
+    "name": "New York",
+    "state_code": "NY",
+    "population": 8336817
+  },
+  {
+    "name": "Los Angeles",
+    "state_code": "CA",
+    "population": 3979576
+  },
+  {
+    "name": "Chicago",
+    "state_code": "IL",
+    "population": 2693976
+  },
+  {
+    "name": "Houston",
+    "state_code": "TX",
+    "population": 2320268
+  },
+  {
+    "name": "Phoenix",
+    "state_code": "AZ",
+    "population": 1680992
+  },
+  {
+    "name": "Philadelphia",
+    "state_code": "PA",
+    "population": 1584064
+  },
+  {
+    "name": "San Antonio",
+    "state_code": "TX",
+    "population": 1547253
+  },
+  {
+    "name": "San Diego",
+    "state_code": "CA",
+    "population": 1423851
+  },
+  {
+    "name": "Dallas",
+    "state_code": "TX",
+    "population": 1343573
+  },
+  {
+    "name": "San Jose",
+    "state_code": "CA",
+    "population": 1021795
+  },
+  {
+    "name": "Austin",
+    "state_code": "TX",
+    "population": 978908
+  },
+  {
+    "name": "Jacksonville",
+    "state_code": "FL",
+    "population": 949611
+  },
+  {
+    "name": "Fort Worth",
+    "state_code": "TX",
+    "population": 918915
+  },
+  {
+    "name": "Columbus",
+    "state_code": "OH",
+    "population": 905748
+  },
+  {
+    "name": "Charlotte",
+    "state_code": "NC",
+    "population": 885708
+  },
+  {
+    "name": "San Francisco",
+    "state_code": "CA",
+    "population": 873965
+  },
+  {
+    "name": "Indianapolis",
+    "state_code": "IN",
+    "population": 876384
+  },
+  {
+    "name": "Seattle",
+    "state_code": "WA",
+    "population": 753675
+  },
+  {
+    "name": "Denver",
+    "state_code": "CO",
+    "population": 727211
+  },
+  {
+    "name": "Boston",
+    "state_code": "MA",
+    "population": 692600
+  },
+  {
+    "name": "Nashville",
+    "state_code": "TN",
+    "population": 689447
+  },
+  {
+    "name": "Detroit",
+    "state_code": "MI",
+    "population": 639111
+  },
+  {
+    "name": "Portland",
+    "state_code": "OR",
+    "population": 652503
+  },
+  {
+    "name": "Las Vegas",
+    "state_code": "NV",
+    "population": 641903
+  },
+  {
+    "name": "Memphis",
+    "state_code": "TN",
+    "population": 633104
+  },
+  {
+    "name": "Louisville",
+    "state_code": "KY",
+    "population": 617638
+  },
+  {
+    "name": "Baltimore",
+    "state_code": "MD",
+    "population": 585708
+  },
+  {
+    "name": "Milwaukee",
+    "state_code": "WI",
+    "population": 577222
+  },
+  {
+    "name": "Albuquerque",
+    "state_code": "NM",
+    "population": 564559
+  },
+  {
+    "name": "Tucson",
+    "state_code": "AZ",
+    "population": 548073
+  },
+  {
+    "name": "Fresno",
+    "state_code": "CA",
+    "population": 542107
+  },
+  {
+    "name": "Sacramento",
+    "state_code": "CA",
+    "population": 524943
+  },
+  {
+    "name": "Kansas City",
+    "state_code": "MO",
+    "population": 508090
+  },
+  {
+    "name": "Mesa",
+    "state_code": "AZ",
+    "population": 504258
+  },
+  {
+    "name": "Atlanta",
+    "state_code": "GA",
+    "population": 498715
+  },
+  {
+    "name": "Miami",
+    "state_code": "FL",
+    "population": 467963
+  },
+  {
+    "name": "Raleigh",
+    "state_code": "NC",
+    "population": 467665
+  },
+  {
+    "name": "Omaha",
+    "state_code": "NE",
+    "population": 486051
+  },
+  {
+    "name": "Minneapolis",
+    "state_code": "MN",
+    "population": 429954
+  },
+  {
+    "name": "Cleveland",
+    "state_code": "OH",
+    "population": 372624
+  }
+]
