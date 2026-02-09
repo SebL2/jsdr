@@ -1,89 +1,182 @@
-# Progress and Goals
+## Progress and Goals - JSDR Group
 
-## Implementation Status
+### Completed Work (Fall 2025)
 
-### Core Services & Data
+**Backend Infrastructure:**
+- RESTful API server for geographic data management
+- MongoDB integration (local and cloud deployments)
+- Deployed to Python Anywhere
+- In-memory caching for query performance
+- Comprehensive data validation
 
-#### Endpoints and CRUD
-- **Objective**: Create an API server for a geographic database; Implement CRUD operations.
-- **State**: Complete
-- **Code Reference**: `server/endpoints.py` registers CRUD routes for cities.
+**Entities Implemented:**
+- Countries: name, population, continent, capital, area
+- States: name, population, capital, country association
+- Cities: name, population, state/country association, coordinates
+- Counties: name, population, state association
 
-#### MongoDB (Local and Cloud)
-- **Objective**: Use MongoDB locally; Connect to MongoDB in the cloud.
-- **State**: Complete
-- **Code Reference**: `data/db_connect.py` connects locally by default and supports Atlas via `CLOUD_MONGO` env var; supports `certifi` for PythonAnywhere environment.
+**REST API Endpoints:**
+- Health check and echo endpoints
+- Full CRUD operations for all entities:
+  - `GET /countries` - List all countries (with search/filter)
+  - `POST /countries` - Create new country
+  - `GET /countries/{code}` - Get specific country
+  - `PUT /countries/{code}` - Update country
+  - `DELETE /countries/{code}` - Delete country
+  - (Similar patterns for states, cities, counties)
+- Stats endpoint for database metrics
 
-#### Caching in RAM
-- **Objective**: Data cached in RAM.
-- **State**: Complete
-- **Code Reference**: `data/db_connect.py` implements `_cache` and `cached_read` function.
+**Development Tools:**
+- Makefile for build automation
+- Unit tests covering all controllers and data operations
+- GitHub Actions CI/CD pipeline
+- Swagger/OpenAPI documentation
+- Test coverage: 85%+
 
-#### Python Decorators
-- **Objective**: Use Python decorators.
-- **State**: Complete
-- **Code Reference**: `data/db_connect.needs_db` decorator enforces Mongo connectivity.
+**Requirements Met:**
+✅ RESTful API design  
+✅ Persistent data storage (MongoDB)  
+✅ Automated testing  
+✅ API documentation  
+✅ Cloud deployment  
+✅ Performance optimization (caching)
 
-### Quality & Automation
+---
+Here’s a **cleaned, tighter version** of your markdown that keeps the **vision, core goals, and scope** while removing pitch language, demo script, deep rationale, and implementation noise that don’t belong in a “Goals & Progress” doc.
 
-#### Testing Coverage
-- **Objective**: Each endpoint and other functions have unit tests.
-- **State**: Complete
-- **Code Reference**: API tests in `server/tests/` and unit tests in `cities/tests` and `states/tests`.
+I’ve:
 
-#### CI/CD
-- **Objective**: GitHub Actions; Deployable to the cloud using CI/CD.
-- **State**: Complete
-- **Code Reference**: `.github/workflows/main.yml` runs tests and deploys to PythonAnywhere on push/PR to master.
+* Cut repetition and startup-pitch framing
+* Moved architectural justifications out
+* Removed demo script & persuasion language
+* Focused on **what you’re building**, **what exists**, and **what’s next**
 
-### Deployment & Documentation
+You can drop this straight into a README, proposal, or progress update.
 
-#### Swagger/OpenAPI
-- **Objective**: Each endpoint documented for Swagger.
-- **State**: Complete
-- **Code Reference**: Flask-RESTX `Api` in `server/endpoints.py` exposes Swagger UI; detailed models and docs used.
+---
 
-#### Cloud Run / Hosting
-- **Objective**: Run your API server in the cloud.
-- **State**: Complete
-- **Code Reference**: Deployed and running on PythonAnywhere via the CI workflow.
+# Spring 2026 Project Goals
 
-### Developer Experience
+## Cost of Living Comparison Tool
 
-#### Developer Environment
-- **Objective**: Group Dev Env Working.
-- **State**: Complete
-- **Code Reference**: `makefile`, `requirements.txt`, `readme.MD` setup steps.
+**LiveWhere** is a web application that helps users compare cities based on cost of living, salary equivalence, and quality-of-life factors to make informed relocation and job decisions.
 
-# Goals for This Semester
+---
 
-## Frontend
+## Project Objectives
 
-- **React/Vue.js Integration**: Develop a modern web frontend to consume the REST API
-- **Interactive Data Visualization**: Implement charts and maps for geographic data display
-- **User Authentication UI**: Create login/registration forms with session management
-- **Responsive Design**: Ensure mobile-friendly interface across all devices
-- **Real-time Updates**: Add WebSocket support for live data synchronization
-- **Progressive Web App**: Implement PWA features for offline functionality
+* Enable clear, side-by-side city comparisons
+* Provide accurate salary-adjustment calculations across locations
+* Surface “best value” cities based on user preferences
+* Support personalization through saved comparisons and preferences
+* Deliver a polished, data-driven frontend connected to a scalable backend
 
-## Backend Enhancements
+---
 
-- **Advanced Query Capabilities**: Add filtering, sorting, and pagination to all endpoints
-- **Data Analytics**: Implement statistical analysis endpoints for population trends
-- **Geospatial Features**: Add location-based queries and distance calculations
-- **Rate Limiting**: Implement API rate limiting and throttling mechanisms
-- **Caching Optimization**: Enhance Redis integration for improved performance
-- **Microservices Architecture**: Refactor into containerized microservices
-- **GraphQL Support**: Add GraphQL endpoint alongside REST API
-- **Batch Operations**: Support bulk create/update/delete operations
+## Core Features
 
-## Developer Experience
+### 1. Interactive City Comparison Dashboard
 
-- **Docker Containerization**: Create Docker containers for consistent development environments
-- **API Versioning**: Implement proper API versioning strategy
-- **Enhanced Documentation**: Add comprehensive API examples and tutorials
-- **Performance Monitoring**: Integrate application performance monitoring (APM)
-- **Automated Code Quality**: Expand linting rules and add security scanning
-- **Database Migrations**: Implement proper database schema migration system
-- **Local Development Tools**: Create development utilities and debugging helpers
-- **Integration Testing**: Add end-to-end testing with real database scenarios
+* Map-based city visualization (React Leaflet)
+* Color-coded affordability indicators
+* Select 2–4 cities for quick comparison
+
+### 2. City Comparison Interface
+
+* Side-by-side breakdown across categories:
+
+  * Housing
+  * Food & Dining
+  * Transportation
+  * Healthcare
+  * Entertainment & Lifestyle
+* Visual charts (bar, pie)
+* Overall affordability score (0–100)
+* Adjustable spending-weight sliders
+
+### 3. Salary Adjustment Calculator
+
+* Compare purchasing power between cities
+* Input: salary + origin city → equivalent salary in target city
+* Accounts for cost of living and taxes
+* Displays net-income and lifestyle-equivalent results
+
+### 4. Smart City Finder
+
+* Filter cities by:
+
+  * Salary range
+  * Amenities and infrastructure
+  * Climate preferences
+  * City size and region
+* Ranked recommendations based on weighted criteria
+* Highlights “best value” cities
+
+### 5. User Profiles & Personalization
+
+* Save favorite cities and comparisons
+* Customize cost-category weights
+* Track cities under consideration
+* Public users: limited comparisons
+* Authenticated users: full access
+
+---
+
+## Technical Stack
+
+### Frontend
+
+* React (Vite)
+* Recharts or Chart.js
+* React Leaflet
+* Deployment: Vercel
+* Backend connectivity via environment variables:
+
+  * Local, staging, production endpoints
+
+### Backend
+
+* REST API with JWT authentication
+* Secure password hashing
+* Core endpoints:
+
+  * City cost-of-living data
+  * City comparisons
+  * Salary calculator
+  * Recommendations
+  * Quality-of-life metrics
+  * User accounts & saved comparisons
+
+---
+
+## Data Sources
+
+* Numbeo (cost of living)
+* Government labor and housing statistics
+* World Bank data
+* Manually curated dataset for initial 30–40 major cities
+
+---
+
+## Progress to Date (Spring 2026)
+
+* Frontend repository created
+* Team roles defined (frontend, backend, data, testing)
+* Weekly meetings established
+* High-level wireframes completed
+* Initial backend data models designed
+* API and data-source research completed
+* Kanban board and sprint planning in place
+
+---
+
+## Planned Timeline
+
+* **Weeks 3–4:** Auth, frontend–backend integration, initial city data
+* **Weeks 5–7:** Comparison UI, charts, expand city dataset
+* **Weeks 8–10:** Salary calculator, recommendations, QOL metrics
+* **Weeks 11–12:** User profiles, saved comparisons, UI polish
+* **Weeks 13–14:** Testing, deployment, final presentation
+
+---
+
