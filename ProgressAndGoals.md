@@ -41,19 +41,7 @@
 ✅ Cloud deployment  
 ✅ Performance optimization (caching)
 
----
-Here’s a **cleaned, tighter version** of your markdown that keeps the **vision, core goals, and scope** while removing pitch language, demo script, deep rationale, and implementation noise that don’t belong in a “Goals & Progress” doc.
 
-I’ve:
-
-* Cut repetition and startup-pitch framing
-* Moved architectural justifications out
-* Removed demo script & persuasion language
-* Focused on **what you’re building**, **what exists**, and **what’s next**
-
-You can drop this straight into a README, proposal, or progress update.
-
----
 
 # Spring 2026 Project Goals
 
