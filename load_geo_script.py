@@ -57,10 +57,9 @@ def main():
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
-#TO DO:
-#Create comparison between locations for salary calculation
 
-#Add functionality to filter cities by salary, city population, etc.
-
+# TO DO:
+# Create comparison between locations for salary calculation
+# Add functionality to filter cities by salary, city population, etc.
 if __name__ == "__main__":
     main()
