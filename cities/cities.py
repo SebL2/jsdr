@@ -136,3 +136,21 @@ def city_exists(city_id: str) -> bool:
     """
     cities = dbc.read(CITY_COLLECTION)
     return any(city.get(ID) == city_id for city in cities)
+
+
+def exists(name: str, state_code: str) -> bool:
+    """
+    Check if a city exists by name and state code.
+
+    Args:
+        name (str): City name
+        state_code (str): State code
+
+    Returns:
+        bool: True if city exists
+    """
+    city = dbc.read_one(
+        CITY_COLLECTION,
+        {NAME: name, STATE_CODE: state_code},
+    )
+    return city is not None

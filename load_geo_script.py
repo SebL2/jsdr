@@ -40,6 +40,11 @@ def load_cities() -> int:
     count = 0
     for doc in entities:
         try:
+            name = doc.get(NAME)
+            state_code = doc.get('state_code')  # Adjust based on JSON keys
+            if cities.exists(name, state_code):
+                print(f"City already exists: {name}, {state_code}", file=sys.stderr)
+                continue
             cities.create(doc)
             count += 1
         except Exception as err:
