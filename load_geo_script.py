@@ -12,7 +12,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
-from cities import cities
+from cities import cities  # noqa: E402
 
 NAME = cities.NAME
 
@@ -43,7 +43,10 @@ def load_cities() -> int:
             name = doc.get(NAME)
             state_code = doc.get('state_code')  # Adjust based on JSON keys
             if cities.exists(name, state_code):
-                print(f"City already exists: {name}, {state_code}", file=sys.stderr)
+                print(
+                    f"City already exists: {name}, {state_code}",
+                    file=sys.stderr
+                )
                 continue
             cities.create(doc)
             count += 1
