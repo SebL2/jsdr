@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Load geographical entities (cities) from JSON into MongoDB.
 """
@@ -5,13 +6,13 @@ Load geographical entities (cities) from JSON into MongoDB.
 import json
 import os
 import sys
-from cities import cities
 
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
+from cities import cities
 
 NAME = cities.NAME
 
