@@ -78,23 +78,31 @@ def valid_id(_id: str) -> bool:
 
 
 def delete(name: str, state_code: str) -> bool:
+    """Remove city from database by name and state code."""
+    # Delete city using compound key
     ret = dbc.delete(CITY_COLLECTION, {NAME: name, STATE_CODE: state_code})
+    # Verify deletion occurred
     if ret < 1:
         raise ValueError(f'City not found: {name}, {state_code}')
     return ret
 
 
 def read() -> list:
+    """Retrieve all cities from database."""
     return dbc.read(CITY_COLLECTION)
 
 
 def get_population(city_name: str, state_code: str) -> int:
+    """Get population for specific city."""
+    # Find city by name and state
     city = dbc.read_one(
         CITY_COLLECTION,
         {NAME: city_name, STATE_CODE: state_code},
     )
+    # Handle city not found
     if not city:
         raise ValueError(f'City not found: {city_name}, {state_code}')
+    # Return population or default -1
     return city.get(POPULATION, -1)
 
 
@@ -141,7 +149,9 @@ def city_exists(city_id: str) -> bool:
     Return True if a city with the given ID exists in the database.
     Do not return True if the city does not exist in the database.
     """
+    # Get all cities from database
     cities = dbc.read(CITY_COLLECTION)
+    # Check if any city has matching ID
     return any(city.get(ID) == city_id for city in cities)
 
 
@@ -156,8 +166,10 @@ def exists(name: str, state_code: str) -> bool:
     Returns:
         bool: True if city exists
     """
+    # Query database for city with compound key
     city = dbc.read_one(
         CITY_COLLECTION,
         {NAME: name, STATE_CODE: state_code},
     )
+    # Return existence status
     return city is not None
