@@ -2,7 +2,7 @@
 Cities Business Logic Module
 
 Provides core business logic for managing city data with CRUD operations,
-validation, and error handling.
+validation, and error handling. And Logic (not the rapper)
 """
 
 # Import database connection module
