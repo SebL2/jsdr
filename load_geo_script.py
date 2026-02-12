@@ -91,5 +91,14 @@ def main():
 # TODO: Add progress bar for long-running imports
 # TODO: Create comparison between locations for salary calculation
 # TODO: Add functionality to filter cities by salary, city population, etc.
+# TODO: Add support for loading states data from JSON
+# TODO: Implement rollback functionality for failed imports
+# TODO: Add command line arguments for different data sources
+# TODO: Create logging system for import operations
+# TODO: Add duplicate detection and merge strategies
+# TODO: Implement incremental updates instead of full reload
+# TODO: Add data transformation pipeline for different JSON formats
+# TODO: Create backup verification before import
+# TODO: Add performance metrics and timing reports
 if __name__ == "__main__":
     main()
