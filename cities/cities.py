@@ -24,6 +24,13 @@ SAMPLE_CITY = {
     POPULATION: -1
 }
 
+# Helper placeholder for future normalization logic (intentionally unused)
+def _normalize_city_name(name: str) -> str:
+    """
+    Normalize city names consistently (reserved for future use).
+    """
+    return name.strip()
+
 
 def create(flds: dict) -> str:
     """
