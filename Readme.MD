@@ -64,6 +64,13 @@ This project uses:
 - **flake8** for code linting
 - **GitHub Actions** for CI/CD
 
+## Development Checklist
+
+- Install MongoDB locally (or run `docker-compose up mongo`).
+- Seed data via `python load_geo_script.py` (it will reuse cached JSON if present).
+- Run `make dev_env` to install dependencies and `make all_tests` to verify coverage.
+- Visit `/` (Swagger UI) after starting the server to explore every documented endpoint.
+
 ## Documentation
 
 - [Progress and Goals](ProgressAndGoals.md) - Detailed project status and roadmap
