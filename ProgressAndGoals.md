@@ -159,10 +159,15 @@ Performance optimization (caching)
 ## Planned Timeline
 
 * **Weeks 3–4:** Auth, frontend–backend integration, initial city data
+  * Acceptance: `/cities` POST/DELETE require tokens; React Leaflet map can display city markers from seeded data.
 * **Weeks 5–7:** Comparison UI, charts, expand city dataset
+  * Acceptance: Comparison dashboard supports 2–4 cities with Recharts data, filters apply to salary/amenity preferences, and budget sliders adjust scores.
 * **Weeks 8–10:** Salary calculator, recommendations, QOL metrics
+  * Acceptance: Salary adjustments and recommendations API return consistent payloads, UI displays QOL breakdowns
 * **Weeks 11–12:** User profiles, saved comparisons, UI polish
+  * Acceptance: Authenticated users can save comparisons, profile page lists saved sets, and UI matches polished wireframes.
 * **Weeks 13–14:** Testing, deployment, final presentation
+  * Acceptance: Automated tests cover frontend flows and backend controllers, CI/CD deploys to PythonAnywhere (or equivalent), and demo scripts ready for presentation.
 
 ---
 
