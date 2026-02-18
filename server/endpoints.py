@@ -28,7 +28,7 @@ app = Flask(__name__)
 # Enable Cross-Origin Resource Sharing for web browser compatibility
 # Configure CORS to allow requests from frontend
 # This resolves CSRF-like issues by properly handling cross-origin requests
-CORS(app, 
+CORS(app,
      resources={r"/*": {
          "origins": "*",  # In production, specify actual frontend domain
          "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
