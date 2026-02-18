@@ -2,6 +2,7 @@
 export LINTER = flake8
 export PYLINTFLAGS = --exclude=__main__.py
 
+# Use local MongoDB by default. CI sets CLOUD_MONGO=1 and MONGO_PASSWD for Atlas.
 export CLOUD_MONGO = 0
 
 PYTHONFILES = $(shell ls *.py)

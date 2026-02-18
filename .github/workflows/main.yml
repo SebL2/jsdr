@@ -39,14 +39,15 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Install MongoDB in a Docker container.
-        uses: supercharge/mongodb-github-action@1.8.0
-
       - name: Install Python packages.
         run: make dev_env
 
       - name: Run Python tests.
         run: make all_tests
+        env:
+          CLOUD_MONGO: '1'
+          MONGO_PASSWD: ${{ secrets.MONGO_PASSWD }}
+          # Optional: override defaults (MONGO_USER, MONGO_SVC, GEO_DB, DB_PARAMS) if needed
         
       - name: Deploy to PythonAnywhere
         run: ./deploy.sh

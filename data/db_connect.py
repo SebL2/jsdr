@@ -341,6 +341,48 @@ def health_check():
         return False
 
 
+def can_connect(timeout_ms=2000):
+    """
+    Quick check whether MongoDB is reachable (local or Atlas per env).
+    Does not use or set the global client. Use for tests/CI to decide
+    if integration tests should run.
+
+    Returns:
+        bool: True if a connection with current config would succeed.
+    """
+    use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
+    try:
+        if use_cloud:
+            password = os.environ.get('MONGO_PASSWD')
+            if not password:
+                return False
+            user_nm = os.environ.get('MONGO_USER', 'gcallah')
+            cloud_mdb = os.environ.get('MONGO_MDB', 'mongodb+srv')
+            cloud_svc = os.environ.get(
+                'MONGO_SVC',
+                'koukoumongo1.yud9b.mongodb.net'
+            )
+            GEO_DB = os.environ.get('GEO_DB', SE_DB)
+            db_params = os.environ.get(
+                'DB_PARAMS',
+                'retryWrites=true&w=majority'
+            )
+            c = pm.MongoClient(
+                f"{cloud_mdb}://{user_nm}:{password}@{cloud_svc}/"
+                f"{GEO_DB}?{db_params}",
+                tlsCAFile=certifi.where(),
+                serverSelectionTimeoutMS=timeout_ms,
+                **PA_SETTINGS
+            )
+        else:
+            c = pm.MongoClient(serverSelectionTimeoutMS=timeout_ms)
+        c.admin.command("ping")
+        c.close()
+        return True
+    except Exception:
+        return False
+
+
 def running_on_pythonanywhere() -> bool:
     """
     Detect if code is running on PythonAnywhere platform.

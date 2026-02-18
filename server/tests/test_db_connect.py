@@ -6,10 +6,27 @@ Includes both a real integration test and mocked examples.
 
 from unittest.mock import patch
 
+import pytest
+
 from server.db_connect import DBConnect
 from data import db_connect as core_db
 
+# Cached so we only probe once per session (avoids 2s timeout on every test)
+_mongo_available_cache = None
 
+
+def _mongo_available():
+    """True if MongoDB is reachable (local or Atlas, per CLOUD_MONGO env)."""
+    global _mongo_available_cache
+    if _mongo_available_cache is not None:
+        return _mongo_available_cache
+    _mongo_available_cache = core_db.can_connect(timeout_ms=2000)
+    return _mongo_available_cache
+
+
+@pytest.mark.skipif(
+    not _mongo_available(), reason="MongoDB not available (local or Atlas)"
+)
 def test_db_connect_real_success():
     """
     Test DBConnect.connect() using the real underlying MongoDB connection.
@@ -26,6 +43,9 @@ def test_db_connect_real_success():
     assert core_db.health_check() is True
 
 
+@pytest.mark.skipif(
+    not _mongo_available(), reason="MongoDB not available (local or Atlas)"
+)
 def test_list_collections_and_sample_documents():
     """
     Integration test that inspects available collections and prints
