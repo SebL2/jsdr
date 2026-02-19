@@ -25,8 +25,16 @@ import cities.cities as ct
 
 # Initialize Flask application
 app = Flask(__name__)
-# Enable Cross-Origin Resource Sharing for web browser compatibility
-CORS(app)
+# CORS for frontend: allow cross-origin
+# requests (avoids browser blocking / CSRF-like issues)
+CORS(
+    app,
+    resources={r"/*": {
+        "origins": "*",
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+    }},
+)
 # Create Flask-RESTX API instance for automatic documentation and validation
 api = Api(app)
 
