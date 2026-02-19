@@ -87,7 +87,6 @@ def connect_db():
         return client
 
     print('Client is None — initializing MongoDB client...')
-
     use_cloud = os.environ.get('CLOUD_MONGO', LOCAL) == CLOUD
 
     if use_cloud:

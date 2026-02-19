@@ -47,6 +47,13 @@ jobs:
 
       - name: Run Python tests.
         run: make all_tests
+        env:
+          CLOUD_MONGO: "1"
+          MONGO_PASSWD: ${{secrets.MONGO_PASSWD}}
+          MONGO_USER: ${{secrets.MONGO_USER}}
+          MONGO_SVC: ${{secrets.MONGO_SVC}}
+          MONGO_MDB: ${{secrets.MONGO_MDB}}
+
         
       - name: Deploy to PythonAnywhere
         run: ./deploy.sh
