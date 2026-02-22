@@ -30,6 +30,17 @@ export async function getEndpoints(): Promise<string[]> {
 export async function getCities(): Promise<City[]> {
   const res = await fetch(API_URLS.CITIES)
   if (!res.ok) throw new Error(`getCities failed: ${res.status}`)
-  const data = await res.json()
-  return Array.isArray(data) ? data : []
+  const body = await res.json()
+
+  if (Array.isArray(body)) return body
+
+  if (body && typeof body === 'object') {
+    const citiesField = (body as any).Cities
+    if (Array.isArray(citiesField)) return citiesField
+    if (citiesField && typeof citiesField === 'object') {
+      return Object.entries(citiesField).map(([id, v]) => ({ id, ...(v as any) })) as City[]
+    }
+  }
+
+  return []
 }
