@@ -46,6 +46,13 @@ def _normalize_population(population: int) -> int:
     return int(population)
 
 
+def _normalize_city_id(city_id: str) -> str:
+    """
+    Normalize city IDs consistently (reserved for future use).
+    """
+    return city_id.strip()
+
+
 def create(flds: dict) -> str:
     """
     Create a new city with validation.
