@@ -32,6 +32,13 @@ def _normalize_city_name(name: str) -> str:
     return name.strip()
 
 
+def _normalize_state_code(state_code: str) -> str:
+    """
+    Normalize state codes consistently (reserved for future use).
+    """
+    return state_code.strip().upper()
+
+
 def create(flds: dict) -> str:
     """
     Create a new city with validation.
