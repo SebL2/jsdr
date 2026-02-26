@@ -85,10 +85,11 @@ status() {
 }
 
 if [ $# -lt 1 ]; then
-  usage
+  # Default to background start when no command provided to ease local dev
+  cmd="bg"
+else
+  cmd=$1
 fi
-
-cmd=$1
 
 case "$cmd" in
   install)
