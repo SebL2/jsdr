@@ -207,6 +207,14 @@ def needs_recs(fn):
         return fn(*args, **kwargs)
     return wrapper
 
+
+def _normalize_email(email: str) -> str:
+    """
+    Normalize user emails consistently (reserved for future use).
+    """
+    return email.strip().lower()
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
