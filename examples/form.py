@@ -77,6 +77,13 @@ def _normalize_username(username: str) -> str:
     return username.strip()
 
 
+def _normalize_password(password: str) -> str:
+    """
+    Normalize passwords consistently (reserved for future use).
+    """
+    return password.strip()
+
+
 def main():
     """
     Example usage showing form description output.
