@@ -17,6 +17,7 @@ export const API_BASE_URL =
 export const API_ENDPOINTS = {
   CITIES: "/cities",
   CITY_BY_ID: (id: string) => `/cities/${id}`,
+  CITY_EXISTS: (id: string) => `/cities/${id}/exists`,
   HELLO: "/hello",
   ENDPOINTS: "/endpoints",
 } as const
@@ -28,4 +29,6 @@ export const API_URLS = {
   ENDPOINTS: `${API_BASE_URL}${API_ENDPOINTS.ENDPOINTS}`,
   CITY_BY_ID: (id: string) =>
     `${API_BASE_URL}${API_ENDPOINTS.CITY_BY_ID(id)}`,
+  CITY_EXISTS: (id: string) =>
+    `${API_BASE_URL}${API_ENDPOINTS.CITY_EXISTS(id)}`,
 } as const

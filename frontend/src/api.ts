@@ -44,3 +44,13 @@ export async function getCities(): Promise<City[]> {
 
   return []
 }
+
+export async function getCityExists(cityId: string): Promise<boolean> {
+  const res = await fetch(API_URLS.CITY_EXISTS(cityId))
+  if (!res.ok) throw new Error(`getCityExists failed: ${res.status}`)
+  const body = await parseResponse(res)
+  if (body && typeof body === 'object' && typeof (body as any).exists === 'boolean') {
+    return (body as any).exists
+  }
+  return false
+}

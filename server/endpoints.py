@@ -311,6 +311,27 @@ class Endpoints(Resource):
         return {"Available endpoints": endpoints}
 
 
+@api.route(f'{CITIES_EPS}/<string:city_id>/exists')
+class CityExists(Resource):
+    """
+    Check if a city with the given ID exists.
+    """
+
+    def get(self, city_id):
+        """
+        GET /cities/<city_id>/exists - Check if a city exists.
+
+        Returns:
+            200: JSON with "exists" (bool)
+        """
+        try:
+            found = ct.city_exists(city_id)
+            return {"exists": found}
+        except ConnectionError:
+            return {ERROR: "There is a connection error"}, \
+                HTTPStatus.INTERNAL_SERVER_ERROR
+
+
 @api.route(f'{CITIES_EPS}/<string:city_id>')
 class City(Resource):
     """
