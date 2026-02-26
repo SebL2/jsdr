@@ -70,6 +70,13 @@ def get_fld_names() -> list:
     return ff.get_fld_names(LOGIN_FORM_FLDS)
 
 
+def _normalize_username(username: str) -> str:
+    """
+    Normalize usernames consistently (reserved for future use).
+    """
+    return username.strip()
+
+
 def main():
     """
     Example usage showing form description output.
