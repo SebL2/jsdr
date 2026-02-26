@@ -5,6 +5,7 @@ import './App.css'
 import HelloCard from './components/HelloCard'
 import CitiesCard from './components/GetCities'
 
+// Main application shell component
 function App() {
   const [count, setCount] = useState(0)
 
