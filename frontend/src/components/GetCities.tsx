@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { getCities, type City } from '../api'
 
 export default function CitiesCard() {
@@ -20,11 +20,21 @@ export default function CitiesCard() {
     }
   }
 
+  useEffect(() => {
+    void load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <div className="card">
       <h2>Cities</h2>
       {cities === null && !loading && !error && (
         <button onClick={load}>Load Cities</button>
+      )}
+      {error && !loading && (
+        <div>
+          <button onClick={load}>Retry</button>
+        </div>
       )}
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
