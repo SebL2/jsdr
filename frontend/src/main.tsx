@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 
+// Frontend app entrypoint (Vite + React)
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
