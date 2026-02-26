@@ -1,41 +1,35 @@
-import { useEffect, useState } from 'react'
-import { getCities, type City} from '../api'
-import { API_URLS } from '../config/api'
+import { useState } from 'react'
+import { getCities, type City } from '../api'
 
 export default function CitiesCard() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [cities, setCities] = useState<City[]>([])
+  const [cities, setCities] = useState<City[] | null>(null)
 
-  useEffect(() => {
-    let mounted = true
-
-    const load = async () => {
-      setLoading(true)
-      try {
-        let data = await getCities()
-
-        if (mounted) setCities(Array.isArray(data) ? data : [])
-      } catch (e: any) {
-        if (mounted) setError(e?.message || String(e))
-      } finally {
-        if (mounted) setLoading(false)
-      }
+  const load = async () => {
+    setCities(null)
+    setError(null)
+    setLoading(true)
+    try {
+      const data = await getCities()
+      setCities(Array.isArray(data) ? data : [])
+    } catch (e: any) {
+      setError(e?.message || String(e))
+    } finally {
+      setLoading(false)
     }
-
-    load()
-    return () => {
-      mounted = false
-    }
-  }, [])
+  }
 
   return (
     <div className="card">
       <h2>Cities</h2>
+      {cities === null && !loading && !error && (
+        <button onClick={load}>Load Cities</button>
+      )}
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      {!loading && !error && (
-        (cities.length === 0) ? (
+      {cities !== null && !loading && !error && (
+        cities.length === 0 ? (
           <p>No cities found</p>
         ) : (
           <ul>
