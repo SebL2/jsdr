@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 Load geographical entities (cities) from JSON into MongoDB.
+Mongo DB is the database, as opposed to MangoDB, which is just a mango
 """
 
 import json
