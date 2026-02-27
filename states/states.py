@@ -10,6 +10,7 @@ Features:
 - Population management
 - Database abstraction
 - Error handling and logging
+- 4RAWS - EsDeeKid
 """
 
 # Import database connection module for data persistence
