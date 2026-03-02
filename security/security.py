@@ -126,15 +126,19 @@ def create(feature_name: str, config: dict) -> str:
     Raises:
         ValueError: If feature_name or config is invalid
     """
+    # Validate feature name
     if not feature_name or not isinstance(feature_name, str):
         raise ValueError(f"Invalid feature name: {feature_name}")
+    # Validate config structure
     if not isinstance(config, dict):
         raise ValueError(f"Invalid config type: {type(config)}")
     
+    # Build document with feature name and config
     doc = {
         'feature_name': feature_name,
         **config
     }
+    # Insert into database
     result = dbc.create(COLLECT_NAME, doc)
     return str(result.inserted_id)
 
@@ -152,7 +156,9 @@ def delete(feature_name: str) -> int:
     Raises:
         ValueError: If feature not found
     """
+    # Attempt to delete feature from database
     ret = dbc.delete(COLLECT_NAME, {'feature_name': feature_name})
+    # Verify deletion occurred
     if ret < 1:
         raise ValueError(f"Feature not found: {feature_name}")
     return ret
@@ -172,16 +178,18 @@ def update(feature_name: str, config: dict) -> bool:
     Raises:
         ValueError: If feature not found
     """
-    # Check if feature exists
+    # Check if feature exists before updating
     existing = dbc.read_one(COLLECT_NAME, {'feature_name': feature_name})
     if not existing:
         raise ValueError(f"Feature not found: {feature_name}")
     
+    # Perform update operation
     result = dbc.update(
         COLLECT_NAME,
         {'feature_name': feature_name},
         config
     )
+    # Return success status
     return result.modified_count > 0
 
 
@@ -227,8 +235,9 @@ def read_feature(feature_name: str) -> dict:
     Returns:
         dict: Security config for feature, or None if not found
     """
-    # Check if feature exists in security records
+    # Look up feature in cached security records
     if feature_name in security_recs:
         return security_recs[feature_name]
     else:
+        # Feature not found, return None
         return None
