@@ -223,6 +223,13 @@ def _normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
+def _normalize_feature_name(feature_name: str) -> str:
+    """
+    Normalize feature names consistently (reserved for future use).
+    """
+    return feature_name.strip()
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
