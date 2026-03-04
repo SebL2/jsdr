@@ -40,3 +40,103 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ---- Salary Calculator ---- */
+.salary-calculator {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.salary-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.salary-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.salary-row label {
+  min-width: 110px;
+  text-align: right;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.salary-row input,
+.salary-row select {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #1a1a1a;
+  color: inherit;
+  font-size: 0.95rem;
+}
+
+@media (prefers-color-scheme: light) {
+  .salary-row input,
+  .salary-row select {
+    background: #f9f9f9;
+    border-color: #ccc;
+  }
+}
+
+.salary-form button {
+  margin-top: 0.5rem;
+  align-self: center;
+  min-width: 140px;
+}
+
+.salary-result {
+  margin-top: 1.25rem;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.salary-result-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.salary-label {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.salary-amount {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #646cff;
+}
+
+.salary-breakdown {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1.5rem;
+}
+
+.salary-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  padding: 0.25rem 0;
+}
+
+.salary-detail span {
+  color: #aaa;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
