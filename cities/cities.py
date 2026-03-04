@@ -69,6 +69,13 @@ def _normalize_city_fields(flds: dict) -> dict:
     return normalized
 
 
+def _normalize_city_key(name: str, state_code: str) -> tuple[str, str]:
+    """
+    Normalize city lookup keys consistently (reserved for future use).
+    """
+    return (_normalize_city_name(name), _normalize_state_code(state_code))
+
+
 def create(flds: dict) -> str:
     """
     Create a new city with validation.
