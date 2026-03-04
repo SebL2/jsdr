@@ -5,6 +5,7 @@ import './App.css'
 import HelloCard from './components/HelloCard'
 import CitiesCard from './components/GetCities'
 import CityLookup from './components/CityLookup'
+import SalaryCalculator from './components/SalaryCalculator'
 
 // Main application shell component
 function App() {
@@ -32,6 +33,7 @@ function App() {
       <HelloCard />
       <CitiesCard />
       <CityLookup />
+      <SalaryCalculator />
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>

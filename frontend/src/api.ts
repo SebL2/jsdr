@@ -65,3 +65,42 @@ export async function getCity(cityId: string): Promise<City> {
   const cityData = body?.Cities ?? body
   return { id: cityId, ...cityData } as City
 }
+
+// --- Cost of Living & Salary Adjustment ---
+
+export type SalaryResult = {
+  from_city: string
+  to_city: string
+  original_salary: number
+  adjusted_salary: number
+  col_from: number
+  col_to: number
+  difference: number
+  percentage_change: number
+}
+
+export async function getCostOfLiving(): Promise<Record<string, number>> {
+  const res = await fetch(API_URLS.COST_OF_LIVING)
+  if (!res.ok) throw new Error(`getCostOfLiving failed: ${res.status}`)
+  const body = await res.json()
+  return body.cost_of_living ?? body
+}
+
+export async function getSalaryAdjustment(
+  salary: number,
+  fromCity: string,
+  toCity: string,
+): Promise<SalaryResult> {
+  const params = new URLSearchParams({
+    salary: String(salary),
+    from_city: fromCity,
+    to_city: toCity,
+  })
+  const res = await fetch(`${API_URLS.SALARY_ADJUSTMENT}?${params}`)
+  if (!res.ok) {
+    const body = await parseResponse(res)
+    const msg = (body as any)?.Error ?? `getSalaryAdjustment failed: ${res.status}`
+    throw new Error(msg)
+  }
+  return await res.json()
+}
