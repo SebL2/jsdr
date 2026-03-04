@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import HelloCard from './components/HelloCard'
 import CitiesCard from './components/GetCities'
+import CityLookup from './components/CityLookup'
 
 // Main application shell component
 function App() {
@@ -30,6 +31,7 @@ function App() {
       </div>
       <HelloCard />
       <CitiesCard />
+      <CityLookup />
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>

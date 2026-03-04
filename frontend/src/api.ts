@@ -54,3 +54,14 @@ export async function getCityExists(cityId: string): Promise<boolean> {
   }
   return false
 }
+
+export async function getCity(cityId: string): Promise<City> {
+  const res = await fetch(API_URLS.CITY_BY_ID(cityId))
+  if (!res.ok) {
+    if (res.status === 404) throw new Error('City not found')
+    throw new Error(`getCity failed: ${res.status}`)
+  }
+  const body = await res.json()
+  const cityData = body?.Cities ?? body
+  return { id: cityId, ...cityData } as City
+}
