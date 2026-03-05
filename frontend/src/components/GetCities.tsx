@@ -29,7 +29,7 @@ export default function CitiesCard() {
     <div className="card">
       <h2>Cities</h2>
       {cities === null && !loading && !error && (
-        <button onClick={load}>Load Cities</button>
+        <button onClick={load}>Get Cities</button>
       )}
       {error && !loading && (
         <div>
