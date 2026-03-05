@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import HelloCard from './components/HelloCard'
 import CitiesCard from './components/GetCities'
 import CityLookup from './components/CityLookup'
 import SalaryCalculator from './components/SalaryCalculator'
-
+import SetPopulation from './components/SetPopulation'
 // Main application shell component
 function App() {
   const [count, setCount] = useState(0)
@@ -26,7 +24,7 @@ function App() {
       <CitiesCard />
       <CityLookup />
       <SalaryCalculator />
-     
+      <SetPopulation />
     </>
   )
 }

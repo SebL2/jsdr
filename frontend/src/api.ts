@@ -104,3 +104,13 @@ export async function getSalaryAdjustment(
   }
   return await res.json()
 }
+
+export async function setPopulation(cityName: string, state: string, population: number): Promise<void> {
+  const res = await fetch(API_URLS.CITIES, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ city: cityName, state: state, population: population }),
+  })
+  if (!res.ok) throw new Error(`setPopulation failed: ${res.status}`)
+  return await res.json()
+}
