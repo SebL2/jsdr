@@ -10,6 +10,7 @@ Key Features:
 - Error handling with proper HTTP status codes
 - Input validation and parsing
 - CORS support for cross-origin requests
+- manipulation cursed technique
 """
 
 # Import HTTP status codes for proper REST API responses
