@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logo from './assets/logo.png'
 import './App.css'
 import HelloCard from './components/HelloCard'
 import CitiesCard from './components/GetCities'
@@ -11,7 +12,10 @@ function App() {
 
   return (
     <>
-     
+      <div>
+        <img src={logo} className="logo" alt="Site logo" />
+      </div>
+      <h1>LiveWhere</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
