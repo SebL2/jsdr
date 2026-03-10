@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 import { useState, useEffect } from 'react'
+=======
+import { useState } from 'react'
+import logo from './assets/logo.png'
+>>>>>>> 0170bae0847e2a9452040189dc0b66d3e24265e4
 import './App.css'
 import CityMap from './components/CityMap'
 import CityComparison from './components/CityComparison'
 import SalaryCalculator from './components/SalaryCalculator'
 import CitiesCard from './components/GetCities'
+<<<<<<< HEAD
 
 interface City {
   name: string;
@@ -14,6 +20,12 @@ interface City {
 }
 
 // Main application shell component - LiveWhere Cost of Living Tool
+=======
+import CityLookup from './components/CityLookup'
+import SalaryCalculator from './components/SalaryCalculator'
+import SetPopulation from './components/SetPopulation'
+// Main application shell component
+>>>>>>> 0170bae0847e2a9452040189dc0b66d3e24265e4
 function App() {
   const [cities, setCities] = useState<City[]>([]);
   const [selectedCities, setSelectedCities] = useState<City[]>([]);
@@ -43,6 +55,7 @@ function App() {
   };
 
   return (
+<<<<<<< HEAD
     <div style={{ padding: '20px' }}>
       <h1>LiveWhere — Cost of Living Comparison Tool</h1>
       <p>Compare cities, calculate salary adjustments, and find your ideal location</p>
@@ -82,6 +95,27 @@ function App() {
         <CitiesCard />
       </div>
     </div>
+=======
+    <>
+      <div>
+        <img src={logo} className="logo" alt="Site logo" />
+      </div>
+      <h1>LiveWhere</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <HelloCard />
+      <CitiesCard />
+      <CityLookup />
+      <SalaryCalculator />
+      <SetPopulation />
+    </>
+>>>>>>> 0170bae0847e2a9452040189dc0b66d3e24265e4
   )
 }
 

@@ -10,6 +10,7 @@ Key Features:
 - Error handling with proper HTTP status codes
 - Input validation and parsing
 - CORS support for cross-origin requests
+- manipulation cursed technique
 """
 
 # Import HTTP status codes for proper REST API responses
@@ -22,6 +23,9 @@ from flask_cors import CORS
 
 # Import our cities business logic module
 import cities.cities as ct
+
+# Import cost-of-living module
+import cost_of_living.cost_of_living as col
 
 # Initialize Flask application
 app = Flask(__name__)
@@ -50,6 +54,10 @@ MESSAGE = 'Message'
 
 CITIES_EPS = '/cities'
 CITIES_RESP = 'Cities'
+
+# Cost-of-living endpoint constants
+COL_EP = '/cost-of-living'
+SALARY_EP = '/cost-of-living/salary-adjustment'
 
 # Standard response message constants
 SUCCESS = "Success"
@@ -88,6 +96,15 @@ city_delete.add_argument('city', type=str, required=True,
                          help='City to delete is required')
 city_delete.add_argument('state', type=str, required=True,
                          help='State name to delete is required')
+
+# Parser for salary adjustment query parameters
+salary_adj_parser = reqparse.RequestParser()
+salary_adj_parser.add_argument('salary', type=float, required=True,
+                               help='Annual salary is required')
+salary_adj_parser.add_argument('from_city', type=str, required=True,
+                               help='Origin city is required')
+salary_adj_parser.add_argument('to_city', type=str, required=True,
+                               help='Target city is required')
 
 
 @api.route(f'{CITIES_EPS}')
@@ -384,3 +401,63 @@ class City(Resource):
             # Handle database connection failures
             return {ERROR: "There is a connection error"}, \
                 HTTPStatus.INTERNAL_SERVER_ERROR
+
+
+@api.route(COL_EP)
+class CostOfLiving(Resource):
+    """
+    Cost-of-living index endpoint.
+
+    Returns cost-of-living indices for all tracked cities.
+    Index value of 100 = US national average.
+    """
+
+    def get(self):
+        """
+        GET /cost-of-living - Retrieve all city COL indices.
+
+        Returns:
+            200: JSON object with city names mapped to COL index values
+        """
+        data = col.get_all()
+        return {"cost_of_living": data, "count": len(data)}
+
+
+@api.route(SALARY_EP)
+class SalaryAdjustment(Resource):
+    """
+    Salary adjustment calculator endpoint.
+
+    Compares purchasing power between two cities by adjusting
+    a salary based on cost-of-living differences.
+    """
+
+    @api.expect(salary_adj_parser)
+    def get(self):
+        """
+        GET /cost-of-living/salary-adjustment - Calculate adjusted salary.
+
+        Query params:
+            salary (float): Current annual salary
+            from_city (str): Origin city name
+            to_city (str): Target city name
+
+        Returns:
+            200: JSON with original and adjusted salary details
+            400: Bad request (negative salary)
+            404: City not found in dataset
+        """
+        args = salary_adj_parser.parse_args()
+        salary = args['salary']
+        from_city = args['from_city']
+        to_city = args['to_city']
+
+        if salary < 0:
+            return {ERROR: "Salary cannot be negative"}, \
+                HTTPStatus.BAD_REQUEST
+
+        try:
+            result = col.adjust_salary(salary, from_city, to_city)
+            return result
+        except ValueError as e:
+            return {ERROR: str(e)}, HTTPStatus.NOT_FOUND

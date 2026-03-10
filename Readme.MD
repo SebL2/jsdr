@@ -35,6 +35,23 @@ make all_tests
 make lint
 ```
 
+### Frontend (Local vs Cloud API)
+Use the provided scripts to start the frontend with `VITE_API_BASE_URL` set for the target server:
+
+```bash
+# Local backend via Vite proxy (/api -> http://127.0.0.1:8000)
+./frontend-local.sh
+
+# Cloud backend (PythonAnywhere)
+./frontend-cloud.sh
+```
+
+You can still override either script's default at runtime:
+
+```bash
+VITE_API_BASE_URL=https://example.com ./frontend-cloud.sh
+```
+
 ## API Endpoints
 
 The API provides endpoints for:

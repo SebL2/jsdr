@@ -20,6 +20,8 @@ export const API_ENDPOINTS = {
   CITY_EXISTS: (id: string) => `/cities/${id}/exists`,
   HELLO: "/hello",
   ENDPOINTS: "/endpoints",
+  COST_OF_LIVING: "/cost-of-living",
+  SALARY_ADJUSTMENT: "/cost-of-living/salary-adjustment",
 } as const
 
 /** Full URLs: API_BASE_URL + path. */
@@ -31,4 +33,6 @@ export const API_URLS = {
     `${API_BASE_URL}${API_ENDPOINTS.CITY_BY_ID(id)}`,
   CITY_EXISTS: (id: string) =>
     `${API_BASE_URL}${API_ENDPOINTS.CITY_EXISTS(id)}`,
+  COST_OF_LIVING: `${API_BASE_URL}${API_ENDPOINTS.COST_OF_LIVING}`,
+  SALARY_ADJUSTMENT: `${API_BASE_URL}${API_ENDPOINTS.SALARY_ADJUSTMENT}`,
 } as const

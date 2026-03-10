@@ -53,6 +53,29 @@ def _normalize_city_id(city_id: str) -> str:
     return city_id.strip()
 
 
+def _normalize_city_fields(flds: dict) -> dict:
+    """
+    Normalize city field dictionaries consistently (reserved for future use).
+    """
+    normalized = dict(flds)
+    if NAME in normalized and normalized[NAME] is not None:
+        normalized[NAME] = _normalize_city_name(normalized[NAME])
+    if STATE_CODE in normalized and normalized[STATE_CODE] is not None:
+        normalized[STATE_CODE] = _normalize_state_code(normalized[STATE_CODE])
+    if POPULATION in normalized and normalized[POPULATION] is not None:
+        normalized[POPULATION] = _normalize_population(normalized[POPULATION])
+    if ID in normalized and normalized[ID] is not None:
+        normalized[ID] = _normalize_city_id(normalized[ID])
+    return normalized
+
+
+def _normalize_city_key(name: str, state_code: str) -> tuple[str, str]:
+    """
+    Normalize city lookup keys consistently (reserved for future use).
+    """
+    return (_normalize_city_name(name), _normalize_state_code(state_code))
+
+
 def create(flds: dict) -> str:
     """
     Create a new city with validation.

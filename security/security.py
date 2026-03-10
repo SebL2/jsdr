@@ -223,6 +223,34 @@ def _normalize_email(email: str) -> str:
     return email.strip().lower()
 
 
+def _normalize_feature_name(feature_name: str) -> str:
+    """
+    Normalize feature names consistently (reserved for future use).
+    """
+    return feature_name.strip()
+
+
+def _normalize_user_list(user_list: list) -> list:
+    """
+    Normalize user lists consistently (reserved for future use).
+    """
+    return [_normalize_email(user) for user in user_list]
+
+
+def _normalize_checks(checks: dict) -> dict:
+    """
+    Normalize checks dictionaries consistently (reserved for future use).
+    """
+    return dict(checks)
+
+
+def _normalize_config(config: dict) -> dict:
+    """
+    Normalize security config dictionaries consistently (reserved for future use).
+    """
+    return dict(config)
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
