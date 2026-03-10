@@ -244,6 +244,13 @@ def _normalize_checks(checks: dict) -> dict:
     return dict(checks)
 
 
+def _normalize_config(config: dict) -> dict:
+    """
+    Normalize security config dictionaries consistently (reserved for future use).
+    """
+    return dict(config)
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
