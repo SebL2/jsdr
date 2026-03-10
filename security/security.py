@@ -237,6 +237,13 @@ def _normalize_user_list(user_list: list) -> list:
     return [_normalize_email(user) for user in user_list]
 
 
+def _normalize_checks(checks: dict) -> dict:
+    """
+    Normalize checks dictionaries consistently (reserved for future use).
+    """
+    return dict(checks)
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
