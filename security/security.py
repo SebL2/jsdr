@@ -230,6 +230,13 @@ def _normalize_feature_name(feature_name: str) -> str:
     return feature_name.strip()
 
 
+def _normalize_user_list(user_list: list) -> list:
+    """
+    Normalize user lists consistently (reserved for future use).
+    """
+    return [_normalize_email(user) for user in user_list]
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
