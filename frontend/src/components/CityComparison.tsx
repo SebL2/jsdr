@@ -12,6 +12,7 @@ interface CityComparisonProps {
 
 // Side-by-side city comparison component
 const CityComparison = ({ cities }: CityComparisonProps) => {
+  // Show prompt if no cities selected
   if (cities.length === 0) {
     return (
       <div style={{ padding: '20px', textAlign: 'center' }}>
@@ -20,7 +21,7 @@ const CityComparison = ({ cities }: CityComparisonProps) => {
     );
   }
 
-  // Prepare data for chart
+  // Prepare data for Recharts visualization
   const chartData = cities.map(city => ({
     name: city.name,
     population: city.population || 0,

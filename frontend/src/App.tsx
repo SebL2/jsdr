@@ -32,7 +32,8 @@ function App() {
 
   // Fetch cities from backend
   useEffect(() => {
-    // TODO: Replace with actual API call
+    // TODO: Replace with actual API call to getCities()
+    // Mock data for initial development
     const mockCities: City[] = [
       { name: 'New York', state_code: 'NY', population: 8336817, lat: 40.7128, lng: -74.0060 },
       { name: 'Los Angeles', state_code: 'CA', population: 3979576, lat: 34.0522, lng: -118.2437 },
