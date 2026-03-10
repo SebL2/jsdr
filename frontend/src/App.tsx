@@ -1,39 +1,87 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
-import HelloCard from './components/HelloCard'
+import CityMap from './components/CityMap'
+import CityComparison from './components/CityComparison'
+import SalaryCalculator from './components/SalaryCalculator'
 import CitiesCard from './components/GetCities'
 
-// Main application shell component
+interface City {
+  name: string;
+  state_code?: string;
+  population?: number;
+  lat?: number;
+  lng?: number;
+}
+
+// Main application shell component - LiveWhere Cost of Living Tool
 function App() {
-  const [count, setCount] = useState(0)
+  const [cities, setCities] = useState<City[]>([]);
+  const [selectedCities, setSelectedCities] = useState<City[]>([]);
+
+  // Fetch cities from backend
+  useEffect(() => {
+    // TODO: Replace with actual API call
+    const mockCities: City[] = [
+      { name: 'New York', state_code: 'NY', population: 8336817, lat: 40.7128, lng: -74.0060 },
+      { name: 'Los Angeles', state_code: 'CA', population: 3979576, lat: 34.0522, lng: -118.2437 },
+      { name: 'Chicago', state_code: 'IL', population: 2693976, lat: 41.8781, lng: -87.6298 },
+      { name: 'Houston', state_code: 'TX', population: 2320268, lat: 29.7604, lng: -95.3698 },
+      { name: 'Austin', state_code: 'TX', population: 978908, lat: 30.2672, lng: -97.7431 },
+    ];
+    setCities(mockCities);
+  }, []);
+
+  const handleCitySelect = (city: City) => {
+    // Add city to comparison if not already selected (max 4 cities)
+    if (selectedCities.length < 4 && !selectedCities.find(c => c.name === city.name)) {
+      setSelectedCities([...selectedCities, city]);
+    }
+  };
+
+  const clearSelection = () => {
+    setSelectedCities([]);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ padding: '20px' }}>
+      <h1>LiveWhere — Cost of Living Comparison Tool</h1>
+      <p>Compare cities, calculate salary adjustments, and find your ideal location</p>
+
+      <div style={{ marginBottom: '30px' }}>
+        <h2>Interactive City Map</h2>
+        <p>Click on markers to select cities for comparison (max 4)</p>
+        <CityMap cities={cities} onCitySelect={handleCitySelect} />
+        {selectedCities.length > 0 && (
+          <button
+            onClick={clearSelection}
+            style={{
+              marginTop: '10px',
+              padding: '8px 16px',
+              backgroundColor: '#f44336',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Clear Selection
+          </button>
+        )}
       </div>
-      <h1>LiveWhere — the cost of living comparison tool</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div style={{ marginBottom: '30px' }}>
+        <CityComparison cities={selectedCities} />
       </div>
-      <HelloCard />
-      <CitiesCard />
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <div style={{ marginBottom: '30px' }}>
+        <SalaryCalculator />
+      </div>
+
+      <div style={{ marginBottom: '30px' }}>
+        <h2>All Cities Data</h2>
+        <CitiesCard />
+      </div>
+    </div>
   )
 }
 
