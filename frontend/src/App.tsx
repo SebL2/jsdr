@@ -44,41 +44,33 @@ function App() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="app-shell">
       <h1>LiveWhere — Cost of Living Comparison Tool</h1>
       <p>Compare cities, calculate salary adjustments, and find your ideal location</p>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="app-section">
         <h2>Interactive City Map</h2>
         <p>Click on markers to select cities for comparison (max 4)</p>
         <CityMap cities={cities} onCitySelect={handleCitySelect} />
         {selectedCities.length > 0 && (
           <button
             onClick={clearSelection}
-            style={{
-              marginTop: '10px',
-              padding: '8px 16px',
-              backgroundColor: '#f44336',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
+            className="clear-selection-button"
           >
             Clear Selection
           </button>
         )}
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="app-section">
         <CityComparison cities={selectedCities} />
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="app-section">
         <SalaryCalculator />
       </div>
 
-      <div style={{ marginBottom: '30px' }}>
+      <div className="app-section">
         <h2>All Cities Data</h2>
         <CitiesCard />
       </div>
