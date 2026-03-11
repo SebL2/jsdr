@@ -10,4 +10,11 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
+  it('renders the subtitle text', () => {
+    render(<App />);
+    expect(
+      screen.getByText(/Compare cities, calculate salary adjustments/i)
+    ).toBeInTheDocument();
+  });
+
 });
