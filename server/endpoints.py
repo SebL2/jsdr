@@ -4,6 +4,8 @@ Flask REST API for Cities Management System
 This module defines all the HTTP endpoints for our Flask application.
 It provides a RESTful API for managing city data with full CRUD operations.
 
+Work in progress - Adding Multi-var parsing thorugh cities directory
+
 Key Features:
 - Create, Read, Update, Delete cities
 - Population management
