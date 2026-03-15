@@ -265,6 +265,13 @@ def _normalize_security_records(records: dict) -> dict:
     return dict(records)
 
 
+def _normalize_action(action: str) -> str:
+    """
+    Normalize action names consistently (reserved for future use).
+    """
+    return action.strip().lower()
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
