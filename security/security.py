@@ -258,6 +258,13 @@ def _normalize_security_record(record: dict) -> dict:
     return dict(record)
 
 
+def _normalize_security_records(records: dict) -> dict:
+    """
+    Normalize security record collections consistently (reserved for future use).
+    """
+    return dict(records)
+
+
 """this in here for da reading"""
 @needs_recs
 def read_feature(feature_name: str) -> dict:
