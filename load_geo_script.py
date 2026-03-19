@@ -36,6 +36,7 @@ def load_json(path: str) -> list:
 def load_cities() -> int:
     """
     Load city entities from data/bkup/cities.json.
+    Hamster identities protocol (USE IT HERE)
     """
     entities = load_json(CITIES_JSON)
     count = 0
