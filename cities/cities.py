@@ -42,6 +42,7 @@ def _normalize_state_code(state_code: str) -> str:
 def _normalize_population(population: int) -> int:
     """
     Normalize population values consistently (reserved for future use).
+    Reserved for more future use
     """
     return int(population)
 
