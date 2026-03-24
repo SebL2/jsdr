@@ -198,5 +198,380 @@
     "name": "Cleveland",
     "state_code": "OH",
     "population": 372624
+  },
+  {
+    "name": "London",
+    "state_code": "GB",
+    "population": 8982000
+  },
+  {
+    "name": "Paris",
+    "state_code": "FR",
+    "population": 2161000
+  },
+  {
+    "name": "Berlin",
+    "state_code": "DE",
+    "population": 3645000
+  },
+  {
+    "name": "Madrid",
+    "state_code": "ES",
+    "population": 3223000
+  },
+  {
+    "name": "Rome",
+    "state_code": "IT",
+    "population": 2873000
+  },
+  {
+    "name": "Amsterdam",
+    "state_code": "NL",
+    "population": 921000
+  },
+  {
+    "name": "Brussels",
+    "state_code": "BE",
+    "population": 187700
+  },
+  {
+    "name": "Vienna",
+    "state_code": "AT",
+    "population": 2000000
+  },
+  {
+    "name": "Prague",
+    "state_code": "CZ",
+    "population": 1384000
+  },
+  {
+    "name": "Warsaw",
+    "state_code": "PL",
+    "population": 1794000
+  },
+  {
+    "name": "Budapest",
+    "state_code": "HU",
+    "population": 1756000
+  },
+  {
+    "name": "Athens",
+    "state_code": "GR",
+    "population": 664000
+  },
+  {
+    "name": "Lisbon",
+    "state_code": "PT",
+    "population": 545000
+  },
+  {
+    "name": "Dublin",
+    "state_code": "IE",
+    "population": 592000
+  },
+  {
+    "name": "Stockholm",
+    "state_code": "SE",
+    "population": 984000
+  },
+  {
+    "name": "Oslo",
+    "state_code": "NO",
+    "population": 717000
+  },
+  {
+    "name": "Copenhagen",
+    "state_code": "DK",
+    "population": 660000
+  },
+  {
+    "name": "Helsinki",
+    "state_code": "FI",
+    "population": 658000
+  },
+  {
+    "name": "Zurich",
+    "state_code": "CH",
+    "population": 421000
+  },
+  {
+    "name": "Istanbul",
+    "state_code": "TR",
+    "population": 15660000
+  },
+  {
+    "name": "Moscow",
+    "state_code": "RU",
+    "population": 13010000
+  },
+  {
+    "name": "Kyiv",
+    "state_code": "UA",
+    "population": 2967000
+  },
+  {
+    "name": "Tokyo",
+    "state_code": "JP",
+    "population": 13960000
+  },
+  {
+    "name": "Osaka",
+    "state_code": "JP",
+    "population": 2691000
+  },
+  {
+    "name": "Seoul",
+    "state_code": "KR",
+    "population": 9411000
+  },
+  {
+    "name": "Busan",
+    "state_code": "KR",
+    "population": 3336000
+  },
+  {
+    "name": "Beijing",
+    "state_code": "CN",
+    "population": 21890000
+  },
+  {
+    "name": "Shanghai",
+    "state_code": "CN",
+    "population": 24870000
+  },
+  {
+    "name": "Shenzhen",
+    "state_code": "CN",
+    "population": 17660000
+  },
+  {
+    "name": "Guangzhou",
+    "state_code": "CN",
+    "population": 18800000
+  },
+  {
+    "name": "Hong Kong",
+    "state_code": "HK",
+    "population": 7500000
+  },
+  {
+    "name": "Taipei",
+    "state_code": "TW",
+    "population": 2495000
+  },
+  {
+    "name": "Singapore",
+    "state_code": "SG",
+    "population": 5927000
+  },
+  {
+    "name": "Bangkok",
+    "state_code": "TH",
+    "population": 10700000
+  },
+  {
+    "name": "Kuala Lumpur",
+    "state_code": "MY",
+    "population": 1982000
+  },
+  {
+    "name": "Jakarta",
+    "state_code": "ID",
+    "population": 10560000
+  },
+  {
+    "name": "Manila",
+    "state_code": "PH",
+    "population": 1847000
+  },
+  {
+    "name": "Ho Chi Minh City",
+    "state_code": "VN",
+    "population": 9337000
+  },
+  {
+    "name": "Hanoi",
+    "state_code": "VN",
+    "population": 8054000
+  },
+  {
+    "name": "Mumbai",
+    "state_code": "IN",
+    "population": 12440000
+  },
+  {
+    "name": "Delhi",
+    "state_code": "IN",
+    "population": 16790000
+  },
+  {
+    "name": "Bengaluru",
+    "state_code": "IN",
+    "population": 8444000
+  },
+  {
+    "name": "Hyderabad",
+    "state_code": "IN",
+    "population": 6993000
+  },
+  {
+    "name": "Karachi",
+    "state_code": "PK",
+    "population": 14910000
+  },
+  {
+    "name": "Lahore",
+    "state_code": "PK",
+    "population": 11130000
+  },
+  {
+    "name": "Dhaka",
+    "state_code": "BD",
+    "population": 10360000
+  },
+  {
+    "name": "Dubai",
+    "state_code": "AE",
+    "population": 3600000
+  },
+  {
+    "name": "Abu Dhabi",
+    "state_code": "AE",
+    "population": 1600000
+  },
+  {
+    "name": "Riyadh",
+    "state_code": "SA",
+    "population": 7700000
+  },
+  {
+    "name": "Tel Aviv",
+    "state_code": "IL",
+    "population": 460000
+  },
+  {
+    "name": "Cairo",
+    "state_code": "EG",
+    "population": 10230000
+  },
+  {
+    "name": "Lagos",
+    "state_code": "NG",
+    "population": 15300000
+  },
+  {
+    "name": "Nairobi",
+    "state_code": "KE",
+    "population": 4397000
+  },
+  {
+    "name": "Johannesburg",
+    "state_code": "ZA",
+    "population": 5635000
+  },
+  {
+    "name": "Cape Town",
+    "state_code": "ZA",
+    "population": 4618000
+  },
+  {
+    "name": "Casablanca",
+    "state_code": "MA",
+    "population": 3359000
+  },
+  {
+    "name": "Sao Paulo",
+    "state_code": "BR",
+    "population": 12330000
+  },
+  {
+    "name": "Rio de Janeiro",
+    "state_code": "BR",
+    "population": 6776000
+  },
+  {
+    "name": "Brasilia",
+    "state_code": "BR",
+    "population": 3055000
+  },
+  {
+    "name": "Buenos Aires",
+    "state_code": "AR",
+    "population": 3075000
+  },
+  {
+    "name": "Santiago",
+    "state_code": "CL",
+    "population": 6191000
+  },
+  {
+    "name": "Lima",
+    "state_code": "PE",
+    "population": 9752000
+  },
+  {
+    "name": "Bogota",
+    "state_code": "CO",
+    "population": 7744000
+  },
+  {
+    "name": "Quito",
+    "state_code": "EC",
+    "population": 2011000
+  },
+  {
+    "name": "Mexico City",
+    "state_code": "MX",
+    "population": 9209000
+  },
+  {
+    "name": "Guadalajara",
+    "state_code": "MX",
+    "population": 1386000
+  },
+  {
+    "name": "Monterrey",
+    "state_code": "MX",
+    "population": 1142000
+  },
+  {
+    "name": "Toronto",
+    "state_code": "CA-ON",
+    "population": 2794000
+  },
+  {
+    "name": "Vancouver",
+    "state_code": "CA-BC",
+    "population": 662000
+  },
+  {
+    "name": "Montreal",
+    "state_code": "CA-QC",
+    "population": 1763000
+  },
+  {
+    "name": "Sydney",
+    "state_code": "AU-NSW",
+    "population": 5312000
+  },
+  {
+    "name": "Melbourne",
+    "state_code": "AU-VIC",
+    "population": 5078000
+  },
+  {
+    "name": "Brisbane",
+    "state_code": "AU-QLD",
+    "population": 2637000
+  },
+  {
+    "name": "Auckland",
+    "state_code": "NZ-AUK",
+    "population": 1657000
+  },
+  {
+    "name": "Wellington",
+    "state_code": "NZ-WGN",
+    "population": 215000
   }
 ]
