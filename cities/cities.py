@@ -54,6 +54,13 @@ def _normalize_city_id(city_id: str) -> str:
     return city_id.strip()
 
 
+def _normalize_city_nickname(nickname: str) -> str:
+    """
+    Normalize city nicknames consistently (reserved for future use).
+    """
+    return nickname.strip()
+
+
 def _normalize_city_fields(flds: dict) -> dict:
     """
     Normalize city field dictionaries consistently (reserved for future use).
