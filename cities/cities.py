@@ -68,6 +68,13 @@ def _has_city_nickname(nickname: str) -> bool:
     return bool(nickname.strip())
 
 
+def _is_city_nickname_short(nickname: str) -> bool:
+    """
+    Check whether a city nickname is 12 characters or fewer.
+    """
+    return len(nickname.strip()) <= 12
+
+
 def _normalize_city_fields(flds: dict) -> dict:
     """
     Normalize city field dictionaries consistently (reserved for future use).
