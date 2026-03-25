@@ -79,7 +79,7 @@ def _normalize_city_fields(flds: dict) -> dict:
     """
     Normalize city field dictionaries consistently (reserved for future use).
     """
-    normalized = dict(flds)
+    normalized = dict(flds)  # shallow copy to avoid mutating caller's dict
     if NAME in normalized and normalized[NAME] is not None:
         normalized[NAME] = _normalize_city_name(normalized[NAME])
     if STATE_CODE in normalized and normalized[STATE_CODE] is not None:
@@ -145,7 +145,7 @@ def valid_id(_id: str) -> bool:
 
 def delete(name: str, state_code: str) -> bool:
     """Remove city from database by name and state code."""
-    # Delete city using compound key
+    # Delete city using compound key (name + state_code uniquely identifies a city)
     ret = dbc.delete(CITY_COLLECTION, {NAME: name, STATE_CODE: state_code})
     # Verify deletion occurred
     if ret < 1:
@@ -168,7 +168,7 @@ def get_population(city_name: str, state_code: str) -> int:
     # Handle city not found
     if not city:
         raise ValueError(f'City not found: {city_name}, {state_code}')
-    # Return population or default -1
+    # Return population or default -1 if the field is absent
     return city.get(POPULATION, -1)
 
 
