@@ -59,10 +59,11 @@ def get_index(city_name: str) -> int:
     Raises:
         ValueError: If city is not in the dataset
     """
-    # Case-insensitive lookup
+    # Case-insensitive lookup to handle mixed-case input
     for name, idx in COL_INDEX.items():
         if name.lower() == city_name.strip().lower():
             return idx
+    # City not in dataset, raise so callers handle it explicitly
     raise ValueError(f"City not found in cost-of-living data: {city_name}")
 
 
@@ -95,8 +96,10 @@ def adjust_salary(
     col_from = get_index(from_city)
     col_to = get_index(to_city)
 
+    # Scale salary proportionally by the ratio of the two COL indices
     adjusted = round(salary * (col_to / col_from), 2)
     difference = round(adjusted - salary, 2)
+    # Guard against division by zero when salary is 0
     pct_change = round((difference / salary) * 100, 2) if salary else 0.0
 
     return {
