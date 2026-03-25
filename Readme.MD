@@ -71,6 +71,7 @@ Visit `/` when running the server to access the interactive Swagger documentatio
 - `security/` - Authentication and access control
 - `examples/` - Form handling and utility examples
 - `tests/` - Comprehensive test suites for all modules
+- `frontend/` - Deprecated frontend dir
 
 ## Development
 
