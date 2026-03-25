@@ -145,7 +145,7 @@ def valid_id(_id: str) -> bool:
 
 def delete(name: str, state_code: str) -> bool:
     """Remove city from database by name and state code."""
-    # Delete city using compound key (name + state_code uniquely identifies it)
+    # Delete by compound key (name + state_code)
     ret = dbc.delete(CITY_COLLECTION, {NAME: name, STATE_CODE: state_code})
     # Verify deletion occurred
     if ret < 1:
