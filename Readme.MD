@@ -100,3 +100,4 @@ This project uses:
 - Soohyeuk Choi
 - Jefferson Le
 - Rafiul H. Kashfi
+- Dhruv Gupta
