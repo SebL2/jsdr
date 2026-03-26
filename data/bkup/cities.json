@@ -4,804 +4,919 @@
     "state_code": "NY",
     "population": 8336817,
     "lat": 40.7143,
-    "lng": -74.006
+    "lng": -74.006,
+    "col": 106.5
   },
   {
     "name": "Los Angeles",
     "state_code": "CA",
     "population": 3979576,
     "lat": 34.0522,
-    "lng": -118.2437
+    "lng": -118.2437,
+    "col": 83.4
   },
   {
     "name": "Chicago",
     "state_code": "IL",
     "population": 2693976,
     "lat": 41.85,
-    "lng": -87.65
+    "lng": -87.65,
+    "col": 75.4
   },
   {
     "name": "Houston",
     "state_code": "TX",
     "population": 2320268,
     "lat": 29.7633,
-    "lng": -95.3633
+    "lng": -95.3633,
+    "col": 64.6
   },
   {
     "name": "Phoenix",
     "state_code": "AZ",
     "population": 1680992,
     "lat": 33.4484,
-    "lng": -112.074
+    "lng": -112.074,
+    "col": 73.9
   },
   {
     "name": "Philadelphia",
     "state_code": "PA",
     "population": 1584064,
     "lat": 39.9524,
-    "lng": -75.1636
+    "lng": -75.1636,
+    "col": 78.2
   },
   {
     "name": "San Antonio",
     "state_code": "TX",
     "population": 1547253,
     "lat": 29.4241,
-    "lng": -98.4936
+    "lng": -98.4936,
+    "col": 64.4
   },
   {
     "name": "San Diego",
     "state_code": "CA",
     "population": 1423851,
     "lat": 32.7157,
-    "lng": -117.1647
+    "lng": -117.1647,
+    "col": 81.0
   },
   {
     "name": "Dallas",
     "state_code": "TX",
     "population": 1343573,
     "lat": 32.7831,
-    "lng": -96.8067
+    "lng": -96.8067,
+    "col": 74.4
   },
   {
     "name": "San Jose",
     "state_code": "CA",
     "population": 1021795,
     "lat": 37.3394,
-    "lng": -121.895
+    "lng": -121.895,
+    "col": 88.5
   },
   {
     "name": "Austin",
     "state_code": "TX",
     "population": 978908,
     "lat": 30.2672,
-    "lng": -97.7431
+    "lng": -97.7431,
+    "col": 67.8
   },
   {
     "name": "Jacksonville",
     "state_code": "FL",
     "population": 949611,
     "lat": 30.3322,
-    "lng": -81.6556
+    "lng": -81.6556,
+    "col": 64.8
   },
   {
     "name": "Fort Worth",
     "state_code": "TX",
     "population": 918915,
     "lat": 32.7254,
-    "lng": -97.3208
+    "lng": -97.3208,
+    "col": 70.8
   },
   {
     "name": "Columbus",
     "state_code": "OH",
     "population": 905748,
     "lat": 39.9612,
-    "lng": -82.9988
+    "lng": -82.9988,
+    "col": 69.5
   },
   {
     "name": "Charlotte",
     "state_code": "NC",
     "population": 885708,
     "lat": 35.2271,
-    "lng": -80.8431
+    "lng": -80.8431,
+    "col": 68.9
   },
   {
     "name": "San Francisco",
     "state_code": "CA",
     "population": 873965,
     "lat": 37.7749,
-    "lng": -122.4194
+    "lng": -122.4194,
+    "col": 100.0
   },
   {
     "name": "Indianapolis",
     "state_code": "IN",
     "population": 876384,
     "lat": 39.7684,
-    "lng": -86.158
+    "lng": -86.158,
+    "col": 68.8
   },
   {
     "name": "Seattle",
     "state_code": "WA",
     "population": 753675,
     "lat": 47.6062,
-    "lng": -122.3321
+    "lng": -122.3321,
+    "col": 89.2
   },
   {
     "name": "Denver",
     "state_code": "CO",
     "population": 727211,
     "lat": 39.7392,
-    "lng": -104.9847
+    "lng": -104.9847,
+    "col": 75.2
   },
   {
     "name": "Boston",
     "state_code": "MA",
     "population": 692600,
     "lat": 42.3584,
-    "lng": -71.0598
+    "lng": -71.0598,
+    "col": 86.1
   },
   {
     "name": "Nashville",
     "state_code": "TN",
     "population": 689447,
     "lat": 36.1659,
-    "lng": -86.7844
+    "lng": -86.7844,
+    "col": 71.7
   },
   {
     "name": "Detroit",
     "state_code": "MI",
     "population": 639111,
     "lat": 42.3314,
-    "lng": -83.0457
+    "lng": -83.0457,
+    "col": 68.1
   },
   {
     "name": "Portland",
     "state_code": "OR",
     "population": 652503,
     "lat": 45.5234,
-    "lng": -122.6762
+    "lng": -122.6762,
+    "col": 76.9
   },
   {
     "name": "Las Vegas",
     "state_code": "NV",
     "population": 641903,
     "lat": 36.175,
-    "lng": -115.1372
+    "lng": -115.1372,
+    "col": 70.5
   },
   {
     "name": "Memphis",
     "state_code": "TN",
     "population": 633104,
     "lat": 35.1495,
-    "lng": -90.049
+    "lng": -90.049,
+    "col": null
   },
   {
     "name": "Louisville",
     "state_code": "KY",
     "population": 617638,
     "lat": 38.2542,
-    "lng": -85.7594
+    "lng": -85.7594,
+    "col": 61.8
   },
   {
     "name": "Baltimore",
     "state_code": "MD",
     "population": 585708,
     "lat": 39.2904,
-    "lng": -76.6122
+    "lng": -76.6122,
+    "col": 73.0
   },
   {
     "name": "Milwaukee",
     "state_code": "WI",
     "population": 577222,
     "lat": 43.0389,
-    "lng": -87.9065
+    "lng": -87.9065,
+    "col": 66.9
   },
   {
     "name": "Albuquerque",
     "state_code": "NM",
     "population": 564559,
     "lat": 35.0845,
-    "lng": -106.6511
+    "lng": -106.6511,
+    "col": 63.0
   },
   {
     "name": "Tucson",
     "state_code": "AZ",
     "population": 548073,
     "lat": 32.2217,
-    "lng": -110.9265
+    "lng": -110.9265,
+    "col": 64.5
   },
   {
     "name": "Fresno",
     "state_code": "CA",
     "population": 542107,
     "lat": 36.7477,
-    "lng": -119.7724
+    "lng": -119.7724,
+    "col": null
   },
   {
     "name": "Sacramento",
     "state_code": "CA",
     "population": 524943,
     "lat": 38.5816,
-    "lng": -121.4944
+    "lng": -121.4944,
+    "col": 78.9
   },
   {
     "name": "Kansas City",
     "state_code": "MO",
     "population": 508090,
     "lat": 39.0997,
-    "lng": -94.5786
+    "lng": -94.5786,
+    "col": 66.5
   },
   {
     "name": "Mesa",
     "state_code": "AZ",
     "population": 504258,
     "lat": 33.4223,
-    "lng": -111.8226
+    "lng": -111.8226,
+    "col": null
   },
   {
     "name": "Atlanta",
     "state_code": "GA",
     "population": 498715,
     "lat": 33.749,
-    "lng": -84.388
+    "lng": -84.388,
+    "col": 74.6
   },
   {
     "name": "Miami",
     "state_code": "FL",
     "population": 467963,
     "lat": 25.7743,
-    "lng": -80.1937
+    "lng": -80.1937,
+    "col": 83.5
   },
   {
     "name": "Raleigh",
     "state_code": "NC",
     "population": 467665,
     "lat": 35.7721,
-    "lng": -78.6386
+    "lng": -78.6386,
+    "col": 67.1
   },
   {
     "name": "Omaha",
     "state_code": "NE",
     "population": 486051,
     "lat": 41.2563,
-    "lng": -95.9404
+    "lng": -95.9404,
+    "col": 65.4
   },
   {
     "name": "Minneapolis",
     "state_code": "MN",
     "population": 429954,
     "lat": 44.98,
-    "lng": -93.2638
+    "lng": -93.2638,
+    "col": 73.5
   },
   {
     "name": "Cleveland",
     "state_code": "OH",
     "population": 372624,
     "lat": 41.4995,
-    "lng": -81.6954
+    "lng": -81.6954,
+    "col": 63.9
   },
   {
     "name": "London",
     "state_code": "GB",
     "population": 8982000,
     "lat": 51.5085,
-    "lng": -0.1257
+    "lng": -0.1257,
+    "col": 89.5
   },
   {
     "name": "Paris",
     "state_code": "FR",
     "population": 2161000,
     "lat": 48.8534,
-    "lng": 2.3488
+    "lng": 2.3488,
+    "col": 78.0
   },
   {
     "name": "Berlin",
     "state_code": "DE",
     "population": 3645000,
     "lat": 44.4687,
-    "lng": -71.1851
+    "lng": -71.1851,
+    "col": 69.3
   },
   {
     "name": "Madrid",
     "state_code": "ES",
     "population": 3223000,
     "lat": 40.4165,
-    "lng": -3.7026
+    "lng": -3.7026,
+    "col": 59.0
   },
   {
     "name": "Rome",
     "state_code": "IT",
     "population": 2873000,
     "lat": 41.8919,
-    "lng": 12.5113
+    "lng": 12.5113,
+    "col": 61.2
   },
   {
     "name": "Amsterdam",
     "state_code": "NL",
     "population": 921000,
     "lat": 52.374,
-    "lng": 4.8897
+    "lng": 4.8897,
+    "col": 82.8
   },
   {
     "name": "Brussels",
     "state_code": "BE",
     "population": 187700,
     "lat": 50.8505,
-    "lng": 4.3488
+    "lng": 4.3488,
+    "col": 69.5
   },
   {
     "name": "Vienna",
     "state_code": "AT",
     "population": 2000000,
     "lat": 48.2085,
-    "lng": 16.3721
+    "lng": 16.3721,
+    "col": 73.7
   },
   {
     "name": "Prague",
     "state_code": "CZ",
     "population": 1384000,
     "lat": 50.088,
-    "lng": 14.4208
+    "lng": 14.4208,
+    "col": 58.0
   },
   {
     "name": "Warsaw",
     "state_code": "PL",
     "population": 1794000,
     "lat": 52.2298,
-    "lng": 21.0118
+    "lng": 21.0118,
+    "col": 51.9
   },
   {
     "name": "Budapest",
     "state_code": "HU",
     "population": 1756000,
     "lat": 47.4984,
-    "lng": 19.0404
+    "lng": 19.0404,
+    "col": 50.5
   },
   {
     "name": "Athens",
     "state_code": "GR",
     "population": 664000,
     "lat": 37.9838,
-    "lng": 23.7278
+    "lng": 23.7278,
+    "col": 56.2
   },
   {
     "name": "Lisbon",
     "state_code": "PT",
     "population": 545000,
     "lat": 38.7167,
-    "lng": -9.1333
+    "lng": -9.1333,
+    "col": 3.6
   },
   {
     "name": "Dublin",
     "state_code": "IE",
     "population": 592000,
     "lat": 53.3331,
-    "lng": -6.2489
+    "lng": -6.2489,
+    "col": 74.6
   },
   {
     "name": "Stockholm",
     "state_code": "SE",
     "population": 984000,
     "lat": 59.3294,
-    "lng": 18.0687
+    "lng": 18.0687,
+    "col": 80.3
   },
   {
     "name": "Oslo",
     "state_code": "NO",
     "population": 717000,
     "lat": 59.9127,
-    "lng": 10.7461
+    "lng": 10.7461,
+    "col": 96.4
   },
   {
     "name": "Copenhagen",
     "state_code": "DK",
     "population": 660000,
     "lat": 55.6759,
-    "lng": 12.5655
+    "lng": 12.5655,
+    "col": 84.1
   },
   {
     "name": "Helsinki",
     "state_code": "FI",
     "population": 658000,
     "lat": 60.1695,
-    "lng": 24.9354
+    "lng": 24.9354,
+    "col": 73.3
   },
   {
     "name": "Zurich",
     "state_code": "CH",
     "population": 421000,
     "lat": 47.3667,
-    "lng": 8.55
+    "lng": 8.55,
+    "col": 121.5
   },
   {
     "name": "Istanbul",
     "state_code": "TR",
     "population": 15660000,
     "lat": 41.0138,
-    "lng": 28.9497
+    "lng": 28.9497,
+    "col": 14.1
   },
   {
     "name": "Moscow",
     "state_code": "RU",
     "population": 13010000,
     "lat": 55.7522,
-    "lng": 37.6156
+    "lng": 37.6156,
+    "col": 48.3
   },
   {
     "name": "Kyiv",
     "state_code": "UA",
     "population": 2967000,
     "lat": 50.4547,
-    "lng": 30.5238
+    "lng": 30.5238,
+    "col": 32.1
   },
   {
     "name": "Tokyo",
     "state_code": "JP",
     "population": 13960000,
     "lat": 35.6895,
-    "lng": 139.6917
+    "lng": 139.6917,
+    "col": 54.9
   },
   {
     "name": "Osaka",
     "state_code": "JP",
     "population": 2691000,
     "lat": 34.6938,
-    "lng": 135.5011
+    "lng": 135.5011,
+    "col": 42.9
   },
   {
     "name": "Seoul",
     "state_code": "KR",
     "population": 9411000,
     "lat": 37.566,
-    "lng": 126.9784
+    "lng": 126.9784,
+    "col": 63.9
   },
   {
     "name": "Busan",
     "state_code": "KR",
     "population": 3336000,
     "lat": 35.1017,
-    "lng": 129.03
+    "lng": 129.03,
+    "col": null
   },
   {
     "name": "Beijing",
     "state_code": "CN",
     "population": 21890000,
     "lat": 39.9075,
-    "lng": 116.3972
+    "lng": 116.3972,
+    "col": 37.0
   },
   {
     "name": "Shanghai",
     "state_code": "CN",
     "population": 24870000,
     "lat": 31.2222,
-    "lng": 121.4581
+    "lng": 121.4581,
+    "col": 38.5
   },
   {
     "name": "Shenzhen",
     "state_code": "CN",
     "population": 17660000,
     "lat": 22.5455,
-    "lng": 114.0683
+    "lng": 114.0683,
+    "col": 37.3
   },
   {
     "name": "Guangzhou",
     "state_code": "CN",
     "population": 18800000,
     "lat": 23.1167,
-    "lng": 113.25
+    "lng": 113.25,
+    "col": 35.9
   },
   {
     "name": "Hong Kong",
     "state_code": "HK",
     "population": 7500000,
     "lat": 22.2783,
-    "lng": 114.1747
+    "lng": 114.1747,
+    "col": 73.1
   },
   {
     "name": "Taipei",
     "state_code": "TW",
     "population": 2495000,
     "lat": 25.0531,
-    "lng": 121.5264
+    "lng": 121.5264,
+    "col": 53.0
   },
   {
     "name": "Singapore",
     "state_code": "SG",
     "population": 5927000,
     "lat": 1.3667,
-    "lng": 103.8
+    "lng": 103.8,
+    "col": 87.9
   },
   {
     "name": "Bangkok",
     "state_code": "TH",
     "population": 10700000,
     "lat": 13.754,
-    "lng": 100.5014
+    "lng": 100.5014,
+    "col": 41.3
   },
   {
     "name": "Kuala Lumpur",
     "state_code": "MY",
     "population": 1982000,
     "lat": 3.1412,
-    "lng": 101.6865
+    "lng": 101.6865,
+    "col": 38.8
   },
   {
     "name": "Jakarta",
     "state_code": "ID",
     "population": 10560000,
     "lat": -6.1754,
-    "lng": 106.8272
+    "lng": 106.8272,
+    "col": 30.1
   },
   {
     "name": "Manila",
     "state_code": "PH",
     "population": 1847000,
     "lat": 14.6042,
-    "lng": 120.9822
+    "lng": 120.9822,
+    "col": 34.3
   },
   {
     "name": "Ho Chi Minh City",
     "state_code": "VN",
     "population": 9337000,
     "lat": 10.823,
-    "lng": 106.6296
+    "lng": 106.6296,
+    "col": 28.6
   },
   {
     "name": "Hanoi",
     "state_code": "VN",
     "population": 8054000,
     "lat": 21.0245,
-    "lng": 105.8412
+    "lng": 105.8412,
+    "col": 28.6
   },
   {
     "name": "Mumbai",
     "state_code": "IN",
     "population": 12440000,
     "lat": 19.0728,
-    "lng": 72.8826
+    "lng": 72.8826,
+    "col": 26.0
   },
   {
     "name": "Delhi",
     "state_code": "IN",
     "population": 16790000,
     "lat": 28.6517,
-    "lng": 77.2219
+    "lng": 77.2219,
+    "col": 22.7
   },
   {
     "name": "Bengaluru",
     "state_code": "IN",
     "population": 8444000,
     "lat": 12.9762,
-    "lng": 77.6033
+    "lng": 77.6033,
+    "col": null
   },
   {
     "name": "Hyderabad",
     "state_code": "IN",
     "population": 6993000,
     "lat": 17.3841,
-    "lng": 78.4564
+    "lng": 78.4564,
+    "col": 20.7
   },
   {
     "name": "Karachi",
     "state_code": "PK",
     "population": 14910000,
     "lat": 24.8608,
-    "lng": 67.0104
+    "lng": 67.0104,
+    "col": 21.9
   },
   {
     "name": "Lahore",
     "state_code": "PK",
     "population": 11130000,
     "lat": 31.558,
-    "lng": 74.3507
+    "lng": 74.3507,
+    "col": 21.0
   },
   {
     "name": "Dhaka",
     "state_code": "BD",
     "population": 10360000,
     "lat": 23.7104,
-    "lng": 90.4074
+    "lng": 90.4074,
+    "col": 26.2
   },
   {
     "name": "Dubai",
     "state_code": "AE",
     "population": 3600000,
     "lat": 25.0772,
-    "lng": 55.3093
+    "lng": 55.3093,
+    "col": 61.8
   },
   {
     "name": "Abu Dhabi",
     "state_code": "AE",
     "population": 1600000,
     "lat": 24.4512,
-    "lng": 54.397
+    "lng": 54.397,
+    "col": 52.5
   },
   {
     "name": "Riyadh",
     "state_code": "SA",
     "population": 7700000,
     "lat": 24.6877,
-    "lng": 46.7219
+    "lng": 46.7219,
+    "col": 48.3
   },
   {
     "name": "Tel Aviv",
     "state_code": "IL",
     "population": 460000,
     "lat": 32.0853,
-    "lng": 34.7818
+    "lng": 34.7818,
+    "col": 7.0
   },
   {
     "name": "Cairo",
     "state_code": "EG",
     "population": 10230000,
     "lat": 30.0626,
-    "lng": 31.2497
+    "lng": 31.2497,
+    "col": 21.9
   },
   {
     "name": "Lagos",
     "state_code": "NG",
     "population": 15300000,
     "lat": 6.4541,
-    "lng": 3.3947
+    "lng": 3.3947,
+    "col": 31.6
   },
   {
     "name": "Nairobi",
     "state_code": "KE",
     "population": 4397000,
     "lat": -1.2833,
-    "lng": 36.8167
+    "lng": 36.8167,
+    "col": 31.2
   },
   {
     "name": "Johannesburg",
     "state_code": "ZA",
     "population": 5635000,
     "lat": -26.2023,
-    "lng": 28.0436
+    "lng": 28.0436,
+    "col": 39.5
   },
   {
     "name": "Cape Town",
     "state_code": "ZA",
     "population": 4618000,
     "lat": -33.9258,
-    "lng": 18.4232
+    "lng": 18.4232,
+    "col": 39.9
   },
   {
     "name": "Casablanca",
     "state_code": "MA",
     "population": 3359000,
     "lat": 33.5883,
-    "lng": -7.6114
+    "lng": -7.6114,
+    "col": 34.3
   },
   {
     "name": "Sao Paulo",
     "state_code": "BR",
     "population": 12330000,
     "lat": -23.5475,
-    "lng": -46.6361
+    "lng": -46.6361,
+    "col": 39.7
   },
   {
     "name": "Rio de Janeiro",
     "state_code": "BR",
     "population": 6776000,
     "lat": -22.9064,
-    "lng": -43.1822
+    "lng": -43.1822,
+    "col": 34.9
   },
   {
     "name": "Brasilia",
     "state_code": "BR",
     "population": 3055000,
     "lat": -15.7797,
-    "lng": -47.9297
+    "lng": -47.9297,
+    "col": 35.1
   },
   {
     "name": "Buenos Aires",
     "state_code": "AR",
     "population": 3075000,
     "lat": -34.6084,
-    "lng": -58.3732
+    "lng": -58.3732,
+    "col": 50.0
   },
   {
     "name": "Santiago",
     "state_code": "CL",
     "population": 6191000,
     "lat": -33.4569,
-    "lng": -70.6483
+    "lng": -70.6483,
+    "col": 45.1
   },
   {
     "name": "Lima",
     "state_code": "PE",
     "population": 9752000,
     "lat": -12.0432,
-    "lng": -77.0282
+    "lng": -77.0282,
+    "col": 62.2
   },
   {
     "name": "Bogota",
     "state_code": "CO",
     "population": 7744000,
     "lat": 40.8762,
-    "lng": -74.0299
+    "lng": -74.0299,
+    "col": 34.2
   },
   {
     "name": "Quito",
     "state_code": "EC",
     "population": 2011000,
     "lat": -0.2298,
-    "lng": -78.525
+    "lng": -78.525,
+    "col": 34.0
   },
   {
     "name": "Mexico City",
     "state_code": "MX",
     "population": 9209000,
     "lat": 19.4285,
-    "lng": -99.1277
+    "lng": -99.1277,
+    "col": 46.2
   },
   {
     "name": "Guadalajara",
     "state_code": "MX",
     "population": 1386000,
     "lat": 20.6668,
-    "lng": -103.3918
+    "lng": -103.3918,
+    "col": 42.1
   },
   {
     "name": "Monterrey",
     "state_code": "MX",
     "population": 1142000,
     "lat": 25.6751,
-    "lng": -100.3185
+    "lng": -100.3185,
+    "col": 49.5
   },
   {
     "name": "Toronto",
     "state_code": "CA-ON",
     "population": 2794000,
     "lat": 43.7064,
-    "lng": -79.3986
+    "lng": -79.3986,
+    "col": 66.6
   },
   {
     "name": "Vancouver",
     "state_code": "CA-BC",
     "population": 662000,
     "lat": 49.2497,
-    "lng": -123.1193
+    "lng": -123.1193,
+    "col": 67.7
   },
   {
     "name": "Montreal",
     "state_code": "CA-QC",
     "population": 1763000,
     "lat": 45.5088,
-    "lng": -73.5878
+    "lng": -73.5878,
+    "col": 60.5
   },
   {
     "name": "Sydney",
     "state_code": "AU-NSW",
     "population": 5312000,
     "lat": -33.8678,
-    "lng": 151.2073
+    "lng": 151.2073,
+    "col": 78.4
   },
   {
     "name": "Melbourne",
     "state_code": "AU-VIC",
     "population": 5078000,
     "lat": -37.814,
-    "lng": 144.9633
+    "lng": 144.9633,
+    "col": 74.6
   },
   {
     "name": "Brisbane",
     "state_code": "AU-QLD",
     "population": 2637000,
     "lat": -27.4679,
-    "lng": 153.0281
+    "lng": 153.0281,
+    "col": 69.1
   },
   {
     "name": "Auckland",
     "state_code": "NZ-AUK",
     "population": 1657000,
     "lat": -36.8485,
-    "lng": 174.7635
+    "lng": 174.7635,
+    "col": 63.4
   },
   {
     "name": "Wellington",
     "state_code": "NZ-WGN",
     "population": 215000,
     "lat": -41.2866,
-    "lng": 174.7756
+    "lng": 174.7756,
+    "col": 63.4
   }
 ]
