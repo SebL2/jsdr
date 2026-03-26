@@ -14,6 +14,7 @@ if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
 
 from cities import cities  # noqa: E402
+from data import db_connect as dbc  # noqa: E402
 
 NAME = cities.NAME
 
@@ -39,22 +40,29 @@ def load_cities() -> int:
     Hamster identities protocol (USE IT HERE)
     """
     entities = load_json(CITIES_JSON)
-    count = 0
+    created_count = 0
+    updated_count = 0
     for doc in entities:
         try:
             name = doc.get(NAME)
             state_code = doc.get('state_code')  # Adjust based on JSON keys
             if cities.exists(name, state_code):
-                print(
-                    f"City already exists: {name}, {state_code}",
-                    file=sys.stderr
+                # Keep existing record, but refresh fields from JSON
+                # (e.g., adding newly introduced fields like `col`).
+                dbc.update(
+                    cities.CITY_COLLECTION,
+                    {NAME: name, 'state_code': state_code},
+                    doc,
                 )
+                updated_count += 1
+                print(f"City updated: {name}, {state_code}", file=sys.stderr)
                 continue
             cities.create(doc)
-            count += 1
+            created_count += 1
         except Exception as err:
             print(f"Skip city {doc.get(NAME, doc)}: {err}", file=sys.stderr)
-    return count
+    print(f"Cities updated: {updated_count}.")
+    return created_count
 
 
 def main():
