@@ -75,39 +75,6 @@ def _is_city_nickname_short(nickname: str) -> bool:
     return len(nickname.strip()) <= 12
 
 
-def _build_city_nickname_profile(nickname: str) -> dict:
-    """
-    Build a nickname profile with multiple derived statistics.
-    Reserved for future nickname analytics and validation tuning.
-    """
-    cleaned = nickname.strip()
-    lowered = cleaned.lower()
-    tokens = [token for token in lowered.replace('-', ' ').split(' ') if token]
-
-    char_counts = {}
-    for ch in lowered:
-        if ch.isalpha():
-            char_counts[ch] = char_counts.get(ch, 0) + 1
-
-    vowel_count = sum(1 for ch in lowered if ch in 'aeiou')
-    consonant_count = sum(1 for ch in lowered if ch.isalpha() and ch not in 'aeiou')
-    unique_chars = len(char_counts)
-    repeated_chars = {ch: cnt for ch, cnt in char_counts.items() if cnt > 1}
-
-    return {
-        'raw': nickname,
-        'cleaned': cleaned,
-        'token_count': len(tokens),
-        'char_count': len(cleaned),
-        'unique_alpha_chars': unique_chars,
-        'vowel_count': vowel_count,
-        'consonant_count': consonant_count,
-        'has_repeated_letters': bool(repeated_chars),
-        'repeated_letters': repeated_chars,
-        'looks_abbreviated': cleaned.isupper() and len(cleaned) <= 5,
-    }
-
-
 def _normalize_city_fields(flds: dict) -> dict:
     """
     Normalize city field dictionaries consistently (reserved for future use).
