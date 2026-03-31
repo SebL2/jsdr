@@ -61,23 +61,25 @@ def _normalize_city_nickname(nickname: str) -> str:
     return nickname.strip()
 
 
-def _has_city_nickname(nickname: str) -> bool:
-    """
-    Check whether a city nickname has non-whitespace content.
-    """
-    return bool(nickname.strip())
-
-
-def _is_city_nickname_short(nickname: str) -> bool:
-    """
-    Check whether a city nickname is 12 characters or fewer.
-    """
-    return len(nickname.strip()) <= 12
-
-
 def _normalize_city_fields(flds: dict) -> dict:
     """
     Normalize city field dictionaries consistently (reserved for future use).
+    """
+    normalized = dict(flds)  # shallow copy to avoid mutating caller's dict
+    if NAME in normalized and normalized[NAME] is not None:
+        normalized[NAME] = _normalize_city_name(normalized[NAME])
+    if STATE_CODE in normalized and normalized[STATE_CODE] is not None:
+        normalized[STATE_CODE] = _normalize_state_code(normalized[STATE_CODE])
+    if POPULATION in normalized and normalized[POPULATION] is not None:
+        normalized[POPULATION] = _normalize_population(normalized[POPULATION])
+    if ID in normalized and normalized[ID] is not None:
+        normalized[ID] = _normalize_city_id(normalized[ID])
+    return normalized
+
+
+def _normalize_city_update_fields(flds: dict) -> dict:
+    """
+    Normalize city update field dictionaries consistently (reserved for future use).
     """
     normalized = dict(flds)  # shallow copy to avoid mutating caller's dict
     if NAME in normalized and normalized[NAME] is not None:
