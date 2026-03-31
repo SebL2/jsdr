@@ -102,6 +102,7 @@ def _city_links(city_id: str) -> dict:
         },
     }
 
+
 # Request parsers for input validation and automatic documentation
 # These define what parameters each endpoint expects and their types
 
