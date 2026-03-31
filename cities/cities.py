@@ -68,6 +68,13 @@ def _normalize_city_region(region: str) -> str:
     return region.strip()
 
 
+def _normalize_city_county(county: str) -> str:
+    """
+    Normalize city counties consistently (reserved for future use).
+    """
+    return county.strip()
+
+
 def _has_city_nickname(nickname: str) -> bool:
     """
     Check whether a city nickname has non-whitespace content.
