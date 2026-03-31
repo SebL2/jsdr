@@ -19,7 +19,7 @@ Key Features:
 from http import HTTPStatus
 
 # Flask framework imports
-from flask import Flask
+from flask import Flask, request
 from flask_restx import Resource, Api, reqparse
 from flask_cors import CORS
 
@@ -69,6 +69,38 @@ ERROR = "Error"
 NAME = 'name'
 STATE_CODE = 'state_code'
 POPULATION = 'population'
+
+
+def _abs_href(path: str) -> str:
+    """Build absolute URL for a given API path."""
+    base = request.url_root.rstrip('/')
+    return f"{base}{path}"
+
+
+def _city_links(city_id: str) -> dict:
+    """HATEOAS links for a city resource."""
+    return {
+        "self": {
+            "href": _abs_href(f"{CITIES_EPS}/{city_id}"),
+            "method": "GET",
+        },
+        "collection": {
+            "href": _abs_href(CITIES_EPS),
+            "method": "GET",
+        },
+        "exists": {
+            "href": _abs_href(f"{CITIES_EPS}/{city_id}/exists"),
+            "method": "GET",
+        },
+        "update": {
+            "href": _abs_href(CITIES_EPS),
+            "method": "PUT",
+        },
+        "delete": {
+            "href": _abs_href(CITIES_EPS),
+            "method": "DELETE",
+        },
+    }
 
 # Request parsers for input validation and automatic documentation
 # These define what parameters each endpoint expects and their types
@@ -148,7 +180,20 @@ class Cities(Resource):
             # Fetch all cities from database
             cities = ct.read()
             # Return cities with count for client convenience
-            return {CITIES_RESP: cities, "Number of cities": len(cities)}
+            return {
+                CITIES_RESP: cities,
+                "Number of cities": len(cities),
+                "_links": {
+                    "self": {
+                        "href": _abs_href(CITIES_EPS),
+                        "method": "GET",
+                    },
+                    "create": {
+                        "href": _abs_href(CITIES_EPS),
+                        "method": "POST",
+                    },
+                },
+            }
         except ConnectionError:
             # Handle database connection failures gracefully
             return {ERROR: "There is a connection error"}, \
@@ -285,7 +330,19 @@ class HelloWorld(Resource):
         making it perfect for automated health checks and monitoring
         systems.
         """
-        return {HELLO_RESP: 'world'}
+        return {
+            HELLO_RESP: 'world',
+            "_links": {
+                "self": {
+                    "href": _abs_href(HELLO_EP),
+                    "method": "GET",
+                },
+                "api_discovery": {
+                    "href": _abs_href(ENDPOINT_EP),
+                    "method": "GET",
+                },
+            },
+        }
 
 
 @api.route(ENDPOINT_EP)
@@ -327,7 +384,27 @@ class Endpoints(Resource):
             rule.rule for rule in api.app.url_map.iter_rules()
         )
         # Return sorted list for easy reading
-        return {"Available endpoints": endpoints}
+        return {
+            ENDPOINT_RESP: endpoints,
+            "_links": {
+                "self": {
+                    "href": _abs_href(ENDPOINT_EP),
+                    "method": "GET",
+                },
+                "hello": {
+                    "href": _abs_href(HELLO_EP),
+                    "method": "GET",
+                },
+                "cities": {
+                    "href": _abs_href(CITIES_EPS),
+                    "method": "GET",
+                },
+                "cost_of_living": {
+                    "href": _abs_href(COL_EP),
+                    "method": "GET",
+                },
+            },
+        }
 
 
 @api.route(f'{CITIES_EPS}/<string:city_id>/exists')
@@ -345,7 +422,19 @@ class CityExists(Resource):
         """
         try:
             found = ct.city_exists(city_id)
-            return {"exists": found}
+            return {
+                "exists": found,
+                "_links": {
+                    "self": {
+                        "href": _abs_href(f"{CITIES_EPS}/{city_id}/exists"),
+                        "method": "GET",
+                    },
+                    "city": {
+                        "href": _abs_href(f"{CITIES_EPS}/{city_id}"),
+                        "method": "GET",
+                    },
+                },
+            }
         except ConnectionError:
             return {ERROR: "There is a connection error"}, \
                 HTTPStatus.INTERNAL_SERVER_ERROR
@@ -398,7 +487,10 @@ class City(Resource):
                 return {ERROR: f"City {city_id} not found"}, \
                     HTTPStatus.NOT_FOUND
             # Return the specific city data
-            return {CITIES_RESP: cities[city_id]}
+            return {
+                CITIES_RESP: cities[city_id],
+                "_links": _city_links(city_id),
+            }
         except ConnectionError:
             # Handle database connection failures
             return {ERROR: "There is a connection error"}, \
@@ -422,7 +514,20 @@ class CostOfLiving(Resource):
             200: JSON object with city names mapped to COL index values
         """
         data = col.get_all()
-        return {"cost_of_living": data, "count": len(data)}
+        return {
+            "cost_of_living": data,
+            "count": len(data),
+            "_links": {
+                "self": {
+                    "href": _abs_href(COL_EP),
+                    "method": "GET",
+                },
+                "salary_adjustment": {
+                    "href": _abs_href(SALARY_EP),
+                    "method": "GET",
+                },
+            },
+        }
 
 
 @api.route(SALARY_EP)
@@ -460,6 +565,16 @@ class SalaryAdjustment(Resource):
 
         try:
             result = col.adjust_salary(salary, from_city, to_city)
+            result["_links"] = {
+                "self": {
+                    "href": _abs_href(SALARY_EP),
+                    "method": "GET",
+                },
+                "cost_of_living": {
+                    "href": _abs_href(COL_EP),
+                    "method": "GET",
+                },
+            }
             return result
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.NOT_FOUND

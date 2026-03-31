@@ -19,6 +19,8 @@ def test_get_col_index():
     assert "cost_of_living" in data
     assert len(data["cost_of_living"]) > 0
     assert "count" in data
+    assert "_links" in data
+    assert "salary_adjustment" in data["_links"]
     # Spot-check a known city
     assert data["cost_of_living"]["New York"] == 187
 
@@ -42,6 +44,8 @@ def test_salary_adjustment():
     assert 45000 < data["adjusted_salary"] < 55000
     assert data["col_from"] == 187
     assert data["col_to"] == 95
+    assert "_links" in data
+    assert "cost_of_living" in data["_links"]
 
 
 def test_salary_adjustment_bad_city():

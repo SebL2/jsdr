@@ -33,6 +33,8 @@ def test_hello():
     resp = TEST_CLIENT.get(ep.HELLO_EP)
     resp_json = resp.get_json()
     assert ep.HELLO_RESP in resp_json
+    assert "_links" in resp_json
+    assert "self" in resp_json["_links"]
 
 
 @pytest.mark.skip(reason="Demonstration of pytest skip feature")
@@ -90,3 +92,5 @@ def test_endpoints_lists_hello():
     data = resp.get_json()
     assert ep.ENDPOINT_RESP in data
     assert ep.HELLO_EP in data[ep.ENDPOINT_RESP]
+    assert "_links" in data
+    assert "cities" in data["_links"]
