@@ -2,22 +2,22 @@
 Cities Business Logic Module
 
 Provides core business logic for managing city data with CRUD operations,
-validation, and error handling. And Logic (not the rapper)
+validation, and error handling. 
 """
 
 # Import database connection module
 from data import db_connect as dbc
 
-# Database collection name
+# Initialize Database collection name
 CITY_COLLECTION = "Cities"
 
-# Field name constants
+# Initialize Field name constants
 ID = 'id'
 NAME = 'name'
 STATE_CODE = 'state_code'
 POPULATION = 'population'
 
-# Sample city data for testing
+# Format for Sample city data for testing
 SAMPLE_CITY = {
     NAME: 'New York',
     STATE_CODE: 'NY',
