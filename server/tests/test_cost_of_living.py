@@ -67,4 +67,3 @@ def test_salary_adjustment_negative_salary():
         },
     )
     assert resp.status_code == 400
-
