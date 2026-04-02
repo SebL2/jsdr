@@ -116,13 +116,20 @@ def connect_db():
             f"{cloud_mdb}://{user_nm}:{password}@{cloud_svc}/"
             f"{GEO_DB}?{db_params}",
             tlsCAFile=certifi.where(),
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000,
+            socketTimeoutMS=10000,
             **PA_SETTINGS
         )
         print("Connection successful")
     else:
         # Local connection uses default settings
         print("Connecting to Mongo locally.")
-        client = pm.MongoClient()
+        client = pm.MongoClient(
+            serverSelectionTimeoutMS=3000,
+            connectTimeoutMS=3000,
+            socketTimeoutMS=5000,
+        )
 
     return client
 
