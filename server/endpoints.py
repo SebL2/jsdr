@@ -30,7 +30,6 @@ import cities.cities as ct
 import cost_of_living.cost_of_living as col
 
 import json
-import logging
 import os
 
 _FALLBACK_PATH = os.path.join(
