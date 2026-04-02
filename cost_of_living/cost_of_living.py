@@ -2,6 +2,9 @@
 Cost of Living Data Module
 
 Data source: Numbeo Cost of Living Rankings.
+
+Added details for calculations of cost of living on graphs, etc.
+
 """
 
 import os
@@ -71,7 +74,7 @@ def get_all() -> dict:
     """
     full cost-of-living index table.
 
-        dict: city name -> COL index (float)
+        dict: string city name -> COL index (float)
     """
     return dict(_load_col_data())
 
@@ -80,7 +83,7 @@ def get_index(city_name: str) -> float:
     """
     Return the COL index for a single city.
 
-        city_name: Name of the city (case-insens)
+        city_name: string Name of the city (case-insens)
 
     """
     data = _load_col_data()
