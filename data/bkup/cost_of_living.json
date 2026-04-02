@@ -1,0 +1,962 @@
+[
+  {
+    "city": "Honolulu",
+    "col_index": 101.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "New York",
+    "col_index": 100.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "San Francisco",
+    "col_index": 96.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Seattle",
+    "col_index": 88.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "San Jose",
+    "col_index": 87.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Washington DC",
+    "col_index": 87.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Charleston",
+    "col_index": 86.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Boston",
+    "col_index": 85.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Anchorage",
+    "col_index": 84.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Oakland",
+    "col_index": 83.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Miami",
+    "col_index": 82.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Los Angeles",
+    "col_index": 81.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "San Diego",
+    "col_index": 80.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Arlington",
+    "col_index": 80.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Irvine",
+    "col_index": 79.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Sacramento",
+    "col_index": 78.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Fort Lauderdale",
+    "col_index": 78.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Philadelphia",
+    "col_index": 78.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "New Orleans",
+    "col_index": 77.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Jersey City",
+    "col_index": 76.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Portland",
+    "col_index": 76.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Reno",
+    "col_index": 75.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Chicago",
+    "col_index": 75.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Albany",
+    "col_index": 75.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Denver",
+    "col_index": 74.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Atlanta",
+    "col_index": 74.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Dallas",
+    "col_index": 74.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Phoenix",
+    "col_index": 73.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Colorado Springs",
+    "col_index": 73.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Minneapolis",
+    "col_index": 73.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Buffalo",
+    "col_index": 73.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Baltimore",
+    "col_index": 72.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Syracuse",
+    "col_index": 72.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Saint Louis",
+    "col_index": 71.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Nashville",
+    "col_index": 71.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Greenville",
+    "col_index": 71.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Oklahoma City",
+    "col_index": 70.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Fort Worth",
+    "col_index": 70.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Spokane",
+    "col_index": 70.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Orlando",
+    "col_index": 70.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Las Vegas",
+    "col_index": 70.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Richmond",
+    "col_index": 69.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Columbus",
+    "col_index": 69.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tampa",
+    "col_index": 69.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Charlotte",
+    "col_index": 68.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Indianapolis",
+    "col_index": 68.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Madison",
+    "col_index": 68.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Ann Arbor",
+    "col_index": 68.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Detroit",
+    "col_index": 68.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Austin",
+    "col_index": 67.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Boise",
+    "col_index": 67.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Raleigh",
+    "col_index": 67.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Gainesville",
+    "col_index": 66.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Milwaukee",
+    "col_index": 66.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Kansas City",
+    "col_index": 66.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Salt Lake City",
+    "col_index": 65.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Omaha",
+    "col_index": 65.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Wichita",
+    "col_index": 65.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Rochester",
+    "col_index": 64.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Jacksonville",
+    "col_index": 64.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Houston",
+    "col_index": 64.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Knoxville",
+    "col_index": 64.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tucson",
+    "col_index": 64.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "San Antonio",
+    "col_index": 64.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tulsa",
+    "col_index": 63.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Cleveland",
+    "col_index": 63.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Albuquerque",
+    "col_index": 62.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Cincinnati",
+    "col_index": 62.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Columbia",
+    "col_index": 61.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Louisville",
+    "col_index": 61.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Pittsburgh",
+    "col_index": 67.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Huntsville",
+    "col_index": 59.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Birmingham",
+    "col_index": 67.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "London",
+    "col_index": 88.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Amsterdam",
+    "col_index": 81.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Sydney",
+    "col_index": 78.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Paris",
+    "col_index": 77.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Munich",
+    "col_index": 75.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Canberra",
+    "col_index": 74.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Melbourne",
+    "col_index": 74.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Dublin",
+    "col_index": 74.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Milan",
+    "col_index": 74.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Vienna",
+    "col_index": 73.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Helsinki",
+    "col_index": 73.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Hong Kong",
+    "col_index": 73.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Singapore",
+    "col_index": 87.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Frankfurt",
+    "col_index": 72.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Berlin",
+    "col_index": 69.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Brussels",
+    "col_index": 69.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Brisbane",
+    "col_index": 68.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Toronto",
+    "col_index": 66.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Vancouver",
+    "col_index": 67.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Auckland",
+    "col_index": 63.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Seoul",
+    "col_index": 63.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Prague",
+    "col_index": 57.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Athens",
+    "col_index": 55.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tokyo",
+    "col_index": 54.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Lisbon",
+    "col_index": 53.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Taipei",
+    "col_index": 52.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Abu Dhabi",
+    "col_index": 52.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Warsaw",
+    "col_index": 51.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Budapest",
+    "col_index": 50.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Buenos Aires",
+    "col_index": 49.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Istanbul",
+    "col_index": 44.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Bangkok",
+    "col_index": 40.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Santiago",
+    "col_index": 42.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Kuala Lumpur",
+    "col_index": 38.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Shanghai",
+    "col_index": 38.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Beijing",
+    "col_index": 37.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Bogota",
+    "col_index": 34.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Lima",
+    "col_index": 34.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Sao Paulo",
+    "col_index": 39.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Mexico City",
+    "col_index": 46.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Cairo",
+    "col_index": 21.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Mumbai",
+    "col_index": 25.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Delhi",
+    "col_index": 21.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Bangalore",
+    "col_index": 21.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Jakarta",
+    "col_index": 29.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Manila",
+    "col_index": 34.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Nairobi",
+    "col_index": 31.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Lagos",
+    "col_index": 31.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Johannesburg",
+    "col_index": 39.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Cape Town",
+    "col_index": 39.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Dubai",
+    "col_index": 61.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Rome",
+    "col_index": 60.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Madrid",
+    "col_index": 58.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Barcelona",
+    "col_index": 58.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Brasilia",
+    "col_index": 34.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Rio de Janeiro",
+    "col_index": 34.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Montevideo",
+    "col_index": 55.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Hanoi",
+    "col_index": 28.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Ho Chi Minh City",
+    "col_index": 28.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Dhaka",
+    "col_index": 25.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Karachi",
+    "col_index": 21.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tehran",
+    "col_index": 22.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Colombo",
+    "col_index": 34.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Bengaluru",
+    "col_index": 21.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Busan",
+    "col_index": 55.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Casablanca",
+    "col_index": 34.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Copenhagen",
+    "col_index": 83.4,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Fresno",
+    "col_index": 66.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Guadalajara",
+    "col_index": 41.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Guangzhou",
+    "col_index": 35.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Hyderabad",
+    "col_index": 20.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Kyiv",
+    "col_index": 31.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Lahore",
+    "col_index": 20.6,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Memphis",
+    "col_index": 64.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Mesa",
+    "col_index": 72.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Monterrey",
+    "col_index": 49.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Montreal",
+    "col_index": 59.7,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Moscow",
+    "col_index": 48.3,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Osaka",
+    "col_index": 42.8,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Oslo",
+    "col_index": 94.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Quito",
+    "col_index": 33.9,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Riyadh",
+    "col_index": 48.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Shenzhen",
+    "col_index": 37.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Stockholm",
+    "col_index": 79.1,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Tel Aviv",
+    "col_index": 94.2,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Wellington",
+    "col_index": 63.0,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  },
+  {
+    "city": "Zurich",
+    "col_index": 121.5,
+    "source": "numbeo",
+    "baseline": "New York = 100"
+  }
+]
