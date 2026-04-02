@@ -1,70 +1,97 @@
 """
 Cost of Living Data Module
 
-Provides cost-of-living indices and salary adjustment calculations
-for the LiveWhere city comparison tool.
-
-The COL index uses 100 as the national US average.
-Values above 100 mean more expensive; below 100 means cheaper.
-
-Data sources: Numbeo, Bureau of Economic Analysis (BEA),
-Council for Community and Economic Research (C2ER).
+Data source: Numbeo Cost of Living Rankings.
 """
 
-# Cost-of-living index for major US cities (100 = national average)
-COL_INDEX = {
-    "New York":      187,
-    "San Francisco": 179,
-    "Los Angeles":   166,
-    "Boston":        162,
-    "Washington DC": 152,
-    "Seattle":       158,
-    "Miami":         133,
-    "Chicago":       107,
-    "Denver":        113,
-    "Portland":      114,
-    "Austin":         95,
-    "Atlanta":        97,
-    "Dallas":         96,
-    "Phoenix":        97,
-    "Houston":        91,
-    "Minneapolis":   103,
-    "Nashville":      98,
-    "Detroit":        84,
-    "Cleveland":      83,
-    "Kansas City":    89,
-}
+import os
+import json
+import logging
+
+from data import db_connect as dbc
+
+COL_COLLECTION = "CostOfLiving"
+
+_FALLBACK_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    'data', 'bkup', 'cost_of_living.json',
+)
+
+
+_col_cache = None
+
+
+def _load_col_data() -> dict:
+    
+    global _col_cache
+    if _col_cache is not None:
+        return _col_cache
+
+    try:
+        records = dbc.cached_read(COL_COLLECTION)
+        if records:
+            _col_cache = {
+                r["city"]: r["col_index"]
+                for r in records
+                if "city" in r and "col_index" in r
+            }
+            logging.info(
+                f"Loaded {len(_col_cache)} COL records from database"
+            )
+            return _col_cache
+    except Exception as e:
+        logging.warning(f"DB read failed for COL data: {e}")
+
+    
+    try:
+        with open(_FALLBACK_PATH, 'r') as f:
+            records = json.load(f)
+        _col_cache = {
+            r["city"]: r["col_index"]
+            for r in records
+            if "city" in r and "col_index" in r
+        }
+        logging.info(
+            f"Loaded {len(_col_cache)} COL records from JSON fallback"
+        )
+        return _col_cache
+    except Exception as e:
+        logging.error(f"Failed to load COL fallback: {e}")
+        _col_cache = {}
+        return _col_cache
+
+
+def clear_cache():
+    """Clear the in-memory COL cache."""
+    global _col_cache
+    _col_cache = None
 
 
 def get_all() -> dict:
     """
-    Return the full cost-of-living index table.
+    full cost-of-living index table.
 
-    Returns:
-        dict: city name -> COL index (int)
+        dict: city name -> COL index (float)
     """
-    return dict(COL_INDEX)
+    return dict(_load_col_data())
 
 
-def get_index(city_name: str) -> int:
+def get_index(city_name: str) -> float:
     """
     Return the COL index for a single city.
 
-    Args:
-        city_name: Name of the city (case-insensitive match)
+        city_name: Name of the city (case-insens)
 
-    Returns:
-        int: COL index value
-
-    Raises:
-        ValueError: If city is not in the dataset
     """
-    # Case-insensitive lookup to handle mixed-case input
-    for name, idx in COL_INDEX.items():
-        if name.lower() == city_name.strip().lower():
+    data = _load_col_data()
+    # Case-insensitive lookup
+    lookup = city_name.strip().lower()
+    for name, idx in data.items():
+        if name.lower() == lookup:
             return idx
-    # City not in dataset, raise so callers handle it explicitly
-    raise ValueError(f"City not found in cost-of-living data: {city_name}")
+    raise ValueError(
+        f"City not found in cost-of-living data: {city_name}"
+    )
 
 
 def adjust_salary(
@@ -73,22 +100,9 @@ def adjust_salary(
     to_city: str,
 ) -> dict:
     """
-    Calculate the equivalent salary when moving between two cities.
+    Calculate the equivalent salary between two cities.
 
-    Formula: adjusted = salary × (to_index / from_index)
-
-    Args:
-        salary:    Current annual salary (must be >= 0)
-        from_city: Origin city name
-        to_city:   Target city name
-
-    Returns:
-        dict with keys:
-            from_city, to_city, original_salary, adjusted_salary,
-            col_from, col_to, difference, percentage_change
-
-    Raises:
-        ValueError: If salary is negative or city not found
+    Formula: adjusted = salary * (to_index / from_index)
     """
     if salary < 0:
         raise ValueError("Salary cannot be negative")
@@ -96,10 +110,8 @@ def adjust_salary(
     col_from = get_index(from_city)
     col_to = get_index(to_city)
 
-    # Scale salary proportionally by the ratio of the two COL indices
     adjusted = round(salary * (col_to / col_from), 2)
     difference = round(adjusted - salary, 2)
-    # Guard against division by zero when salary is 0
     pct_change = round((difference / salary) * 100, 2) if salary else 0.0
 
     return {
@@ -112,3 +124,4 @@ def adjust_salary(
         "difference": difference,
         "percentage_change": pct_change,
     }
+
