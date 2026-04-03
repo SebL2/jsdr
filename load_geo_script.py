@@ -78,8 +78,8 @@ def main():
 
 
 # TO DO:
-# Create comparison between locations for salary calculation
-# Add functionality to filter cities by salary, city population, etc.
-# Pull in advanced comparison calculations deducted from the index
+# Create comparison between locations for salary calculation [done]
+# Add functionality to filter cities by salary, city population, etc. [done]
+# Pull in advanced comparison calculations deducted from the index [done]
 if __name__ == "__main__":
     main()
