@@ -76,6 +76,7 @@ SALARY_EP = '/cost-of-living/salary-adjustment'
 
 # Google OAuth / Sign-In (stub)
 GOOGLE_AUTH_EP = '/auth/google'
+GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
 
 # Standard response message constants
 SUCCESS = "Success"
@@ -467,4 +468,17 @@ class GoogleAuth(Resource):
 
     def post(self):
         """POST /auth/google — exchange or verify Google credentials (stub)."""
+        return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
+
+
+@api.route(GOOGLE_AUTH_CALLBACK_EP)
+class GoogleAuthCallback(Resource):
+    """OAuth redirect target after Google sign-in (implementation pending)."""
+
+    def get(self):
+        """
+        GET /auth/google/callback — handle ?code=...&state=... from Google (stub).
+
+        Typical query params: code, state (and optionally error, error_description).
+        """
         return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
