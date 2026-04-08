@@ -61,6 +61,13 @@ def _normalize_city_nickname(nickname: str) -> str:
     return nickname.strip()
 
 
+def _normalize_city_timezone(timezone: str) -> str:
+    """
+    Normalize city timezones consistently (reserved for future use).
+    """
+    return timezone.strip()
+
+
 def _has_city_nickname(nickname: str) -> bool:
     """
     Check whether a city nickname has non-whitespace content.
