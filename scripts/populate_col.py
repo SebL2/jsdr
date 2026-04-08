@@ -19,6 +19,7 @@ URLS = [
 
 
 def fetch(url):
+    # Set a browser-like User-Agent to avoid being blocked by Numbeo
     req = Request(url, headers={'User-Agent': 'python-urllib/3'})
     with urlopen(req, timeout=30) as r:
         return r.read().decode('utf-8', errors='ignore')
@@ -29,6 +30,7 @@ def strip_tags(html):
 
 
 def find_number_near(text, pos, window=200):
+    # Search a window of characters around pos for the first decimal number
     start = max(0, pos - window)
     end = min(len(text), pos + window)
     snippet = text[start:end]
@@ -73,6 +75,7 @@ def main():
             candidates.append(f"{name} {state_code}")
 
         col_value = None
+        # Try progressively looser name formats to find a match
         for cand in candidates:
             idx = text_lower.find(cand.lower())
             if idx != -1:
@@ -97,7 +100,7 @@ def main():
             entry['col'] = col_value
             updated += 1
         if col_value is not None:
-            found += 1
+            found += 1  # track how many cities got a real value
 
     try:
         with open(CITIES_FILE, 'w', encoding='utf-8') as f:
