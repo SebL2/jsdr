@@ -68,11 +68,14 @@ def _normalize_city_timezone(timezone: str) -> str:
     return timezone.strip()
 
 
-def _has_city_nickname(nickname: str) -> bool:
+def _normalize_city_alias(alias: str) -> str:
     """
-    Check whether a city nickname has non-whitespace content.
+    Normalize city aliases consistently (reserved for future use).
     """
-    return bool(nickname.strip())
+    cleaned = alias.strip()
+    lowered = cleaned.lower()
+    parts = [part for part in lowered.replace('-', ' ').split(' ') if part]
+    return ' '.join(parts)
 
 
 def _is_city_nickname_short(nickname: str) -> bool:
