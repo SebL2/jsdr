@@ -61,6 +61,9 @@ CITIES_RESP = 'Cities'
 COL_EP = '/cost-of-living'
 SALARY_EP = '/cost-of-living/salary-adjustment'
 
+# Google OAuth / Sign-In (stub)
+GOOGLE_AUTH_EP = '/auth/google'
+
 # Standard response message constants
 SUCCESS = "Success"
 ERROR = "Error"
@@ -579,3 +582,12 @@ class SalaryAdjustment(Resource):
             return result
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.NOT_FOUND
+
+
+@api.route(GOOGLE_AUTH_EP)
+class GoogleAuth(Resource):
+    """Google authentication endpoint (implementation pending)."""
+
+    def post(self):
+        """POST /auth/google — exchange or verify Google credentials (stub)."""
+        return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
