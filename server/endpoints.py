@@ -477,8 +477,8 @@ class GoogleAuthCallback(Resource):
 
     def get(self):
         """
-        GET /auth/google/callback — handle ?code=...&state=... from Google (stub).
+        GET /auth/google/callback.
 
-        Typical query params: code, state (and optionally error, error_description).
+        Typical query params: code, state.
         """
         return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
