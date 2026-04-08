@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# One-off script to backfill lat/lng coordinates into cities.json
+# using the Open-Meteo geocoding API (no API key required).
 import json
 import time
 import urllib.parse
@@ -17,26 +19,33 @@ US_STATE_CODES = {
 
 
 def geocode(name: str, state_code: str):
+    # Normalise the state code before any comparisons
     code = (state_code or '').strip().upper()
     params = {
         "name": name,
-        "count": 10,
+        "count": 10,       # fetch up to 10 candidates to find best match
         "language": "en",
         "format": "json",
     }
 
+    # Narrow results to the right country when we can infer it
     expected_country = None
     if code in US_STATE_CODES:
         expected_country = 'US'
         params["countryCode"] = 'US'
     elif '-' in code and len(code.split('-', 1)[0]) == 2:
+        # ISO 3166-2 format e.g. "GB-ENG"
         expected_country = code.split('-', 1)[0]
         params["countryCode"] = expected_country
     elif len(code) == 2 and code.isalpha():
+        # Plain 2-letter country code e.g. "DE"
         expected_country = code
         params["countryCode"] = expected_country
 
-    url = "https://geocoding-api.open-meteo.com/v1/search?" + urllib.parse.urlencode(params)
+    url = (
+        "https://geocoding-api.open-meteo.com/v1/search?"
+        + urllib.parse.urlencode(params)
+    )
 
     with urllib.request.urlopen(url, timeout=12) as response:
         payload = json.loads(response.read().decode('utf-8'))
@@ -46,15 +55,26 @@ def geocode(name: str, state_code: str):
         return None
 
     lower_name = name.strip().lower()
+    # Default to the top result; override if an exact name match is found
     top = results[0]
     for item in results:
         item_name = str(item.get('name', '')).strip().lower()
-        item_country = str(item.get('country_code', '')).strip().upper()
-        if item_name == lower_name and (expected_country is None or item_country == expected_country):
+        item_country = str(
+            item.get('country_code', '')
+        ).strip().upper()
+        exact_name = item_name == lower_name
+        right_country = (
+            expected_country is None
+            or item_country == expected_country
+        )
+        if exact_name and right_country:
             top = item
             break
 
-    return round(float(top['latitude']), 4), round(float(top['longitude']), 4)
+    return (
+        round(float(top['latitude']), 4),
+        round(float(top['longitude']), 4),
+    )
 
 
 with CITIES_PATH.open('r', encoding='utf-8') as f:
@@ -64,9 +84,10 @@ if not isinstance(cities, list):
     raise ValueError('cities.json must remain a JSON array')
 
 updated = 0
-failed = []
+failed = []  # cities that couldn't be geocoded
 
 for city in cities:
+    # Skip cities that already have coordinates
     if 'lat' in city and 'lng' in city:
         continue
 
@@ -87,6 +108,7 @@ for city in cities:
     except Exception:
         failed.append(f"{name} ({state_code})")
 
+    # Throttle requests to stay within API rate limits
     time.sleep(0.08)
 
 with CITIES_PATH.open('w', encoding='utf-8') as f:
