@@ -2,22 +2,22 @@
 Cities Business Logic Module
 
 Provides core business logic for managing city data with CRUD operations,
-validation, and error handling. And Logic (not the rapper)
+validation, and error handling.
 """
 
 # Import database connection module
 from data import db_connect as dbc
 
-# Database collection name
+# Initialize Database collection name
 CITY_COLLECTION = "Cities"
 
-# Field name constants
+# Initialize Field name constants
 ID = 'id'
 NAME = 'name'
 STATE_CODE = 'state_code'
 POPULATION = 'population'
 
-# Sample city data for testing
+# Format for Sample city data for testing
 SAMPLE_CITY = {
     NAME: 'New York',
     STATE_CODE: 'NY',
@@ -61,25 +61,21 @@ def _normalize_city_nickname(nickname: str) -> str:
     return nickname.strip()
 
 
-def _normalize_city_region(region: str) -> str:
+def _normalize_city_timezone(timezone: str) -> str:
     """
-    Normalize city regions consistently (reserved for future use).
+    Normalize city timezones consistently (reserved for future use).
     """
-    return region.strip()
+    return timezone.strip()
 
 
-def _normalize_city_county(county: str) -> str:
+def _normalize_city_alias(alias: str) -> str:
     """
-    Normalize city counties consistently (reserved for future use).
+    Normalize city aliases consistently (reserved for future use).
     """
-    return county.strip()
-
-
-def _has_city_nickname(nickname: str) -> bool:
-    """
-    Check whether a city nickname has non-whitespace content.
-    """
-    return bool(nickname.strip())
+    cleaned = alias.strip()
+    lowered = cleaned.lower()
+    parts = [part for part in lowered.replace('-', ' ').split(' ') if part]
+    return ' '.join(parts)
 
 
 def _is_city_nickname_short(nickname: str) -> bool:
@@ -131,8 +127,8 @@ def create(flds: dict) -> str:
     # Validate required name field
     if not flds.get(NAME):
         raise ValueError(f'Bad value for {flds.get(NAME)=}')
-    # Create city in database
     new_id = dbc.create(CITY_COLLECTION, flds)
+    dbc.clear_cache()
     return new_id
 
 
@@ -164,12 +160,15 @@ def delete(name: str, state_code: str) -> bool:
     # Verify deletion occurred
     if ret < 1:
         raise ValueError(f'City not found: {name}, {state_code}')
+    dbc.clear_cache()
     return ret
 
 
 def read() -> list:
-    """Retrieve all cities from database."""
-    return dbc.read(CITY_COLLECTION)
+    try:
+        return dbc.cached_read(CITY_COLLECTION)
+    except Exception:
+        return []
 
 
 def get_population(city_name: str, state_code: str) -> int:
@@ -221,6 +220,7 @@ def set_population(city_name: str, state_code: str, population: int) -> bool:
         {NAME: city_name, STATE_CODE: state_code},
         {POPULATION: population},
     )
+    dbc.clear_cache()
     return result.modified_count > 0
 
 

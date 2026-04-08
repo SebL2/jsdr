@@ -52,6 +52,8 @@ You can still override either script's default at runtime:
 VITE_API_BASE_URL=https://example.com ./frontend-cloud.sh
 ```
 
+- frontend dir is now an outdated dir. It has moved to a different repo. 
+
 ## API Endpoints
 
 The API provides endpoints for:
@@ -99,6 +101,6 @@ This project uses:
 - Sebastian Liu
 - Derek Kim  
 - Soohyeuk Choi
-- Jefferson Le
+- Jefferson N. Le
 - Rafiul H. Kashfi
 - Dhruv Gupta

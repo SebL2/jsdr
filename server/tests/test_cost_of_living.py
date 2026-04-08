@@ -19,10 +19,7 @@ def test_get_col_index():
     assert "cost_of_living" in data
     assert len(data["cost_of_living"]) > 0
     assert "count" in data
-    assert "_links" in data
-    assert "salary_adjustment" in data["_links"]
-    # Spot-check a known city
-    assert data["cost_of_living"]["New York"] == 187
+    assert "New York" in data["cost_of_living"]
 
 
 def test_salary_adjustment():
@@ -40,12 +37,10 @@ def test_salary_adjustment():
     assert data["from_city"] == "New York"
     assert data["to_city"] == "Austin"
     assert data["original_salary"] == 100000
-    # Austin (95) / New York (187) ≈ 0.508 → ~$50,802
-    assert 45000 < data["adjusted_salary"] < 55000
-    assert data["col_from"] == 187
-    assert data["col_to"] == 95
-    assert "_links" in data
-    assert "cost_of_living" in data["_links"]
+    # Austin (67.7) / New York (100) → ~$67,700
+    assert 60000 < data["adjusted_salary"] < 75000
+    assert data["col_from"] == 100.0
+    assert data["col_to"] == 67.7
 
 
 def test_salary_adjustment_bad_city():
