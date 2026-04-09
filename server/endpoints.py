@@ -17,9 +17,16 @@ Key Features:
 
 # Import HTTP status codes for proper REST API responses
 from http import HTTPStatus
+import json
+import os
+import secrets
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime, timedelta, timezone
 
 # Flask framework imports
-from flask import Flask
+from flask import Flask, redirect, request
 from flask_restx import Resource, Api, reqparse
 from flask_cors import CORS
 
@@ -28,9 +35,6 @@ import cities.cities as ct
 
 # Import cost-of-living module
 import cost_of_living.cost_of_living as col
-
-import json
-import os
 
 _FALLBACK_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
@@ -74,9 +78,132 @@ CITIES_RESP = 'Cities'
 COL_EP = '/cost-of-living'
 SALARY_EP = '/cost-of-living/salary-adjustment'
 
-# Google OAuth / Sign-In (stub)
+# Google OAuth / Sign-In
 GOOGLE_AUTH_EP = '/auth/google'
 GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
+
+# OAuth persistence (MongoDB Geo DB via data.db_connect)
+OAUTH_USERS_COLLECTION = 'Users'
+OAUTH_SESSIONS_COLLECTION = 'Sessions'
+
+POST_LOGIN_REDIRECT = os.environ.get(
+    'POST_LOGIN_REDIRECT',
+    'http://localhost:5173',
+)
+SESSION_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+
+
+def _google_oauth_credentials():
+    return (
+        os.environ.get('GOOGLE_CLIENT_ID'),
+        os.environ.get('GOOGLE_CLIENT_SECRET'),
+        os.environ.get('GOOGLE_REDIRECT_URI'),
+    )
+
+
+def _oauth_http_post_form(url: str, data: dict) -> dict:
+    encoded = urllib.parse.urlencode(data).encode()
+    req = urllib.request.Request(
+        url,
+        data=encoded,
+        method='POST',
+        headers={'Content-Type': 'application/x-www-form-urlencoded'},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode())
+    except urllib.error.HTTPError as e:
+        body = e.read().decode() if e.fp else ''
+        try:
+            return json.loads(body)
+        except json.JSONDecodeError:
+            raise ValueError(f'HTTP {e.code}: {body}') from e
+
+
+def _oauth_http_get_json(url: str, headers=None) -> dict:
+    if headers is None:
+        headers = {}
+    req = urllib.request.Request(url, headers=headers)
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode())
+
+
+def _google_oauth_authorize_url() -> str:
+    cid, secret, redir = _google_oauth_credentials()
+    if not cid or not secret or not redir:
+        raise ValueError(
+            'Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REDIRECT_URI'
+        )
+    params = {
+        'client_id': cid,
+        'redirect_uri': redir,
+        'response_type': 'code',
+        'scope': 'openid email profile',
+        'access_type': 'offline',
+        'prompt': 'consent',
+    }
+    return (
+        'https://accounts.google.com/o/oauth2/v2/auth?'
+        + urllib.parse.urlencode(params)
+    )
+
+
+def _google_exchange_code_for_tokens(code: str) -> dict:
+    cid, secret, redir = _google_oauth_credentials()
+    return _oauth_http_post_form(
+        'https://oauth2.googleapis.com/token',
+        {
+            'client_id': cid,
+            'client_secret': secret,
+            'code': code,
+            'grant_type': 'authorization_code',
+            'redirect_uri': redir,
+        },
+    )
+
+
+def _google_fetch_userinfo(access_token: str) -> dict:
+    return _oauth_http_get_json(
+        'https://www.googleapis.com/oauth2/v2/userinfo',
+        {'Authorization': f'Bearer {access_token}'},
+    )
+
+
+def _find_or_create_oauth_user(email: str, name: str, avatar_url: str) -> str:
+    from data import db_connect as dbc
+
+    doc = dbc.read_one(OAUTH_USERS_COLLECTION, {'email': email})
+    if not doc:
+        ins = dbc.create(
+            OAUTH_USERS_COLLECTION,
+            {'email': email, 'name': name, 'avatar_url': avatar_url},
+        )
+        return str(ins.inserted_id)
+    dbc.update(
+        OAUTH_USERS_COLLECTION,
+        {'email': email},
+        {'name': name, 'avatar_url': avatar_url},
+    )
+    return str(doc['_id'])
+
+
+def _create_oauth_session(user_id: str) -> str:
+    from data import db_connect as dbc
+
+    token = secrets.token_hex(32)
+    expires = datetime.now(timezone.utc) + timedelta(days=7)
+    dbc.create(
+        OAUTH_SESSIONS_COLLECTION,
+        {'token': token, 'user_id': user_id, 'expires': expires},
+    )
+    return token
+
+
+def _session_cookie_secure() -> bool:
+    return os.environ.get('SESSION_COOKIE_SECURE', '').lower() in (
+        '1', 'true', 'yes',
+    )
+
 
 # Standard response message constants
 SUCCESS = "Success"
@@ -464,21 +591,78 @@ class SalaryAdjustment(Resource):
 
 @api.route(GOOGLE_AUTH_EP)
 class GoogleAuth(Resource):
-    """Google authentication endpoint (implementation pending)."""
+    """Start Google OAuth: redirects browser to Google's consent screen."""
 
-    def post(self):
-        """POST /auth/google — exchange or verify Google credentials (stub)."""
-        return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
+    def get(self):
+        """
+        GET /auth/google — redirect to accounts.google.com OAuth2 authorize URL.
+        """
+        try:
+            url = _google_oauth_authorize_url()
+        except ValueError as e:
+            return {ERROR: str(e)}, HTTPStatus.SERVICE_UNAVAILABLE
+        return redirect(url)
 
 
 @api.route(GOOGLE_AUTH_CALLBACK_EP)
 class GoogleAuthCallback(Resource):
-    """OAuth redirect target after Google sign-in (implementation pending)."""
+    """OAuth redirect target: exchange code, upsert user, set session cookie."""
 
     def get(self):
         """
-        GET /auth/google/callback.
-
-        Typical query params: code, state.
+        GET /auth/google/callback — ?code=... from Google (or ?error=...).
         """
-        return {ERROR: "Not implemented"}, HTTPStatus.NOT_IMPLEMENTED
+        err = request.args.get('error')
+        if err:
+            desc = request.args.get('error_description', err)
+            return {ERROR: desc}, HTTPStatus.BAD_REQUEST
+
+        code = request.args.get('code')
+        if not code:
+            return {ERROR: 'Missing authorization code'}, HTTPStatus.BAD_REQUEST
+
+        try:
+            token_res = _google_exchange_code_for_tokens(code)
+        except ValueError as e:
+            return {ERROR: str(e)}, HTTPStatus.BAD_REQUEST
+
+        if token_res.get('error'):
+            return {
+                ERROR: token_res.get('error_description', token_res['error']),
+            }, HTTPStatus.BAD_REQUEST
+
+        access_token = token_res.get('access_token')
+        if not access_token:
+            return {ERROR: 'No access_token in token response'}, \
+                HTTPStatus.BAD_REQUEST
+
+        try:
+            user_info = _google_fetch_userinfo(access_token)
+        except (ValueError, urllib.error.URLError, OSError) as e:
+            return {ERROR: str(e)}, HTTPStatus.BAD_GATEWAY
+
+        email = user_info.get('email')
+        if not email:
+            return {ERROR: 'Google did not return email'}, HTTPStatus.BAD_REQUEST
+
+        name = user_info.get('name') or 'User'
+        avatar_url = user_info.get('picture') or ''
+
+        try:
+            user_id = _find_or_create_oauth_user(email, name, avatar_url)
+            session_token = _create_oauth_session(user_id)
+        except Exception as e:
+            return {ERROR: f'Database error: {e}'}, \
+                HTTPStatus.INTERNAL_SERVER_ERROR
+
+        resp = redirect(POST_LOGIN_REDIRECT)
+        resp.set_cookie(
+            'session',
+            session_token,
+            httponly=True,
+            secure=False,
+            samesite='Lax',
+            path='/',
+            max_age=SESSION_COOKIE_MAX_AGE,
+        )
+        return resp
