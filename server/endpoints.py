@@ -132,7 +132,7 @@ def _google_oauth_authorize_url() -> str:
     cid, secret, redir = _google_oauth_credentials()
     if not cid or not secret or not redir:
         raise ValueError(
-            'Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REDIRECT_URI'
+            'Set environment variables for Google OAuth'
         )
     params = {
         'client_id': cid,
@@ -595,7 +595,7 @@ class GoogleAuth(Resource):
 
     def get(self):
         """
-        GET /auth/google — redirect to accounts.google.com OAuth2 authorize URL.
+        GET /auth/google — redirect to google's OAuth2 authorize URL
         """
         try:
             url = _google_oauth_authorize_url()
@@ -606,7 +606,7 @@ class GoogleAuth(Resource):
 
 @api.route(GOOGLE_AUTH_CALLBACK_EP)
 class GoogleAuthCallback(Resource):
-    """OAuth redirect target: exchange code, upsert user, set session cookie."""
+    """OAuth redirect"""
 
     def get(self):
         """
@@ -619,7 +619,7 @@ class GoogleAuthCallback(Resource):
 
         code = request.args.get('code')
         if not code:
-            return {ERROR: 'Missing authorization code'}, HTTPStatus.BAD_REQUEST
+            return {ERROR: 'Missing auth code'}, HTTPStatus.BAD_REQUEST
 
         try:
             token_res = _google_exchange_code_for_tokens(code)
@@ -643,7 +643,7 @@ class GoogleAuthCallback(Resource):
 
         email = user_info.get('email')
         if not email:
-            return {ERROR: 'Google did not return email'}, HTTPStatus.BAD_REQUEST
+            return {ERROR: 'No return email'}, HTTPStatus.BAD_REQUEST
 
         name = user_info.get('name') or 'User'
         avatar_url = user_info.get('picture') or ''
