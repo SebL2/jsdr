@@ -52,8 +52,11 @@ app = Flask(__name__)
 # requests (avoids browser blocking / CSRF-like issues)
 CORS(
     app,
+    supports_credentials=True,
     resources={r"/*": {
-        "origins": "*",
+        "origins": [
+            "http://localhost:5173",
+        ],
         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"],
     }},
