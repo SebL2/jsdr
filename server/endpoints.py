@@ -597,15 +597,22 @@ class SalaryAdjustment(Resource):
 
 # Parser for recommendations / smart city finder
 recommendations_parser = reqparse.RequestParser()
-recommendations_parser.add_argument('salary', type=float, required=False,
-                                    help='Current annual salary for equivalence calc')
-recommendations_parser.add_argument('state', type=str, required=False,
-                                    help='Filter by state code (e.g. TX, CA)')
-recommendations_parser.add_argument('size', type=str, required=False,
-                                    help='City size: small (<100k), medium (100k-500k), '
-                                         'large (>500k), any')
-recommendations_parser.add_argument('top_n', type=int, required=False,
-                                    help='Number of results to return (default 10, max 50)')
+recommendations_parser.add_argument(
+    'salary', type=float, required=False,
+    help='Current annual salary for equivalence calc',
+)
+recommendations_parser.add_argument(
+    'state', type=str, required=False,
+    help='Filter by state code (e.g. TX, CA)',
+)
+recommendations_parser.add_argument(
+    'size', type=str, required=False,
+    help='City size: small (<100k), medium (100k-500k), large (>500k), any',
+)
+recommendations_parser.add_argument(
+    'top_n', type=int, required=False,
+    help='Number of results to return (default 10, max 50)',
+)
 
 
 def _affordability_score(col_index: float) -> int:
@@ -616,7 +623,7 @@ def _affordability_score(col_index: float) -> int:
 def _qol_score(affordability: int, population: int) -> int:
     """
     Derive a simple quality-of-life score.
-    Weighs affordability (50%) and city-size amenity proxy (30%) + baseline (20%).
+    Weighs affordability (50%) and city-size proxy (30%) + baseline (20%).
     """
     if population >= 500_000:
         size_score = 90
@@ -642,7 +649,7 @@ class Recommendations(Resource):
         GET /recommendations — ranked city recommendations.
 
         Query params (all optional):
-            salary (float): Current annual salary; returns equivalent salary per city.
+            salary (float): Current salary; returns equivalent salary per city.
             state (str): Filter to a single state code.
             size (str): small | medium | large | any
             top_n (int): Max results (default 10, max 50).
@@ -670,7 +677,9 @@ class Recommendations(Resource):
             if not name:
                 continue
 
-            state_code = (city.get('state_code') or city.get('state') or '').upper()
+            state_code = (
+                city.get('state_code') or city.get('state') or ''
+            ).upper()
             population = int(city.get('population') or 0)
             lat = city.get('lat') or city.get('latitude')
             lng = city.get('lng') or city.get('lon') or city.get('longitude')
@@ -680,7 +689,9 @@ class Recommendations(Resource):
                 continue
             if size_filter == 'small' and population >= 100_000:
                 continue
-            if size_filter == 'medium' and not (100_000 <= population < 500_000):
+            if size_filter == 'medium' and not (
+                100_000 <= population < 500_000
+            ):
                 continue
             if size_filter == 'large' and population < 500_000:
                 continue
@@ -691,7 +702,9 @@ class Recommendations(Resource):
 
             affordability = _affordability_score(col_index)
             qol = _qol_score(affordability, population)
-            adjusted_salary = round(salary * (col_index / 100), 2) if salary else None
+            adjusted_salary = (
+                round(salary * (col_index / 100), 2) if salary else None
+            )
 
             results.append({
                 'name': name,
