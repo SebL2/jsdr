@@ -146,13 +146,46 @@ Performance optimization (caching)
 
 ## Progress to Date (Spring 2026)
 
-* Frontend repository created
+**Planning & Process:**
 * Team roles defined (frontend, backend, data, testing)
 * Weekly meetings established
 * High-level wireframes completed
 * Initial backend data models designed
 * API and data-source research completed
 * Kanban board and sprint planning in place
+
+**Backend — Completed:**
+* Google OAuth 2.0 authentication (`GET /auth/google`, `GET /auth/google/callback`)
+  * User/session persistence in MongoDB (`Users` + `Sessions` collections)
+  * 7-day session cookies (httpOnly, SameSite=Lax)
+* CORS configured for frontend (`localhost:5173`)
+* Cost-of-living index endpoint (`GET /cost-of-living`)
+* Salary adjustment calculator (`GET /cost-of-living/salary-adjustment`)
+  * Adjusts salary between cities based on COL index ratio
+* Smart City Finder / Recommendations (`GET /recommendations`)
+  * Affordability score (0–100) derived from COL index
+  * Quality-of-life score (0–100) weighted by affordability + city size
+  * Filters: state, city size (small/medium/large), top_n results
+  * Returns equivalent salary per city when salary param provided
+* Fallback city dataset (`data/bkup/cities.json`) when DB is unavailable
+* Full CRUD for cities, countries, states, counties (carried over from Fall 2025)
+
+**Frontend — Completed** (`jsdr-frontend` repo):
+* React 19 + TypeScript + Vite app scaffolded
+* Interactive city map with React Leaflet — color-coded affordability markers, click to select up to 4 cities
+* City comparison panel — side-by-side breakdown, Recharts bar charts, adjustable spending-weight sliders
+* Salary adjustment calculator UI — origin/target city inputs, COL-adjusted salary, state income tax estimates, take-home pay calculation
+* Smart City Finder UI — filters by salary, state, city size; displays affordability + QOL scores from `/recommendations`
+* Google OAuth integration (AuthBar) — sign-in link → `/auth/google`, session cookie handling, calls `/auth/me` to restore session state
+* Sign-out button calling `POST /auth/logout`
+* Vite proxy configured: `/api` → Flask backend at `localhost:8000`
+* Basic Vitest + React Testing Library smoke tests
+* Dark mode CSS variables
+* Deployment scripts for local and cloud
+
+**Backend — Missing (required by frontend):**
+* `GET /auth/me` — return current user from session cookie (not yet implemented)
+* `POST /auth/logout` — clear session cookie (not yet implemented)
 
 ---
 

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiveWhere — API Overview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .slide {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    .header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .header .subtitle {
+      font-size: 1rem;
+      color: #94a3b8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .group {
+      background: #1e293b;
+      border-radius: 12px;
+      padding: 20px 24px;
+      border-left: 4px solid var(--accent);
+    }
+
+    .group h2 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .endpoint:last-child { border-bottom: none; }
+
+    .method {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 2px 7px;
+      border-radius: 4px;
+      min-width: 46px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .get    { background: #064e3b; color: #34d399; }
+    .post   { background: #1e3a5f; color: #60a5fa; }
+    .put    { background: #3b2100; color: #fb923c; }
+    .delete { background: #450a0a; color: #f87171; }
+
+    .path {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    .desc {
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .base-url {
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+
+    <div class="header">
+      <h1>LiveWhere API</h1>
+      <span class="subtitle">REST endpoints — Flask + MongoDB · sebl2.pythonanywhere.com</span>
+    </div>
+
+    <div class="grid">
+
+      <!-- Cities -->
+      <div class="group" style="--accent: #6366f1;">
+        <h2>Cities</h2>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/cities</span>
+          <span class="desc">List all cities</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/cities/:id</span>
+          <span class="desc">Get city by ID</span>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="path">/cities</span>
+          <span class="desc">Create a city</span>
+        </div>
+        <div class="endpoint">
+          <span class="method put">PUT</span>
+          <span class="path">/cities</span>
+          <span class="desc">Update population</span>
+        </div>
+        <div class="endpoint">
+          <span class="method delete">DEL</span>
+          <span class="path">/cities</span>
+          <span class="desc">Delete a city</span>
+        </div>
+      </div>
+
+      <!-- Cost of Living -->
+      <div class="group" style="--accent: #10b981;">
+        <h2>Cost of Living</h2>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/cost-of-living</span>
+          <span class="desc">COL index for all cities</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/cost-of-living/salary-adjustment</span>
+          <span class="desc">Adjust salary between cities</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/recommendations</span>
+          <span class="desc">Ranked cities by affordability + QOL</span>
+        </div>
+      </div>
+
+      <!-- Auth -->
+      <div class="group" style="--accent: #f59e0b;">
+        <h2>Authentication</h2>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/auth/google</span>
+          <span class="desc">Start Google OAuth flow</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/auth/google/callback</span>
+          <span class="desc">OAuth redirect · sets session cookie</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/auth/me</span>
+          <span class="desc">Return current user</span>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="path">/auth/logout</span>
+          <span class="desc">Clear session · sign out</span>
+        </div>
+      </div>
+
+      <!-- Utility -->
+      <div class="group" style="--accent: #94a3b8;">
+        <h2>Utility</h2>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/hello</span>
+          <span class="desc">Health check</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/endpoints</span>
+          <span class="desc">List all routes</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="path">/swagger.json</span>
+          <span class="desc">OpenAPI spec</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <div style="display:flex; gap:10px;">
+        <span class="badge">Flask-RESTX</span>
+        <span class="badge">MongoDB</span>
+        <span class="badge">Google OAuth 2.0</span>
+        <span class="badge">CORS enabled</span>
+      </div>
+      <span class="base-url">Base: https://sebl2.pythonanywhere.com</span>
+    </div>
+
+  </div>
+</body>
+</html>
