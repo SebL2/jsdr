@@ -87,6 +87,7 @@ RECOMMENDATIONS_EP = '/recommendations'
 # Google OAuth / Sign-In
 GOOGLE_AUTH_EP = '/auth/google'
 AUTH_ME_EP = "/auth/me"
+AUTH_LOGOUT_EP = '/auth/logout'
 GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
 
 # OAuth persistence (MongoDB Geo DB via data.db_connect)
@@ -867,9 +868,40 @@ class AuthMe(Resource):
         return {
             'authenticated': True,
             'user': {
-                'id': user['_id'],
+                'id': str(user['_id']),
                 'email': user.get('email'),
                 'name': user.get('name'),
                 'avatar_url': user.get('avatar_url', ''),
             },
         }
+
+
+@api.route(AUTH_LOGOUT_EP)
+class AuthLogout(Resource):
+    def post(self):
+        """
+        POST /auth/logout — delete the server-side session row and
+        clear the browser's session cookie.
+        """
+        from flask import make_response
+        from data import db_connect as dbc
+
+        token = request.cookies.get('session')
+        if token:
+            try:
+                dbc.delete(OAUTH_SESSIONS_COLLECTION, {'token': token})
+            except Exception:
+                pass
+
+        resp = make_response({'authenticated': False}, HTTPStatus.OK)
+        resp.set_cookie(
+            'session',
+            '',
+            expires=0,
+            max_age=0,
+            httponly=True,
+            secure=_session_cookie_secure(),
+            samesite='Lax',
+            path='/',
+        )
+        return resp
