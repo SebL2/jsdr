@@ -93,6 +93,13 @@ GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
 # OAuth persistence (MongoDB Geo DB via data.db_connect)
 OAUTH_USERS_COLLECTION = 'Users'
 OAUTH_SESSIONS_COLLECTION = 'Sessions'
+USER_PROFILES_COLLECTION = 'UserProfiles'
+
+# Profile endpoints
+PROFILE_EP = '/auth/me/profile'
+FAVORITES_EP = '/auth/me/favorites'
+COMPARISONS_EP = '/auth/me/comparisons'
+WEIGHTS_EP = '/auth/me/weights'
 
 POST_LOGIN_REDIRECT = os.environ.get(
     'POST_LOGIN_REDIRECT',
@@ -881,6 +888,183 @@ class AuthMe(Resource):
                 'avatar_url': user.get('avatar_url', ''),
             },
         }
+
+
+def _default_profile(user_id: str) -> dict:
+    return {
+        'user_id': user_id,
+        'favorites': [],
+        'saved_comparisons': [],
+        'weights': {
+            'Housing': 3,
+            'Food': 2,
+            'Transportation': 2,
+            'Healthcare': 2,
+            'Entertainment': 1,
+        },
+    }
+
+
+def _load_profile(user_id: str) -> dict:
+    from data import db_connect as dbc
+    doc = dbc.read_one(USER_PROFILES_COLLECTION, {'user_id': user_id})
+    if not doc:
+        profile = _default_profile(user_id)
+        dbc.create(USER_PROFILES_COLLECTION, dict(profile))
+        return profile
+    doc.pop('_id', None)
+    return doc
+
+
+def _save_profile_fields(user_id: str, fields: dict) -> None:
+    from data import db_connect as dbc
+    fields = dict(fields)
+    fields['updated_at'] = datetime.now(timezone.utc)
+    try:
+        dbc.update(
+            USER_PROFILES_COLLECTION,
+            {'user_id': user_id},
+            fields,
+        )
+    except Exception:
+        existing = dbc.read_one(USER_PROFILES_COLLECTION, {'user_id': user_id})
+        if not existing:
+            base = _default_profile(user_id)
+            base.update(fields)
+            dbc.create(USER_PROFILES_COLLECTION, base)
+
+
+def _require_auth():
+    user = _oauth_user_from_request()
+    if not user:
+        return None, ({ERROR: 'Authentication required'}, HTTPStatus.UNAUTHORIZED)
+    return str(user['_id']), None
+
+
+def _city_key(name: str, state_code: str) -> str:
+    return f'{name}|{state_code}'
+
+
+@api.route(PROFILE_EP)
+class UserProfileResource(Resource):
+    def get(self):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        return _load_profile(user_id), HTTPStatus.OK
+
+
+@api.route(FAVORITES_EP)
+class FavoritesResource(Resource):
+    def post(self):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        data = request.get_json(silent=True) or {}
+        name = (data.get('name') or '').strip()
+        state_code = (data.get('state_code') or '').strip()
+        if not name or not state_code:
+            return {ERROR: 'name and state_code required'}, HTTPStatus.BAD_REQUEST
+
+        profile = _load_profile(user_id)
+        key = _city_key(name, state_code)
+        existing = [f for f in profile['favorites']
+                    if _city_key(f.get('name', ''), f.get('state_code', '')) == key]
+        if not existing:
+            profile['favorites'].append({
+                'name': name,
+                'state_code': state_code,
+                'added_at': datetime.now(timezone.utc).isoformat(),
+            })
+            _save_profile_fields(user_id, {'favorites': profile['favorites']})
+        return {'favorites': profile['favorites']}, HTTPStatus.OK
+
+
+@api.route(f'{FAVORITES_EP}/<string:city_key>')
+class FavoriteItemResource(Resource):
+    def delete(self, city_key: str):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        profile = _load_profile(user_id)
+        target = urllib.parse.unquote(city_key)
+        profile['favorites'] = [
+            f for f in profile['favorites']
+            if _city_key(f.get('name', ''), f.get('state_code', '')) != target
+        ]
+        _save_profile_fields(user_id, {'favorites': profile['favorites']})
+        return {'favorites': profile['favorites']}, HTTPStatus.OK
+
+
+@api.route(COMPARISONS_EP)
+class ComparisonsResource(Resource):
+    def post(self):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        data = request.get_json(silent=True) or {}
+        name = (data.get('name') or '').strip()
+        cities = data.get('cities') or []
+        if not name:
+            return {ERROR: 'name required'}, HTTPStatus.BAD_REQUEST
+        if not isinstance(cities, list) or not cities:
+            return {ERROR: 'cities must be a non-empty list'}, HTTPStatus.BAD_REQUEST
+        clean = []
+        for c in cities:
+            if not isinstance(c, dict):
+                continue
+            cname = (c.get('name') or '').strip()
+            ccode = (c.get('state_code') or '').strip()
+            if cname and ccode:
+                clean.append({'name': cname, 'state_code': ccode})
+        if not clean:
+            return {ERROR: 'cities entries require name and state_code'}, HTTPStatus.BAD_REQUEST
+
+        profile = _load_profile(user_id)
+        entry = {
+            'id': secrets.token_hex(8),
+            'name': name,
+            'cities': clean,
+            'created_at': datetime.now(timezone.utc).isoformat(),
+        }
+        profile['saved_comparisons'].append(entry)
+        _save_profile_fields(user_id, {'saved_comparisons': profile['saved_comparisons']})
+        return {'saved_comparisons': profile['saved_comparisons']}, HTTPStatus.OK
+
+
+@api.route(f'{COMPARISONS_EP}/<string:comparison_id>')
+class ComparisonItemResource(Resource):
+    def delete(self, comparison_id: str):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        profile = _load_profile(user_id)
+        profile['saved_comparisons'] = [
+            c for c in profile['saved_comparisons']
+            if c.get('id') != comparison_id
+        ]
+        _save_profile_fields(user_id, {'saved_comparisons': profile['saved_comparisons']})
+        return {'saved_comparisons': profile['saved_comparisons']}, HTTPStatus.OK
+
+
+@api.route(WEIGHTS_EP)
+class WeightsResource(Resource):
+    def put(self):
+        user_id, err = _require_auth()
+        if err:
+            return err
+        data = request.get_json(silent=True) or {}
+        weights = data.get('weights')
+        if not isinstance(weights, dict):
+            return {ERROR: 'weights must be an object'}, HTTPStatus.BAD_REQUEST
+        clean = {}
+        for k, v in weights.items():
+            try:
+                clean[str(k)] = max(0, min(5, int(v)))
+            except (TypeError, ValueError):
+                continue
+        _save_profile_fields(user_id, {'weights': clean})
+        return {'weights': clean}, HTTPStatus.OK
 
 
 @api.route(AUTH_LOGOUT_EP)
