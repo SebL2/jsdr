@@ -913,13 +913,15 @@ def _load_profile(user_id: str) -> dict:
         dbc.create(USER_PROFILES_COLLECTION, dict(profile))
         return profile
     doc.pop('_id', None)
+    if isinstance(doc.get('updated_at'), datetime):
+        doc['updated_at'] = doc['updated_at'].isoformat()
     return doc
 
 
 def _save_profile_fields(user_id: str, fields: dict) -> None:
     from data import db_connect as dbc
     fields = dict(fields)
-    fields['updated_at'] = datetime.now(timezone.utc)
+    fields['updated_at'] = datetime.now(timezone.utc).isoformat()
     try:
         dbc.update(
             USER_PROFILES_COLLECTION,
