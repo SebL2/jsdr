@@ -83,6 +83,7 @@ SALARY_EP = '/cost-of-living/salary-adjustment'
 
 # Google OAuth / Sign-In
 GOOGLE_AUTH_EP = '/auth/google'
+AUTH_ME_EP= "/auth/me"
 GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
 
 # OAuth persistence (MongoDB Geo DB via data.db_connect)
@@ -206,6 +207,45 @@ def _session_cookie_secure() -> bool:
     return os.environ.get('SESSION_COOKIE_SECURE', '').lower() in (
         '1', 'true', 'yes',
     )
+
+
+def _oauth_user_from_request():
+    """
+    Load the Users document for the current request's session cookie.
+
+    Returns the user dict if the session cookie is present, valid, and not
+    expired; otherwise None.
+    """
+    from bson import ObjectId
+    from data import db_connect as dbc
+
+    token = request.cookies.get('session')
+    if not token:
+        return None
+
+    sess = dbc.read_one(OAUTH_SESSIONS_COLLECTION, {'token': token})
+    if not sess:
+        return None
+
+    expires = sess.get('expires')
+    if expires is None:
+        return None
+    now = datetime.now(timezone.utc)
+    if getattr(expires, 'tzinfo', None) is None:
+        expires = expires.replace(tzinfo=timezone.utc)
+    if expires < now:
+        return None
+
+    user_id = sess.get('user_id')
+    if not user_id:
+        return None
+
+    try:
+        oid = ObjectId(user_id)
+    except Exception:
+        return None
+
+    return dbc.read_one(OAUTH_USERS_COLLECTION, {'_id': oid})
 
 
 # Standard response message constants
@@ -601,6 +641,7 @@ class GoogleAuth(Resource):
         GET /auth/google — redirect to google's OAuth2 authorize URL
         """
         try:
+            print('reach?')
             url = _google_oauth_authorize_url()
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.SERVICE_UNAVAILABLE
@@ -669,3 +710,36 @@ class GoogleAuthCallback(Resource):
             max_age=SESSION_COOKIE_MAX_AGE,
         )
         return resp
+
+
+@api.route(AUTH_ME_EP)
+class AuthMe(Resource):
+    def get(self):
+        """
+        GET /auth/me - Retrieve the current user's session information.
+
+        Uses the HttpOnly ``session`` cookie set after OAuth. If the cookie
+        is missing, the session is unknown, or it has expired, responds with
+        401 and ``login_url`` so the client can send the user to sign in.
+        """
+        try:
+            user = _oauth_user_from_request()
+        except Exception as e:
+            return {ERROR: str(e)}, HTTPStatus.INTERNAL_SERVER_ERROR
+
+        if not user:
+            return {
+                'authenticated': False,
+                ERROR: 'Session missing or expired. Sign in to continue.',
+                'login_url': GOOGLE_AUTH_EP,
+            }, HTTPStatus.UNAUTHORIZED
+
+        return {
+            'authenticated': True,
+            'user': {
+                'id': user['_id'],
+                'email': user.get('email'),
+                'name': user.get('name'),
+                'avatar_url': user.get('avatar_url', ''),
+            },
+        }
