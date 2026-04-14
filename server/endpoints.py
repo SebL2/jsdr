@@ -86,7 +86,7 @@ RECOMMENDATIONS_EP = '/recommendations'
 
 # Google OAuth / Sign-In
 GOOGLE_AUTH_EP = '/auth/google'
-AUTH_ME_EP= "/auth/me"
+AUTH_ME_EP = "/auth/me"
 GOOGLE_AUTH_CALLBACK_EP = '/auth/google/callback'
 
 # OAuth persistence (MongoDB Geo DB via data.db_connect)
