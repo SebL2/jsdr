@@ -208,9 +208,16 @@ def _create_oauth_session(user_id: str) -> str:
 
 
 def _session_cookie_secure() -> bool:
-    return os.environ.get('SESSION_COOKIE_SECURE', '').lower() in (
-        '1', 'true', 'yes',
-    )
+    """Default True so cross-site (SameSite=None) cookies are accepted."""
+    raw = os.environ.get('SESSION_COOKIE_SECURE')
+    if raw is None:
+        return True
+    return raw.lower() in ('1', 'true', 'yes')
+
+
+def _session_cookie_samesite() -> str:
+    """Cross-site fetches from frontend require SameSite=None."""
+    return os.environ.get('SESSION_COOKIE_SAMESITE', 'None')
 
 
 def _oauth_user_from_request():
@@ -835,8 +842,8 @@ class GoogleAuthCallback(Resource):
             'session',
             session_token,
             httponly=True,
-            secure=False,
-            samesite='Lax',
+            secure=_session_cookie_secure(),
+            samesite=_session_cookie_samesite(),
             path='/',
             max_age=SESSION_COOKIE_MAX_AGE,
         )
@@ -901,7 +908,7 @@ class AuthLogout(Resource):
             max_age=0,
             httponly=True,
             secure=_session_cookie_secure(),
-            samesite='Lax',
+            samesite=_session_cookie_samesite(),
             path='/',
         )
         return resp
