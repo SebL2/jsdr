@@ -81,6 +81,9 @@ CITIES_RESP = 'Cities'
 COL_EP = '/cost-of-living'
 SALARY_EP = '/cost-of-living/salary-adjustment'
 
+# Recommendations / Smart City Finder
+RECOMMENDATIONS_EP = '/recommendations'
+
 # Google OAuth / Sign-In
 GOOGLE_AUTH_EP = '/auth/google'
 AUTH_ME_EP= "/auth/me"
@@ -630,6 +633,133 @@ class SalaryAdjustment(Resource):
             return result
         except ValueError as e:
             return {ERROR: str(e)}, HTTPStatus.NOT_FOUND
+
+
+# Parser for recommendations / smart city finder
+recommendations_parser = reqparse.RequestParser()
+recommendations_parser.add_argument(
+    'salary', type=float, required=False,
+    help='Current annual salary for equivalence calc',
+)
+recommendations_parser.add_argument(
+    'state', type=str, required=False,
+    help='Filter by state code (e.g. TX, CA)',
+)
+recommendations_parser.add_argument(
+    'size', type=str, required=False,
+    help='City size: small (<100k), medium (100k-500k), large (>500k), any',
+)
+recommendations_parser.add_argument(
+    'top_n', type=int, required=False,
+    help='Number of results to return (default 10, max 50)',
+)
+
+
+def _affordability_score(col_index: float) -> int:
+    """Convert a COL index (NYC=100) to a 0-100 affordability score."""
+    return max(0, min(100, round((105 - col_index) / 70 * 100)))
+
+
+def _qol_score(affordability: int, population: int) -> int:
+    """
+    Derive a simple quality-of-life score.
+    Weighs affordability (50%) and city-size proxy (30%) + baseline (20%).
+    """
+    if population >= 500_000:
+        size_score = 90
+    elif population >= 100_000:
+        size_score = 70
+    else:
+        size_score = 45
+    return max(0, min(100, round(0.5 * affordability + 0.3 * size_score + 20)))
+
+
+@api.route(RECOMMENDATIONS_EP)
+class Recommendations(Resource):
+    """
+    Smart City Finder — return cities ranked by affordability.
+
+    Joins the cities collection with cost-of-living data and applies
+    optional filters for state, city size, and salary equivalence.
+    """
+
+    @api.expect(recommendations_parser)
+    def get(self):
+        """
+        GET /recommendations — ranked city recommendations.
+
+        Query params (all optional):
+            salary (float): Current salary; returns equivalent salary per city.
+            state (str): Filter to a single state code.
+            size (str): small | medium | large | any
+            top_n (int): Max results (default 10, max 50).
+
+        Returns:
+            200: JSON with "recommendations" list and "total" count.
+        """
+        args = recommendations_parser.parse_args()
+        salary = args.get('salary')
+        state_filter = (args.get('state') or '').strip().upper() or None
+        size_filter = (args.get('size') or 'any').strip().lower()
+        top_n = min(int(args.get('top_n') or 10), 50)
+
+        city_list = ct.read()
+        if not city_list:
+            city_list = FALLBACK_CITIES
+        col_data = col.get_all()
+
+        # Build lowercase lookup for COL data
+        col_lookup = {k.lower(): v for k, v in col_data.items()}
+
+        results = []
+        for city in city_list:
+            name = city.get('name') or city.get('city')
+            if not name:
+                continue
+
+            state_code = (
+                city.get('state_code') or city.get('state') or ''
+            ).upper()
+            population = int(city.get('population') or 0)
+            lat = city.get('lat') or city.get('latitude')
+            lng = city.get('lng') or city.get('lon') or city.get('longitude')
+
+            # Apply filters
+            if state_filter and state_code != state_filter:
+                continue
+            if size_filter == 'small' and population >= 100_000:
+                continue
+            if size_filter == 'medium' and not (
+                100_000 <= population < 500_000
+            ):
+                continue
+            if size_filter == 'large' and population < 500_000:
+                continue
+
+            col_index = col_lookup.get(name.lower())
+            if col_index is None:
+                continue  # skip cities without COL data
+
+            affordability = _affordability_score(col_index)
+            qol = _qol_score(affordability, population)
+            adjusted_salary = (
+                round(salary * (col_index / 100), 2) if salary else None
+            )
+
+            results.append({
+                'name': name,
+                'state_code': state_code,
+                'population': population,
+                'lat': lat,
+                'lng': lng,
+                'col_index': col_index,
+                'affordability_score': affordability,
+                'qol_score': qol,
+                'adjusted_salary': adjusted_salary,
+            })
+
+        results.sort(key=lambda x: x['affordability_score'], reverse=True)
+        return {'recommendations': results[:top_n], 'total': len(results)}
 
 
 @api.route(GOOGLE_AUTH_EP)
