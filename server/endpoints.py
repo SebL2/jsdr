@@ -1092,7 +1092,7 @@ class WeightsResource(Resource):
         return {'weights': clean}, HTTPStatus.OK
 
 
-def _require_dev_key() -> tuple[bool, tuple | None]:
+def _require_dev_key():
     """
     Validate the X-Dev-Key header against the DEV_API_KEY env var.
     Returns (True, None) on success or (False, error_response) on failure.
