@@ -95,6 +95,9 @@ OAUTH_USERS_COLLECTION = 'Users'
 OAUTH_SESSIONS_COLLECTION = 'Sessions'
 USER_PROFILES_COLLECTION = 'UserProfiles'
 
+# Developer endpoints (not for end-users)
+DEV_LOCATIONS_BULK_EP = '/dev/locations/bulk'
+
 # Profile endpoints
 PROFILE_EP = '/auth/me/profile'
 FAVORITES_EP = '/auth/me/favorites'
@@ -1067,6 +1070,133 @@ class WeightsResource(Resource):
                 continue
         _save_profile_fields(user_id, {'weights': clean})
         return {'weights': clean}, HTTPStatus.OK
+
+
+def _require_dev_key() -> tuple[bool, tuple | None]:
+    """
+    Validate the X-Dev-Key header against the DEV_API_KEY env var.
+    Returns (True, None) on success or (False, error_response) on failure.
+    """
+    expected = os.environ.get('DEV_API_KEY')
+    if not expected:
+        return False, (
+            {ERROR: 'DEV_API_KEY not configured on server'},
+            HTTPStatus.SERVICE_UNAVAILABLE,
+        )
+    provided = request.headers.get('X-Dev-Key', '')
+    if not secrets.compare_digest(provided, expected):
+        return False, ({ERROR: 'Invalid or missing X-Dev-Key'}, HTTPStatus.UNAUTHORIZED)
+    return True, None
+
+
+@api.route(DEV_LOCATIONS_BULK_EP)
+class DevLocationsBulk(Resource):
+    """
+    Developer-only bulk location import endpoint.
+
+    Not intended for end-users. Requires the X-Dev-Key header set to the
+    value of the DEV_API_KEY environment variable.
+
+    Accepts a JSON array of location objects and inserts each one,
+    returning a per-entry report with inserted IDs and any validation errors.
+    Each entry must include at minimum: name (str), state_code (str),
+    population (int >= 0). Optional fields (lat, lng, nickname, timezone)
+    are stored as-is.
+    """
+
+    def post(self):
+        """
+        POST /dev/locations/bulk — bulk-insert locations.
+
+        Headers:
+            X-Dev-Key (str): developer API key (matches DEV_API_KEY env var)
+
+        Body (JSON array):
+            [
+                {
+                    "name": "Austin",
+                    "state_code": "TX",
+                    "population": 978908,
+                    "lat": 30.2672,
+                    "lng": -97.7431
+                },
+                ...
+            ]
+
+        Returns:
+            207 Multi-Status: per-entry results with inserted_id or error
+            400: body is not a JSON array
+            401: bad or missing X-Dev-Key
+            503: DEV_API_KEY not set on server
+        """
+        ok, err = _require_dev_key()
+        if not ok:
+            return err
+
+        body = request.get_json(silent=True)
+        if not isinstance(body, list):
+            return {ERROR: 'Request body must be a JSON array of location objects'}, \
+                HTTPStatus.BAD_REQUEST
+
+        results = []
+        inserted = 0
+        failed = 0
+
+        for idx, entry in enumerate(body):
+            if not isinstance(entry, dict):
+                results.append({'index': idx, 'status': 'error',
+                                'error': 'entry must be an object'})
+                failed += 1
+                continue
+
+            name = (entry.get('name') or '').strip()
+            state_code = (entry.get('state_code') or '').strip().upper()
+            population = entry.get('population')
+
+            if not name:
+                results.append({'index': idx, 'status': 'error',
+                                'error': 'name is required'})
+                failed += 1
+                continue
+            if not state_code:
+                results.append({'index': idx, 'status': 'error',
+                                'error': 'state_code is required'})
+                failed += 1
+                continue
+            if not isinstance(population, int) or population < 0:
+                results.append({'index': idx, 'status': 'error', 'name': name,
+                                'error': 'population must be a non-negative integer'})
+                failed += 1
+                continue
+
+            city_doc = {
+                'name': name,
+                'state_code': state_code,
+                'population': population,
+            }
+            for opt in ('lat', 'lng', 'nickname', 'timezone'):
+                if entry.get(opt) is not None:
+                    city_doc[opt] = entry[opt]
+
+            try:
+                new_id = ct.create(city_doc)
+                results.append({
+                    'index': idx,
+                    'status': 'inserted',
+                    'name': name,
+                    'state_code': state_code,
+                    'inserted_id': str(new_id),
+                })
+                inserted += 1
+            except ValueError as e:
+                results.append({'index': idx, 'status': 'error',
+                                'name': name, 'error': str(e)})
+                failed += 1
+
+        return {
+            'summary': {'total': len(body), 'inserted': inserted, 'failed': failed},
+            'results': results,
+        }, HTTPStatus.MULTI_STATUS
 
 
 @api.route(AUTH_LOGOUT_EP)
