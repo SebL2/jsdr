@@ -942,7 +942,10 @@ def _save_profile_fields(user_id: str, fields: dict) -> None:
 def _require_auth():
     user = _oauth_user_from_request()
     if not user:
-        return None, ({ERROR: 'Authentication required'}, HTTPStatus.UNAUTHORIZED)
+        return None, (
+            {ERROR: 'Authentication required'},
+            HTTPStatus.UNAUTHORIZED,
+        )
     return str(user['_id']), None
 
 
@@ -969,12 +972,15 @@ class FavoritesResource(Resource):
         name = (data.get('name') or '').strip()
         state_code = (data.get('state_code') or '').strip()
         if not name or not state_code:
-            return {ERROR: 'name and state_code required'}, HTTPStatus.BAD_REQUEST
+            return {ERROR: 'name and state_code required'}, \
+                HTTPStatus.BAD_REQUEST
 
         profile = _load_profile(user_id)
         key = _city_key(name, state_code)
-        existing = [f for f in profile['favorites']
-                    if _city_key(f.get('name', ''), f.get('state_code', '')) == key]
+        existing = [
+            f for f in profile['favorites']
+            if _city_key(f.get('name', ''), f.get('state_code', '')) == key
+        ]
         if not existing:
             profile['favorites'].append({
                 'name': name,
@@ -1013,7 +1019,8 @@ class ComparisonsResource(Resource):
         if not name:
             return {ERROR: 'name required'}, HTTPStatus.BAD_REQUEST
         if not isinstance(cities, list) or not cities:
-            return {ERROR: 'cities must be a non-empty list'}, HTTPStatus.BAD_REQUEST
+            return {ERROR: 'cities must be a non-empty list'}, \
+                HTTPStatus.BAD_REQUEST
         clean = []
         for c in cities:
             if not isinstance(c, dict):
@@ -1023,7 +1030,10 @@ class ComparisonsResource(Resource):
             if cname and ccode:
                 clean.append({'name': cname, 'state_code': ccode})
         if not clean:
-            return {ERROR: 'cities entries require name and state_code'}, HTTPStatus.BAD_REQUEST
+            return (
+                {ERROR: 'cities entries require name and state_code'},
+                HTTPStatus.BAD_REQUEST,
+            )
 
         profile = _load_profile(user_id)
         entry = {
@@ -1033,8 +1043,13 @@ class ComparisonsResource(Resource):
             'created_at': datetime.now(timezone.utc).isoformat(),
         }
         profile['saved_comparisons'].append(entry)
-        _save_profile_fields(user_id, {'saved_comparisons': profile['saved_comparisons']})
-        return {'saved_comparisons': profile['saved_comparisons']}, HTTPStatus.OK
+        _save_profile_fields(
+            user_id, {'saved_comparisons': profile['saved_comparisons']}
+        )
+        return (
+            {'saved_comparisons': profile['saved_comparisons']},
+            HTTPStatus.OK,
+        )
 
 
 @api.route(f'{COMPARISONS_EP}/<string:comparison_id>')
@@ -1048,8 +1063,13 @@ class ComparisonItemResource(Resource):
             c for c in profile['saved_comparisons']
             if c.get('id') != comparison_id
         ]
-        _save_profile_fields(user_id, {'saved_comparisons': profile['saved_comparisons']})
-        return {'saved_comparisons': profile['saved_comparisons']}, HTTPStatus.OK
+        _save_profile_fields(
+            user_id, {'saved_comparisons': profile['saved_comparisons']}
+        )
+        return (
+            {'saved_comparisons': profile['saved_comparisons']},
+            HTTPStatus.OK,
+        )
 
 
 @api.route(WEIGHTS_EP)
@@ -1085,7 +1105,10 @@ def _require_dev_key() -> tuple[bool, tuple | None]:
         )
     provided = request.headers.get('X-Dev-Key', '')
     if not secrets.compare_digest(provided, expected):
-        return False, ({ERROR: 'Invalid or missing X-Dev-Key'}, HTTPStatus.UNAUTHORIZED)
+        return False, (
+            {ERROR: 'Invalid or missing X-Dev-Key'},
+            HTTPStatus.UNAUTHORIZED,
+        )
     return True, None
 
 
@@ -1135,8 +1158,10 @@ class DevLocationsBulk(Resource):
 
         body = request.get_json(silent=True)
         if not isinstance(body, list):
-            return {ERROR: 'Request body must be a JSON array of location objects'}, \
-                HTTPStatus.BAD_REQUEST
+            return (
+                {ERROR: 'Request body must be a JSON array'},
+                HTTPStatus.BAD_REQUEST,
+            )
 
         results = []
         inserted = 0
@@ -1164,8 +1189,10 @@ class DevLocationsBulk(Resource):
                 failed += 1
                 continue
             if not isinstance(population, int) or population < 0:
-                results.append({'index': idx, 'status': 'error', 'name': name,
-                                'error': 'population must be a non-negative integer'})
+                results.append({
+                    'index': idx, 'status': 'error', 'name': name,
+                    'error': 'population must be a non-negative integer',
+                })
                 failed += 1
                 continue
 
@@ -1194,7 +1221,11 @@ class DevLocationsBulk(Resource):
                 failed += 1
 
         return {
-            'summary': {'total': len(body), 'inserted': inserted, 'failed': failed},
+            'summary': {
+                'total': len(body),
+                'inserted': inserted,
+                'failed': failed,
+            },
             'results': results,
         }, HTTPStatus.MULTI_STATUS
 
