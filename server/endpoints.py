@@ -17,6 +17,8 @@ Key Features:
 
 # Import HTTP status codes for proper REST API responses
 from http import HTTPStatus
+from data import db_connect as dbc
+
 import json
 import os
 import secrets
@@ -26,7 +28,7 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 
 # Flask framework imports
-from flask import Flask, redirect, request
+from flask import Flask, redirect, request, make_response
 from flask_restx import Resource, Api, reqparse
 from flask_cors import CORS
 
@@ -188,7 +190,6 @@ def _google_fetch_userinfo(access_token: str) -> dict:
 
 
 def _find_or_create_oauth_user(email: str, name: str, avatar_url: str) -> str:
-    from data import db_connect as dbc
 
     doc = dbc.read_one(OAUTH_USERS_COLLECTION, {'email': email})
     if not doc:
@@ -206,7 +207,6 @@ def _find_or_create_oauth_user(email: str, name: str, avatar_url: str) -> str:
 
 
 def _create_oauth_session(user_id: str) -> str:
-    from data import db_connect as dbc
 
     token = secrets.token_hex(32)
     expires = datetime.now(timezone.utc) + timedelta(days=7)
@@ -222,7 +222,6 @@ def _get_or_create_oauth_session(user_id: str) -> str:
     Return an existing session token for this user if one is still valid;
     otherwise create a new session document in MongoDB.
     """
-    from data import db_connect as dbc
 
     now = datetime.now(timezone.utc)
     sess = dbc.read_one(
@@ -255,7 +254,6 @@ def _oauth_user_from_request():
     expired; otherwise None.
     """
     from bson import ObjectId
-    from data import db_connect as dbc
 
     token = request.cookies.get('session')
     if not token:
@@ -355,7 +353,6 @@ class Cities(Resource):
         if not cities:
             cities = FALLBACK_CITIES
             # stick it in cache so we don't retry DB every request
-            from data import db_connect as dbc
             dbc._cache[(ct.CITY_COLLECTION, dbc.SE_DB, True)] = cities
         return {CITIES_RESP: cities, "Number of cities": len(cities)}
 
@@ -926,7 +923,6 @@ def _default_profile(user_id: str) -> dict:
 
 
 def _load_profile(user_id: str) -> dict:
-    from data import db_connect as dbc
     doc = dbc.read_one(USER_PROFILES_COLLECTION, {'user_id': user_id})
     if not doc:
         profile = _default_profile(user_id)
@@ -939,7 +935,6 @@ def _load_profile(user_id: str) -> dict:
 
 
 def _save_profile_fields(user_id: str, fields: dict) -> None:
-    from data import db_connect as dbc
     fields = dict(fields)
     fields['updated_at'] = datetime.now(timezone.utc).isoformat()
     try:
@@ -1254,8 +1249,6 @@ class AuthLogout(Resource):
         POST /auth/logout — delete the server-side session row and
         clear the browser's session cookie.
         """
-        from flask import make_response
-        from data import db_connect as dbc
 
         token = request.cookies.get('session')
         if token:
