@@ -217,6 +217,23 @@ def _create_oauth_session(user_id: str) -> str:
     return token
 
 
+def _get_or_create_oauth_session(user_id: str) -> str:
+    """
+    Return an existing session token for this user if one is still valid;
+    otherwise create a new session document in MongoDB.
+    """
+    from data import db_connect as dbc
+
+    now = datetime.now(timezone.utc)
+    sess = dbc.read_one(
+        OAUTH_SESSIONS_COLLECTION,
+        {'user_id': user_id, 'expires': {'$gt': now}},
+    )
+    if sess and sess.get('token'):
+        return sess['token']
+    return _create_oauth_session(user_id)
+
+
 def _session_cookie_secure() -> bool:
     """Default True so cross-site (SameSite=None) cookies are accepted."""
     raw = os.environ.get('SESSION_COOKIE_SECURE')
@@ -842,7 +859,7 @@ class GoogleAuthCallback(Resource):
 
         try:
             user_id = _find_or_create_oauth_user(email, name, avatar_url)
-            session_token = _create_oauth_session(user_id)
+            session_token = _get_or_create_oauth_session(user_id)
         except Exception as e:
             return {ERROR: f'Database error: {e}'}, \
                 HTTPStatus.INTERNAL_SERVER_ERROR
