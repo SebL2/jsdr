@@ -34,6 +34,7 @@ from flask_cors import CORS
 
 # Import our cities business logic module
 import cities.cities as ct
+import security.security as sec
 
 # Import cost-of-living module
 import cost_of_living.cost_of_living as col
@@ -961,6 +962,34 @@ def _require_auth():
     return str(user['_id']), None
 
 
+def _enforce_people_create_policy(user):
+    
+    feat = sec.read_feature(sec.PEOPLE)
+    if not feat:
+        return None
+    act = feat.get(sec.CREATE)
+    if not act:
+        return None
+    checks = act.get(sec.CHECKS) or {}
+    user_list = act.get(sec.USER_LIST) or []
+    if not checks.get(sec.LOGIN):
+        return None
+    if not user or not user.get('email'):
+        return (
+            {ERROR: 'Authentication required'},
+            HTTPStatus.UNAUTHORIZED,
+        )
+    norm = user['email'].strip().lower()
+    if user_list:
+        allowed = {e.strip().lower() for e in user_list}
+        if norm not in allowed:
+            return (
+                {ERROR: 'Not authorized for this action.'},
+                HTTPStatus.FORBIDDEN,
+            )
+    return None
+
+
 def _city_key(name: str, state_code: str) -> str:
     return f'{name}|{state_code}'
 
@@ -980,6 +1009,9 @@ class FavoritesResource(Resource):
         user_id, err = _require_auth()
         if err:
             return err
+        pol = _enforce_people_create_policy(_oauth_user_from_request())
+        if pol:
+            return pol
         data = request.get_json(silent=True) or {}
         name = (data.get('name') or '').strip()
         state_code = (data.get('state_code') or '').strip()
