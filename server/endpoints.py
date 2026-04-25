@@ -963,7 +963,6 @@ def _require_auth():
 
 
 def _enforce_people_create_policy(user):
-    
     feat = sec.read_feature(sec.PEOPLE)
     if not feat:
         return None
