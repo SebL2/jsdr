@@ -28,8 +28,8 @@ class USPostalCode(PostalCode):
 MIN_UK_POSTCODE_LEN = 7
 MAX_UK_POSTCODE_LEN = 9
 
-# Very small relaxed UK postcode regex for examples: outward + space + inward
-_UK_RE = re.compile(r'^[A-Z]{1,2}[0-9R][0-9A-Z]?\s[0-9][A-Z]{2}$')
+# Relaxed UK postcode regex to match professor examples (letters+digits space digits+letters)
+_UK_RE = re.compile(r'^[A-Z]+[0-9]+\s[0-9]+[A-Z]+$')
 
 
 class UKPostalCode(PostalCode):
